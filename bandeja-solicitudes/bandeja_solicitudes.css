@@ -1,0 +1,56 @@
+.empty{
+    background-color: #ec971f;
+    color: #fff;
+}
+.filaTitulo{
+    color: #fff;
+    background-color: #337ab7;
+}
+.no-select{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+}
+.filaTitulo:hover{
+    cursor: default;
+}
+.nuevo{
+    background-color: #edf2fa;
+}
+.antiguo{
+    color: #333;
+    background-color: white;
+    border-color: white;
+}
+.resto-lista{
+    float: right;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 8px;
+}
+.contenedor-informacion:hover {
+    cursor: default;
+}
+.lista-foco:hover{
+    color: #fff;
+    background-color: #73a4d1;
+    border-color: #539adb;
+}
+.lista-foco{
+    border: 1px solid lightgray !important;
+}
+.center{
+    margin: auto;
+    width: 40%;
+}
+.modal-header {
+    background-color: #10406b;
+    color:white !important;
+    text-align: center;
+}
+.modal-footer {
+    background-color: #f9f9f9;
+}
+.negrilla{
+    font-weight: bold;
+}

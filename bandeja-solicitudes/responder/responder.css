@@ -1,0 +1,86 @@
+.empty{
+    background-color: #ec971f;
+    color: #fff;
+}
+.filaTitulo{
+    color: #fff;
+    background-color: #337ab7;
+}
+.lista-foco{
+    border: 1px solid lightgray !important;
+}
+.lista-foco:hover{
+    color: #fff;
+    background-color: #73a4d1;
+    border-color: #539adb;
+}
+.no-select{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+}
+.filaTitulo:hover{
+    cursor: default;
+}
+.boton-centreado {
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+    background-color: #f9f9f9;
+}
+.modal-footer {
+    text-align: center;
+}
+.center{
+    margin: auto;
+    width: 20%;
+}
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+ul li {
+    display: block;
+}
+.contenedor-principal{
+    border: #BBB solid 1px;
+    padding-left: 15px;
+    padding-right: 10px;
+    border-radius: 4px;
+    width: auto
+}
+.espacio-top{
+    padding-top: 20px;
+}
+.cabecera-mensaje{
+    padding: 10px;
+}
+.inicio-mensaje{
+    padding: 10px;
+}
+.cuerpo-mensaje{
+    padding: 10px;
+}
+.fin-mensaje{
+    padding: 10px;
+}
+.pequenio-espacio{
+    padding-top: 5px;
+}
+.normal-espacio{
+    padding-top: 1cm;
+}
+.espacio-boton-enviar{
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+.negrita{
+    font-weight: bold;
+}
+.texto-center{
+    text-align: center;
+}
+.padding-boton{
+    padding-left: 87px;
+    padding-right: 87px;
+}
+

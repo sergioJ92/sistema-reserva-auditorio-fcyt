@@ -1,0 +1,30 @@
+
+.figura{
+    background-color: lightgreen;
+    width: 60%;
+    padding: 25px;
+    margin-bottom: 25px;
+    color: white;
+    font-size: x-large;
+    border: gray 1px solid;
+    font-family: cursive;
+    margin-left: 20%;
+}
+
+.centreado{
+    text-align: -webkit-center;
+}
+
+.padding-boton{
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.margen-pequeno{
+    margin-top: 0px !important; 
+    margin-bottom: 0px !important;
+}
+
+.alert{
+    margin-bottom: 0px !important;
+}

@@ -1,0 +1,66 @@
+
+.agrandar-combo-box {
+    width: 250px !important;
+}
+
+.padding-derecha-roles {
+    padding-right: 20px;
+}
+
+.alert {
+    margin-bottom: 0px !important;
+}
+
+.margen-privilegios {
+    margin-top: 0px !important;
+}
+
+.padding-lista-privilegios {
+    padding-top: 15px;
+    padding-bottom: 80px;
+}
+
+.padding-lista-privilegios div {
+    border-color: #ccc;
+    border-radius: 0px !important;
+}
+
+.lista-privilegios-desabilitado div {
+    background-color: #f3f3f3;
+}
+
+.ensanchar-boton {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.lista-materias-anadidas {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.lista-materias-anadidas div {
+    border-color: #ccc;
+    border-radius: 0px !important;
+    background-color: #f3f3f3;
+}
+
+.padding-boton {
+    padding: 8px 16px;
+}
+
+.padding-select-materia {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#contenedor-msg-rol > .alert {
+    margin-top: 0;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 10px !important;
+}
+
+#contenedor-msg .alert {
+    margin-top: 0 !important;
+}

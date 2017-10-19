@@ -1,0 +1,79 @@
+
+.cuadrado {
+    background: transparent;
+    border: 0;/*1px solid transparent;*/
+    margin: 0;
+    width: 100%;
+    min-height: 50px;
+    padding: 0;
+}
+
+table {
+    text-align: center;
+}
+.table > tbody > tr > td {
+    vertical-align: middle;
+    line-height: 0;
+}
+
+table thead tr th {
+    text-align: center;
+    background: #337ab7;
+    color: #fff;
+    font-weight: 500;
+}
+
+.table > tbody > tr > td.celda {
+    padding: 0;
+}
+
+.table > tbody > tr > td.periodo {
+    background: #f3f3f3;
+}
+
+table td:first-child {
+    width: 150px;
+}
+
+table td:nth-child(2) {
+    width: 150px;
+}
+
+table td:nth-child(3) {
+    width: 150px;
+}
+
+table td:nth-child(4) {
+    width: 150px;
+}
+
+table td:nth-child(5) {
+    width: 150px;
+}
+
+table td:nth-child(6) {
+    width: 150px;
+}
+
+table td:nth-child(7) {
+    width: 150px;
+}
+
+.cabecera-reservar {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.cabecera-no-puede-reservar {
+    color: #fff;
+    background-color: lightcoral;
+}
+
+.contenedor-calendario {
+    background-color: #eee;
+    padding-top: 40px;
+    padding-bottom: 25px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 10px;
+}
