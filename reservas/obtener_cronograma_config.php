@@ -18,9 +18,9 @@ function obtenerCronogramaYConfig($anio, $gestion) {
     $consulta .= " duracion_periodo, hora_inicio_jornada, hora_fin_jornada, hora_fin_sabado";
     $consulta .= " FROM configuracion c, cronograma_academico ca";
     $consulta .= " WHERE ca.anio='$anio' AND ca.gestion='$gestion' AND c.anio = ca.anio AND c.gestion = ca.gestion";
-    $resConsulta = ConexionBD::getConexion()->query($consulta);
+    $resConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     if ($resConsulta) {
-        return $resConsulta->fetch_assoc();
+        return pg_fetch_assoc($resConsulta);
     }
     return null;
 }

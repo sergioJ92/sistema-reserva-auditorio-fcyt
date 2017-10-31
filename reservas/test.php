@@ -102,9 +102,7 @@ function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto
 
 function obtenerReservaAcademica($idReserva) {
     
-    $consulta = "SELECT r.fecha, r.hora_inicio, r.hora_fin, r.evento, asu.asunto, ma.nombre_materia materia, u.nombres responsable ";
-    $consulta .= "FROM reserva as r, reserva_academica as ra, asunto as asu, materia as ma, responsable_reserva as rr, usuario as u ";
-    $consulta .= "WHERE r.id_reserva = ra.id_reserva AND asu.id_asunto = ra.id_asunto AND ma.codigo_materia = ra.codigo_materia AND ra.id_reserva = rr.id_reserva AND rr.nombre_usuario = u.nombre_usuario AND r.id_reserva = '$idReserva'";
+    $consulta = "SELECT r.fecha, r.hora_inicio, r.hora_fin, r.evento, asu.asunto, ma.nombre_materia materia, u.nombres responsable FROM reserva r, reserva_academica ra, asunto asu, materia ma, responsable_reserva rr, usuario u WHERE r.id_reserva = ra.id_reserva AND asu.id_asunto = ra.id_asunto AND ma.codigo_materia = ra.codigo_materia AND ra.id_reserva = rr.id_reserva AND rr.nombre_usuario = u.nombre_usuario AND r.id_reserva = '$idReserva'";
     $resConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     if (pg_num_rows($resConsulta) == 1) {
         return pg_fetch_assoc($resConsulta);
@@ -114,29 +112,20 @@ function obtenerReservaAcademica($idReserva) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    header('Content-Type: application/json');
-    $entrada = $_POST;
-    
-    $fecha = Validador::desinfectarEntrada($entrada['fecha']);
-    $horaInicio = Validador::desinfectarEntrada($entrada['hora_inicio']);
-    $horaFin = Validador::desinfectarEntrada($entrada['hora_fin']);
-    $codigoMateria = Validador::desinfectarEntrada($entrada['codigo_materia']);
-    $idContenido = Validador::desinfectarEntrada($entrada['id_contenido']);
-    $idAsunto = Validador::desinfectarEntrada($entrada['id_asunto']);
-    $nombreUsuario = Validador::desinfectarEntrada($entrada['nombre_usuario']);
+    $fecha = '2017-11-13';
+    $horaInicio = '18:45';
+    $horaFin = '19:45';
+    $codigoMateria = 2010024;
+    $idContenido = 10;
+    $idAsunto = 2;
+    $nombreUsuario = 'docente';
     
     try {
         $idReserva = guardarReserva($fecha, $horaInicio, $horaFin, 
                 $codigoMateria, $idContenido, $idAsunto, $nombreUsuario);
         $reserva = obtenerReservaAcademica($idReserva);
-        echo json_encode(['exito' => true, 'reserva' => $reserva]);
+        echo "exito";
     }
     catch (ValidacionExcepcion $ex) {
-        echo json_encode(['exito' => false, 'error' => $ex->getMessage()]);
+        echo "fallo";
     }
-}
-else {
-    header('Location: index.php');
-}

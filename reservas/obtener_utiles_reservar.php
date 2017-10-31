@@ -9,9 +9,9 @@ function obtenerMateriasUsuario($nombreUsuario) {
     
     $obtenerMaterias = 'SELECT m.* FROM materia m, tiene_materia tm';
     $obtenerMaterias .= " WHERE tm.nombre_usuario = '$nombreUsuario' AND tm.codigo_materia = m.codigo_materia";
-    $materias = ConexionBD::getConexion()->query($obtenerMaterias);
+    $materias = pg_query(ConexionBD::getConexion(), $obtenerMaterias);
     $resultado = [];
-    while ($fila = $materias->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($materias)) {
         array_push($resultado, $fila);
     }
     return $resultado;
@@ -20,9 +20,9 @@ function obtenerMateriasUsuario($nombreUsuario) {
 function obtenerAsuntos() {
     
     $obtenerAsuntos = 'SELECT * FROM asunto';
-    $asuntos = ConexionBD::getConexion()->query($obtenerAsuntos);
+    $asuntos = pg_query(ConexionBD::getConexion(), $obtenerAsuntos);
     $resultado = [];
-    while ($fila = $asuntos->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($asuntos)) {
         array_push($resultado, $fila);
     }
     return $resultado;

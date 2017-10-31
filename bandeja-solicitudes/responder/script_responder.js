@@ -109,8 +109,10 @@ $(document).ready(function () {
         if ($('#nombre-representante').val() === "" || $('#cargo-representante').val() === "") {
             mostrarMensaje('alert-danger', 'Debes llenar todos los datos');
         } else {
+            var reservaAcetadoRechazado = $('#aceptado-rechazado').val();
+                
             if (reservaAcetadoRechazado === 'ACEPTADO') {
-                $.ajax({
+                /*$.ajax({
                     type: 'POST',
                     dataType: 'json',
                     data: {fecha: fecha},
@@ -134,8 +136,7 @@ $(document).ready(function () {
                         error: function () {
                             alert('Error al realizar la busqueda de eventos para la fecha ' + fecha);
                         }
-                });
-                var reservaAcetadoRechazado = $('#aceptado-rechazado').val();
+                });*/
                 reservaAcetadoRechazado = 'ACEPTANDO';
                 $('#titulo-modal').css({"background-color": "#337ab7", "color": "white"});
                 $('#btn-enviar-mensaje').css({"background-color": "#337ab7", "color": "white"});

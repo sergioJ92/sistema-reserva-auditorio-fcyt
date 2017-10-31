@@ -8,9 +8,9 @@ require_once RAIZ . '/interfazbd/Validador.php';
 function obtenerMaterias() {
     
     $consulta = 'SELECT * FROM materia';
-    $materias = ConexionBD::getConexion()->query($consulta);
+    $materias = pg_query(ConexionBD::getConexion(), $consulta);
     $resultado = [];
-    while ($fila = $materias->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($materias)) {
         array_push($resultado, $fila);
     }
     return $resultado;

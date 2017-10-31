@@ -6,18 +6,18 @@ require_once RAIZ . '/interfazbd/Validador.php';
 require_once RAIZ . '/lib/sesion_store.php';
 
 function obtenerMaterias($nombreUsuario) {
-    $consulta = "SELECT MATER.nombre_materia, MATER.codigo_materia FROM usuario AS USER, tiene_materia AS LIST,materia AS MATER WHERE ";
-    $consulta .= "USER.nombre_usuario = ";
+    $consulta = "SELECT MATER.nombre_materia, MATER.codigo_materia FROM usuario AS us, tiene_materia AS LIST,materia AS MATER WHERE ";
+    $consulta .= "us.nombre_usuario = ";
     $consulta .= " '";
     $consulta .= $nombreUsuario;
     $consulta .= "' ";
-    $consulta .= " AND USER.nombre_usuario = LIST.nombre_usuario AND ";
+    $consulta .= " AND us.nombre_usuario = LIST.nombre_usuario AND ";
     $consulta .= " LIST.codigo_materia = MATER.codigo_materia";
     
-    $resultadoConsulta = ConexionBD::getConexion()->query($consulta);
+    $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     
     $resultado = [];
-    while ($fila = $resultadoConsulta->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($resultadoConsulta)) {
         $resultado []= $fila;
     }
     return $resultado;
@@ -26,9 +26,9 @@ function obtenerMaterias($nombreUsuario) {
 function obtenerAsuntos() {
     
     $obtenerAsuntos = 'SELECT * FROM asunto';
-    $asuntos = ConexionBD::getConexion()->query($obtenerAsuntos);
+    $asuntos = pg_query(ConexionBD::getConexion(),$obtenerAsuntos);
     $resultado = [];
-    while ($fila = $asuntos->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($asuntos)) {
         array_push($resultado, $fila);
     }
     return $resultado;

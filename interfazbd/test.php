@@ -493,3 +493,6 @@ class ContenidoCronograma {
         Validador::revisarCampoEsNumeroEnteroPositivo($cierreuniversidad, 'Cierre Universidad');
     }
 }
+
+
+ContenidoCronograma::insertarActividad('Examenes', '2017-10-31 00:00:00', '2017-11-18 00:00:00', 'examenes parciales', 2017, '2', 1);

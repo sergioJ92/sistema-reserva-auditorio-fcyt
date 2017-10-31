@@ -26,6 +26,7 @@ class ConexionBD {
      */
     public static function conectar() {
 
+        /*
         if (ConexionBD::$conexion === null) {
             require_once 'propiedades.php';
             ConexionBD::$conexion = new mysqli(HOST, USER, PASSWORD, DATABASE);
@@ -33,6 +34,21 @@ class ConexionBD {
                 die("Conexion fallida: " . ConexionBD::$conexion->connect_error);
             }
             self::$conexion->query("SET NAMES 'utf8'");
+            return true;
+        }
+        return false;
+
+        */
+
+        if (ConexionBD::$conexion === null) {
+            require_once 'propiedades.php';
+            ConexionBD::$conexion = pg_connect("host=".HOST." port=".PORT." dbname=".DATABASE." user=".USER." password=".PASSWORD."");
+            //ConexionBD::$conexion = pg_connect(HOST, PORT, USER, PASSWORD, DATABASE);
+            
+            if(ConexionBD::$conexion == false){
+                die("Error en la Conexion: ".pg_last_error());
+            }
+            pg_query(self::$conexion,"SET NAMES 'utf8'");
             return true;
         }
         return false;

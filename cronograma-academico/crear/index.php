@@ -8,9 +8,9 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
 function obtenerMayorMenorAnioCalenAcademico() {
 
     $consulta = 'SELECT max(anio) AS mayoranio, min(anio) AS menoranio FROM cronograma_academico';
-    $resConsulta = ConexionBD::getConexion()->query($consulta);
-    if ($resConsulta->num_rows > 0) {
-        return $resConsulta->fetch_assoc();
+    $resConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    if (pg_num_rows($resConsulta) > 0) {
+        return pg_fetch_assoc($resConsulta);
     }
     return null;
 }
