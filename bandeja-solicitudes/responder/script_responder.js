@@ -64,6 +64,7 @@ $(document).ready(function () {
 
     $('#btn-enviar-mensaje').click(function () {
         var contenidoMensaje = crearContenido();
+        
         if (listaConflictosAcademicas.length === 0) {
             listaConflictosAcademicas = "vacio";
         }
@@ -100,6 +101,7 @@ $(document).ready(function () {
             }
         }
         );
+        redirigir();
     });
     
     $('#enviar-mensaje').click(function () {
@@ -107,8 +109,33 @@ $(document).ready(function () {
         if ($('#nombre-representante').val() === "" || $('#cargo-representante').val() === "") {
             mostrarMensaje('alert-danger', 'Debes llenar todos los datos');
         } else {
-            var reservaAcetadoRechazado = $('#aceptado-rechazado').val();
             if (reservaAcetadoRechazado === 'ACEPTADO') {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {fecha: fecha},
+                    url: "./obtener_eventos_por_fecha.php",
+                    success: function (data) {
+                        llenarEventosAcademicosFecha(data[0]);
+                        llenarEventosSolicitadosFecha(data[1]);
+                        llenarMensajeDeEventosVacios(data[0],data[1]);
+                        var datos = {id_solicitud_reserva: idSolicitudReserva,
+                            responsable: responsable,
+                            fecha: fecha,
+                            hora_inicio: horaInicio,
+                            hora_fin: horaFin,
+                            evento: evento,
+                            descripcion: descripcion,
+                            institucion: institucion
+                        };
+                        listaConflictosAcademicas = hayConflictos(datos, data[0],true);
+                        listaConflictosSolicitadas = hayConflictos(datos, data[1],false);
+                    },
+                        error: function () {
+                            alert('Error al realizar la busqueda de eventos para la fecha ' + fecha);
+                        }
+                });
+                var reservaAcetadoRechazado = $('#aceptado-rechazado').val();
                 reservaAcetadoRechazado = 'ACEPTANDO';
                 $('#titulo-modal').css({"background-color": "#337ab7", "color": "white"});
                 $('#btn-enviar-mensaje').css({"background-color": "#337ab7", "color": "white"});
@@ -127,7 +154,6 @@ $(document).ready(function () {
                 $('#body-modal').empty();
                 $('#titulo-modal').css({"background-color": "#d9534f", "color": "white"});
                 $('#btn-enviar-mensaje').css({"background-color": "#d9534f", "color": "white"});
-                
             }
             $('#descision-reserva').text(reservaAcetadoRechazado);
             $('#myModal').modal();
