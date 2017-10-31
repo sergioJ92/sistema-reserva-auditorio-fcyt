@@ -55,8 +55,85 @@ $('#selecAnio').change(function () {
     }
 });
 
-function modificarFecha(id, fechaCadena) {
+$('#fechahorafin').blur(function(){
+    if($('#fechahorafin').val() !== null && $('#selecAnio').val() !== null){
+        controlarSolapamiento($('#fechahorafin'));
+    }
+});
+
+function controlarSolapamiento(fechaFin){
     
+    $.ajax({
+        type: "POST",
+        url: "obtener_fechas_cronograma.php",
+        dataType: "json",
+        data: {anio: $('#selecAnio').val(),gestion: $('#selecGestion').val(), fechaFinal: $('#fechahorafin').val(), fechaInicial: $('#fechahorainicio').val()},
+        success: function(data){
+            if(data !== null){
+                
+                var fechaFinTabla = cambiarFechaADate(data['fecha_hora_fin']);
+                var fechaFinACrear = ajustarFecha($('#fechahorafin').val()); 
+                var fechaInicialACrear =ajustarFecha($('#fechahorainicio').val());
+
+                if(fechaInicialACrear < fechaFinTabla && fechaFinACrear > fechaFinTabla){
+                    $('#contenedor-msg').empty();
+                    $fecha = data['fecha_hora_fin'].split(' ');
+                    $fecha = ' con fecha a finalizar el '+$fecha[0];
+                    $gestion = data['gestion']+'-'+ data['anio'];
+                    $msg = 'Existe solapamiento con la gestion '+ $gestion + $fecha;
+
+                    mostrarMensajeCronograma('alert-warning', $msg);
+                    $('#guardar').attr('disabled', false);
+                }else{
+                    if(fechaInicialACrear < fechaFinTabla && fechaFinACrear <= fechaFinTabla){
+                        ///bloquear el crear y alertar
+                        mostrarMensajeCronograma('alert-danger', 'El cronograma no debe crearce dentro de otro cronograma');
+                        $('#guardar').attr('disabled',true);    
+                    }else{
+                        mostrarMensajeCronograma('alert-success', 'Este cronograma aun no existe');    
+                        $('#guardar').attr('disabled', false);
+                    }
+                    
+                }                
+            }            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            mostrarMensaje('alert-danger', textStatus);
+        }
+    })
+}
+function compararFechaActual(fechaIniCronograma,fechaFinCronograma){
+        var diaActual = new Date();
+        
+        if(fechaFinCronograma < diaActual || fechaIniCronograma > diaActual){
+            diaActual = fechaIniCronograma;
+        }
+        return diaActual;
+    }
+
+function cambiarFechaADate(cadenayymmdd){
+        
+        var aux = cadenayymmdd.split("-");
+        var res = aux[2].split(" ");
+        var hora = res[1].split(":");
+        var listaRes = [parseInt(aux[0]),parseInt(aux[1]),parseInt(res[0]),
+                        parseInt(hora[0]),parseInt(hora[1]),parseInt(hora[2])];
+        var fecha = new Date(listaRes[0],listaRes[1],listaRes[2],listaRes[3],listaRes[4],listaRes[5]);
+        return fecha;
+    }
+function ajustarFecha(fecha){
+        
+        var aux = fecha.split("-");
+        var res = aux[2].split(" ");
+        var hora = res[1].split(":");
+        var listaRes = [parseInt(res[0]),parseInt(aux[1]),parseInt(aux[0]),
+                        parseInt(hora[0]),parseInt(hora[1]),0];
+        var fecha = new Date(listaRes[0],listaRes[1],listaRes[2],listaRes[3],listaRes[4],listaRes[5]);
+        return fecha;
+    }
+
+
+function modificarFecha(id, fechaCadena) {
     $('#' + id)
             .parent()
             .data('DateTimePicker')
@@ -64,18 +141,16 @@ function modificarFecha(id, fechaCadena) {
 }
 
 function obtenerCronograma() {
-
+    
     $.ajax({
         type: "POST",
         url: "obtener_cronograma.php",
         dataType: 'json',
         data: {anio: $('#selecAnio').val(), gestion: $('#selecGestion').val()},
         success: function (data) {
-
             if (data !== null) {
-                
+                debugger;
                 $('#contenedor-msg').empty();
-
                 modificarFecha('fechahorainicio', data['fecha_hora_inicio']);
                 modificarFecha('fechahorafin', data['fecha_hora_fin']);
                 modificarFecha('fechaactivacion', data['fecha_activacion'] + ' 00:00:00');
@@ -83,7 +158,7 @@ function obtenerCronograma() {
                 var list = data['duracion_periodo'].split(':');
                 var hora = list[0];
                 var minuto = list[1];
-
+                
                 $('#periodo_horas').val(hora);
                 $('#periodo_minutos').val(minuto);
                 var fechaStub = data['fecha_activacion'] + ' ';
@@ -100,6 +175,7 @@ function obtenerCronograma() {
                 $('#guardar').attr('disabled', fechaActivacion < new Date());
 
             } else {
+
                 $('#fechahorainicio').parent().data('DateTimePicker').date(null);
                 $('#fechahorafin').parent().data('DateTimePicker').date(null);
                 $('#fechaactivacion').parent().data('DateTimePicker').date(null);
@@ -132,13 +208,15 @@ function obtenerFecha(idInput) {
 }
 
 $('#guardar').click(function () {
+
     if ($('#selecAnio').val() !== null && $('#selecGestion').val() !== null) {
-        debugger;
+            
         var fechaInicial = formatearFecha(obtenerFecha('fechahorainicio'));
         var fechaFin = formatearFecha(obtenerFecha('fechahorafin'));
         var fechaActivacionCrudo = obtenerFecha('fechaactivacion');
         var fechaActivacion =  formatearSoloFecha(obtenerFecha('fechaactivacion'));
-
+        //comparar con los anteriores cronogramas si existe o no existe solapamiento
+    
         var datos = {
             anio: $('#selecAnio').val(),
             gestion: $('#selecGestion').val(),
@@ -151,6 +229,10 @@ $('#guardar').click(function () {
             hora_fin_jornada: $('#hora_fin_jornada').val(),
             hora_fin_sabado: $('#hora_fin_sabado').val()
         };
+    
+
+
+
         ajaxPost('guardar_cronograma.php', datos, function (resputesta) {
 
             if (resputesta.exito) {
@@ -250,7 +332,6 @@ function modificarHabilitadoBotonesCronograma(habilitado) {
 }
 
 $(document).ready(function () {
-
     mostrarMensajeCronograma('alert-info', 'Seleccione un año y gestión');
     modificarHabilitadoBotonesCronograma(false);
     modificarHabilitadoCamposCronograma(true);

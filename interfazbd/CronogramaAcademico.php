@@ -185,7 +185,21 @@ class CronogramaAcademico extends ConexionBD {
             return null;
         }
     }
-    
+///////////////////////////////////////////////////////////////////////////////////////////
+    public static function obtenerCronoFechaFinYconfi($anio,$gestion){
+
+        self::validarAnioGestion($anio, $gestion);
+        $consulta = "SELECT * FROM cronograma_academico WHERE anio='$anio'";
+        $resultado = ConexionBD::getConexion()->query($consulta);
+
+        if($resultado->num_rows > 0){
+            $res =  $resultado->fetCh_assoc();
+        }else{
+            $res =  null;
+        }
+        return $res;
+    }
+///////////////////////////////////////////////////////////////////////////////////////////    
     public static function obtenerFechaActivacionCronograma($anio, $gestion) {
         
         $consulta = "SELECT fecha_activacion FROM cronograma_academico WHERE anio='$anio' AND gestion='$gestion'";

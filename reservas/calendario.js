@@ -1038,7 +1038,7 @@ class BarraNavegacion extends Observable {
         console.log(diaActual);
         return diaActual;
     }
-
+//////////////////
     cambiarFechaADate(cadenayymmdd){
         var aux = cadenayymmdd.split("-");
         var res = aux[2].split(" ");

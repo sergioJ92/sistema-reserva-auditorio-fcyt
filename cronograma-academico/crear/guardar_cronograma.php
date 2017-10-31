@@ -7,8 +7,7 @@ require_once RAIZ.'/interfazbd/ValidacionExcepcion.php';
 require_once RAIZ.'/interfazbd/CronogramaAcademico.php';
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
     header('Content-Type: application/json');
     $conectado = ConexionBD::conectar();
     $entrada = $_POST;
