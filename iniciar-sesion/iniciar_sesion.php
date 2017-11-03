@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode($resultado);
     }else{
         if(password_verify($passwordUsuario, $resultado['contrasenia'])){
-//         if($passwordUsuario == $resultado['contrasenia']){
+        // if($passwordUsuario == $resultado['contrasenia']){
             //password_hash('password', PASSWORD_DEFAULT);
             $privilegios = obtenerPrivilegio($resultado['nombre_rol']);
             session_start();
