@@ -914,5 +914,3 @@ alter table RESERVA_ACADEMICA
    add constraint FK_RESERVA__RELATIONS_ACTIVIDA foreign key (ID_CONTENIDO)
       references ACTIVIDAD (ID_CONTENIDO)
       on delete restrict on update cascade;
-
-update pg_database set encoding=6 where datname='mibd';

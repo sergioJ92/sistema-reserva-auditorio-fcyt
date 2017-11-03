@@ -40,10 +40,10 @@ INSERT INTO rol (nombre_rol, puede_tener_materias) VALUES
 ('Super usuario', 1);
 
 INSERT INTO usuario (nombre_usuario, contrasenia, nombres, apellidos, nombre_rol) VALUES
-('lin777', '$2y$10$NDXLPI9PAjffRwF2.NThH.jho/jKW8H/NA0iupO4bvI5bCZLtDzsC', 'Evelyn', 'Cusi Lopez', 'Super usuario');
+('root', '$2y$10$L1akpmxVFSI7/1/cwToZvegUJyrtYjAXsgAkUgMwTsaP5YppYnNxe', 'Evelyn', 'Cusi Lopez', 'Super usuario');
 
 INSERT INTO correo_usuario (nombre_usuario, correo) VALUES
-('lin777', 'cusi.evelyn@gmail.com');
+('root', 'cusi.evelyn@gmail.com');
 
 
 
@@ -132,12 +132,12 @@ INSERT INTO reserva_academica (id_reserva, codigo_materia, id_asunto, id_conteni
 
 
 INSERT INTO responsable_reserva (nombre_usuario, id_reserva) VALUES
-('lin777', 1),
-('lin777', 2),
-('lin777', 3),
-('lin777', 4),
-('lin777', 5),
-('lin777', 6);
+('root', 1),
+('root', 2),
+('root', 3),
+('root', 4),
+('root', 5),
+('root', 6);
 
 
 
@@ -154,13 +154,13 @@ INSERT INTO telefono (id_solicitud_reserva, telefono1) VALUES
 
 
 INSERT INTO telefono_usuario (nombre_usuario, telefono) VALUES
-('lin777', 70700865);
+('root', 70700865);
 
 
 INSERT INTO tiene_materia (nombre_usuario, codigo_materia) VALUES
-('lin777', 2010010),
-('lin777', 2010022),
-('lin777', 2010024);
+('root', 2010010),
+('root', 2010022),
+('root', 2010024);
 
 INSERT INTO tolerancia (id_contenido) VALUES
 (2),
