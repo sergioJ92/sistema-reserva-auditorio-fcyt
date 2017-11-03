@@ -9,9 +9,9 @@ require_once RAIZ.'/interfazbd/ValidacionExcepcion.php';
 function verificarModificarReserva($idReserva) {
     
     $consulta = "SELECT * FROM reserva WHERE id_reserva = '$idReserva'";
-    $resConsulta = ConexionBD::getConexion()->query($consulta);
-    if ($resConsulta->num_rows == 1) {
-        $reserva = $resConsulta->fetch_assoc();
+    $resConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    if (pg_num_rows($resConsulta) == 1) {
+        $reserva = pg_fetch_assoc($resConsulta);
         $fecha = $reserva['fecha'];
         $horaInicio = $reserva['hora_inicio'];
         if (Validador::fechaEsMenorIgual("$fecha $horaInicio", date('Y-m-d H:m'))) {
@@ -27,7 +27,7 @@ function actualizarReservaAcademica($idReserva, $codigoMateria, $idAsunto) {
    
     verificarModificarReserva($idReserva);
     $consulta = "UPDATE reserva_academica SET codigo_materia='$codigoMateria', id_asunto='$idAsunto' WHERE id_reserva='$idReserva'";
-    if (ConexionBD::getConexion()->query($consulta)) {
+    if (pg_query(ConexionBD::getConexion(),$consulta)) {
         return true;
     }else{
         return false;

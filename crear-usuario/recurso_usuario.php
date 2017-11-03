@@ -9,8 +9,8 @@ require_once RAIZ . '/interfazbd/ValidacionExcepcion.php';
 function rolPuedeTenerMaterias($nombreRol) {
     
     $conn = ConexionBD::getConexion();
-    $rol = $conn->query("SELECT * FROM rol WHERE nombre_rol='$nombreRol'");
-    return $rol->fetch_assoc()['puede_tener_materias'] == 1;
+    $rol = pg_query($conn,"SELECT * FROM rol WHERE nombre_rol='$nombreRol'");
+    return pg_fetch_assoc($rol)['puede_tener_materias'] == 1;
 }
 
 function validarDatosUsuario(
@@ -56,7 +56,7 @@ function guardarUsuario(
             $nombreRol, $materias);
     
     $conn = ConexionBD::getConexion();
-    $conn->autocommit(false);
+    pg_query($conn, "BEGIN");
     $hashContrasenia = password_hash($contrasenia, PASSWORD_DEFAULT);
     if (!password_verify($contrasenia, $hashContrasenia)) {
         throw new ValidacionExcepcion('No pudo encriptar correctamente la contraseña. '
@@ -67,41 +67,41 @@ function guardarUsuario(
     $insertarUsuario .= " VALUES ('$nombres', '$apellidos',";
     $insertarUsuario .= " '$nombreUsuario', '$hashContrasenia', '$nombreRol')";
     
-    if ($conn->query($insertarUsuario)) {
+    if (pg_query($conn, $insertarUsuario)) {
         $insertarTelefono = 'INSERT INTO telefono_usuario (telefono, nombre_usuario)';
         $insertarTelefono .= " VALUES ('$telefono', '$nombreUsuario')";
         
-        if ($conn->query($insertarTelefono)) {
+        if (pg_query($conn, $insertarTelefono)) {
             $insertarCorreo = 'INSERT INTO correo_usuario (correo, nombre_usuario)';
             $insertarCorreo .= " VALUES ('$correo', '$nombreUsuario')";
             
-            if ($conn->query($insertarCorreo)) {
+            if (pg_query($conn, $insertarCorreo)) {
                 if (count($materias) > 0) {
                     $baseAnadirMateria = 'INSERT INTO tiene_materia (codigo_materia, nombre_usuario)';
 
                     foreach ($materias as $materia) {
                         $anadirMateria = $baseAnadirMateria . " VALUES ('$materia', '$nombreUsuario')";
-                        if (!$conn->query($anadirMateria)) {
+                        if (!pg_query($conn, $anadirMateria)) {
                             throw new GuardarExcepcion('Tiene materia');
                         }
                     }
                 } else {
-                    $conn->query("INSERT INTO tiene_materia"
+                    pg_query($conn, "INSERT INTO tiene_materia"
                             . " (codigo_materia, nombre_usuario)"
                             . " VALUES ('0', '$nombreUsuario')");
                 }
-                $conn->commit();
+                pg_query($conn, "COMMIT");
             } else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Correo usuario');
             }
         } else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Teléfono usuario');
         }
     }
     else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new ValidacionExcepcion('Ya existe una cuenta con ese Nombre de usuario');
     }
 }

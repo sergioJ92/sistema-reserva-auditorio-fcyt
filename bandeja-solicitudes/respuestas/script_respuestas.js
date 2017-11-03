@@ -32,8 +32,8 @@ function llenarModal(valor) {
     $('#modalMensaje').text("");
 
     $('#modalResponsable').text(datos[valor]['responsable']);
-    $('#modalCorreo').text(datos[valor]['correo']);
-    $('#modalTelefono').text(datos[valor]['telefono']);
+    $('#modalCorreo').text(datos[valor]['correo1']);
+    $('#modalTelefono').text(datos[valor]['telefono1']);
     $('#modalHoraInicio').text(datos[valor]['hora_inicio']);
     $('#modalHoraFin').text(datos[valor]['hora_fin']);
     $('#modalEvento').text(datos[valor]['evento']);

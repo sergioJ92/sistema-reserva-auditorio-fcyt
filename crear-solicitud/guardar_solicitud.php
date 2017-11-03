@@ -51,39 +51,40 @@ function insertarSolicitudDeReserva(
     validarSolicitud($fecha, $horaInicio, $horaFin, $responsable, $evento, $telefono, $correo, $institucion);
     
     $conn = ConexionBD::getConexion();
-    $conn->autocommit(false);
+    pg_query($conn, "BEGIN");
     $insertarSolicitud = 'INSERT INTO solicitud_reserva';
-    $insertarSolicitud .= ' (id_solicitud_reserva, leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES';
-    $insertarSolicitud .= " ('null', '0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
+    $insertarSolicitud .= ' (leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES';
+    $insertarSolicitud .= " ('0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
     
-    if ($conn->query($insertarSolicitud)) {
+    if (pg_query($conn, $insertarSolicitud)) {
         return insertarTelefonoYCorreo($conn, $telefono, $correo);
     }
     else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new GuardarExcepcion('Solicitud de reserva');
     }
 }
 
 function insertarTelefonoYCorreo($conn, $telefono, $correo) {
     
-    $get_id = $conn->insert_id;
-    $insertarTelefono = "INSERT INTO telefono (id_solicitud_reserva, telefono) VALUES ('$get_id', '$telefono')";
+    $consulta_insercion = pg_query($conn, "SELECT lastval();");
+    $get_id = pg_fetch_row($consulta_insercion)[0];
+    $insertarTelefono = "INSERT INTO telefono (id_solicitud_reserva, telefono1) VALUES ('$get_id', '$telefono')";
 
-    if ($conn->query($insertarTelefono)) {
+    if (pg_query($conn, $insertarTelefono)) {
 
-        $insertarCorreo = "INSERT INTO correo (id_solicitud_reserva, correo) VALUES ('$get_id', '$correo')";
-        if ($conn->query($insertarCorreo)) {
-            $conn->commit();
+        $insertarCorreo = "INSERT INTO correo (id_solicitud_reserva, correo1) VALUES ('$get_id', '$correo')";
+        if (pg_query($conn, $insertarCorreo)) {
+            pg_query($conn, "COMMIT");
             return $get_id;
         }
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Correo');
         }
     }
     else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new GuardarExcepcion('Telefono');
     }
 }
@@ -91,10 +92,10 @@ function insertarTelefonoYCorreo($conn, $telefono, $correo) {
 function obtenerSolicitudDeReserva() {
     
     $consulta = "SELECT * FROM solicitud_reserva";
-    $resultado = ConexionBD::getConexion()->query($consulta);
+    $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     
-    if ($resultado->num_rows > 0) {
-        return $resultado->fetch_assoc();
+    if (pg_num_rows($resultado) > 0) {
+        return pg_fetch_assoc($resultado);
     }
     else {
         return null;

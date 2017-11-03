@@ -1,0 +1,26 @@
+ 
+Primero debe crearse la base de datos por la consola
+
+-> Para entrar a la consola ejecutar el siguiente comando:
+    psql -U postgres -h localhost -W
+    
+-> Para crear la Base de Datos ejecutar el siguiente comando:
+    create database sisresaudifcyt;
+    
+Luego debe cambiarse la codificacion de la misma
+
+-> Para cambiar la codificacion ejecutar este comando:
+    update pg_database set encoding=6 where datname='sisresaudifcyt';
+
+Luego se debe salir de la consola 
+
+-> Para salir de la consola ejecutar:
+    \q
+    
+Luego se procede a cargar las tablas
+
+-> Para cargar las tablas debe ejecutarse:
+    psql -U postgres -h localhost -W sisresaudifcyt < version1_tis.sql
+    
+-> Para cargar los datos se debe ejecutar:
+    psql -U postgres -h localhost -W sisresaudifcyt < datos_insertar_nuevo.sql

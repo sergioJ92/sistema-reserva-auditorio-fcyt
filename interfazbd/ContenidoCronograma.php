@@ -16,7 +16,7 @@ class ContenidoCronograma {
         $consultaCont .= " ('$fechaHoraInicio','$fechaHoraFin',"
                 . "'$descripcion','$anio','$gestion')";
         
-        return ConexionBD::getConexion()->query($consultaCont);
+        return pg_query(ConexionBD::getConexion(), $consultaCont);
     }
     
     public static function insertarActividad(
@@ -31,26 +31,27 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $anio, $gestion);
         
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::insertarContenido($fechaHoraInicio, $fechaHoraFin, 
                 $descripcion, $anio, $gestion)) {
             
-            $idcontenido = $conn->insert_id;
+            $consulta_insercion = pg_query($conn, "SELECT lastval();");
+            $idcontenido = pg_fetch_row($consulta_insercion)[0];
             $consultaAct = 'INSERT INTO actividad (id_contenido, titulo, permite_reserva) ';
             $consultaAct .= "VALUES ('$idcontenido','$titulo', '$permiteReserva')";
 
-            if ($conn->query($consultaAct)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaAct)) {
+                pg_query($conn, "COMMIT");
                 return $idcontenido;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Actividad');
             }
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Contenido');
         }
     }
@@ -66,26 +67,27 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $anio, $gestion);
 
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::insertarContenido($fechaHoraInicio, $fechaHoraFin, 
                 $descripcion, $anio, $gestion)) {
             
-            $idcontenido = $conn->insert_id;
+            $consulta_insercion = pg_query($conn, "SELECT lastval();");
+            $idcontenido = pg_fetch_row($consulta_insercion)[0];
             $consultaTol = 'INSERT INTO tolerancia (id_contenido) ';
             $consultaTol .= "VALUES ('$idcontenido')";
 
-            if ($conn->query($consultaTol)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaTol)) {
+                pg_query($conn, "COMMIT");
                 return $idcontenido;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Tolerancia');
             }
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Contenido');
         }
     }
@@ -101,25 +103,26 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $anio, $gestion);
             
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
         
         if (self::insertarContenido($fechaHoraInicio, $fechaHoraFin, 
                 $descripcion, $anio, $gestion)) {
             
-            $idcontenido = $conn->insert_id;
+            $consulta_insercion = pg_query($conn, "SELECT lastval();");
+            $idcontenido = pg_fetch_row($consulta_insercion)[0];
             $consultaFerEsp = 'INSERT INTO feriado_especial (id_contenido, titulo)';
             $consultaFerEsp .= " VALUES ('$idcontenido', '$titulo')";
             
-            if ($conn->query($consultaFerEsp)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaFerEsp)) {
+                pg_query($conn, "COMMIT");
                 return $idcontenido;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('FeriadoEspecial');
             }
         } else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Contenido');
         }
     }
@@ -136,26 +139,27 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $anio, $gestion);
         
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
         
         if (self::insertarContenido($fechaHoraInicio, $fechaHoraFin, 
                 $descripcion, $anio, $gestion)) {
             
-            $idcontenido = $conn->insert_id;
+            $consulta_insercion = pg_query($conn, "SELECT lastval();");
+            $idcontenido = pg_fetch_row($consulta_insercion)[0]; 
             $consultaOtro = 'INSERT INTO otro';
             $consultaOtro .= ' (id_contenido, titulo, cierre_universidad)';
             $consultaOtro .= " VALUES ('$idcontenido', '$titulo', '$cierreuniversidad')";
             
-            if ($conn->query($consultaOtro)) {
-                $conn->commit();
+            if (pg_query($conn,$consultaOtro)) {
+                pg_query($conn, "COMMIT");
                 return $idcontenido;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Otro');
             }
         } else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Contenido');
         }
     }
@@ -170,7 +174,7 @@ class ContenidoCronograma {
         $consultaCont .= " descripcion='$descripcion'";
         $consultaCont .= " WHERE id_contenido='$idcontenido'";
         
-        return ConexionBD::getConexion()->query($consultaCont);
+        return pg_query(ConexionBD::getConexion(), $consultaCont);
     }
 
     public static function actualizarActividad($idcontenido, 
@@ -184,7 +188,7 @@ class ContenidoCronograma {
                 $descripcion, $titulo, $permiteReserva);
             
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::actualizarContenido($idcontenido, $fechaHoraInicio, 
                 $fechaHoraFin, $descripcion)) {
@@ -193,17 +197,17 @@ class ContenidoCronograma {
             $consultaAct .= "permite_reserva='$permiteReserva'";
             $consultaAct .= " WHERE id_contenido='$idcontenido'";
 
-            if ($conn->query($consultaAct)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaAct)) {
+                pg_query($conn, "COMMIT");
                 return true;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new ActualizarExcepcion('Actividad', $idcontenido);
             }
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new ActualizarExcepcion('Contenido', $idcontenido);
         }
         return false;
@@ -218,15 +222,15 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $descripcion);
 
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::actualizarContenido($idcontenido, $fechaHoraInicio, 
                 $fechaHoraFin, $descripcion)) {
-            $conn->commit();
+            pg_query($conn, "COMMIT");
             return true;
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new ActualizarExcepcion('Contenido', $idcontenido);
         }
         return false;
@@ -242,7 +246,7 @@ class ContenidoCronograma {
                 $fechaHoraInicio, $fechaHoraFin, $descripcion, $titulo);
 
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::actualizarContenido($idcontenido, $fechaHoraInicio, 
                 $fechaHoraFin, $descripcion)) {
@@ -250,17 +254,17 @@ class ContenidoCronograma {
             $consultaFerEsp = "UPDATE feriado_especial SET titulo='$titulo'";
             $consultaFerEsp .= " WHERE id_contenido='$idcontenido'";
 
-            if ($conn->query($consultaFerEsp)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaFerEsp)) {
+                pg_query($conn, "COMMIT");
                 return true;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new ActualizarExcepcion('FeriadoEspecial', $idcontenido);
             }
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new ActualizarExcepcion('Contenido', $idcontenido);
         }
         return false;
@@ -278,7 +282,7 @@ class ContenidoCronograma {
                 $cierreUniversidad);
         
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
 
         if (self::actualizarContenido($idcontenido, $fechaHoraInicio, 
                 $fechaHoraFin, $descripcion)) {
@@ -287,17 +291,17 @@ class ContenidoCronograma {
             $consultaOtro .= "cierre_universidad='$cierreUniversidad'";
             $consultaOtro .= " WHERE id_contenido='$idcontenido'";
 
-            if ($conn->query($consultaOtro)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaOtro)) {
+                pg_query($conn, "COMMIT");
                 return true;
             } 
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new ActualizarExcepcion('Otro', $idcontenido);
             }
         } 
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new ActualizarExcepcion('Contenido', $idcontenido);
         }
         return false;
@@ -309,7 +313,7 @@ class ContenidoCronograma {
         $consulta = 'SELECT c.id_contenido AS id_contenido, fecha_hora_inicio, fecha_hora_fin, descripcion, titulo, permite_reserva';
         $consulta .= ' FROM contenido c, actividad a';
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion' AND c.id_contenido=a.id_contenido";
-        return self::obtenerEnLista($conn->query($consulta));
+        return self::obtenerEnLista(pg_query($conn, $consulta));
     }
     
     public static function obtenerTolerancias($anio, $gestion) {
@@ -318,7 +322,7 @@ class ContenidoCronograma {
         $consulta = 'SELECT c.id_contenido AS id_contenido, fecha_hora_inicio, fecha_hora_fin, descripcion';
         $consulta .= ' FROM contenido c, tolerancia t';
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion' AND c.id_contenido=t.id_contenido";
-        return self::obtenerEnLista($conn->query($consulta));
+        return self::obtenerEnLista(pg_query($conn, $consulta));
     }
 
     public static function obtenerFeriadosEspeciales($anio, $gestion) {
@@ -327,7 +331,7 @@ class ContenidoCronograma {
         $consulta = 'SELECT c.id_contenido AS id_contenido, fecha_hora_inicio, fecha_hora_fin, descripcion, titulo';
         $consulta .= ' FROM contenido c, feriado_especial f';
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion' AND c.id_contenido=f.id_contenido";
-        return self::obtenerEnLista($conn->query($consulta));
+        return self::obtenerEnLista(pg_query($conn, $consulta));
     }
 
     public static function obtenerOtros($anio, $gestion) {
@@ -336,13 +340,13 @@ class ContenidoCronograma {
         $consulta = 'SELECT c.id_contenido AS id_contenido, fecha_hora_inicio, fecha_hora_fin, descripcion, titulo, cierre_universidad';
         $consulta .= ' FROM contenido c, otro o';
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion' AND c.id_contenido=o.id_contenido";
-        return self::obtenerEnLista($conn->query($consulta));
+        return self::obtenerEnLista(pg_query($conn, $consulta));
     }
 
     public static function obtenerEnLista($consultaResultado) {
 
         $lista = [];
-        while ($fila = $consultaResultado->fetch_assoc()) {
+        while ($fila = pg_fetch_assoc($consultaResultado)) {
             array_push($lista, $fila);
         }
         return $lista;
@@ -351,7 +355,7 @@ class ContenidoCronograma {
     public static function verificarEliminarContenido($idContenido) {
         
         $consulta = "SELECT * FROM reserva_academica WHERE id_contenido = '$idContenido'";
-        if (!ConexionBD::getConexion()->query($consulta)->num_rows == 0) {
+        if (!pg_num_rows(pg_query(ConexionBD::getConexion(), $consulta)) == 0) {
             throw new ValidacionExcepcion('No se puede eliminar un Contenido del cronograma si ya tiene reservas dentro');
         }
     }
@@ -361,7 +365,7 @@ class ContenidoCronograma {
         self::verificarEliminarContenido($idContenido);
         $conn = ConexionBD::getConexion();
         $consulta = "DELETE FROM contenido WHERE id_contenido='$idContenido'";
-        if ($conn->query($consulta)) {
+        if (pg_query($conn, $consulta)) { 
 
         } else {
             throw new EliminarExcepcion('Contenido', $idContenido);
@@ -374,9 +378,9 @@ class ContenidoCronograma {
         $consulta .= ' FROM cronograma_academico';
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion'";
         
-        $resultado = ConexionBD::getConexion()->query($consulta);
-        if ($resultado->num_rows > 0) {
-            return $resultado->fetch_assoc();
+        $resultado = pg_query(ConexionBD::getConexion(), $consulta);
+        if (pg_num_rows($resultado) > 0) {
+            return pg_fetch_assoc($resultado);
         } else {
             throw new ValorIncorrectoExcepcion('Año y Gestion', 'No existen');
         }

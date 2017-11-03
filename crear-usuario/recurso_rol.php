@@ -9,9 +9,9 @@ require_once RAIZ. '/interfazbd/ValidacionExcepcion.php';
 function obtenerRoles() {
     
     $consulta = 'SELECT * FROM rol r, privilegio p WHERE r.nombre_rol = p.nombre_rol';
-    $resultado = ConexionBD::getConexion()->query($consulta);
+    $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     $resultadoLista = [];
-    while ($fila = $resultado->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($resultado)) {
         array_push($resultadoLista, $fila);
     }
     return $resultadoLista;
@@ -31,24 +31,24 @@ function guardarRol($nombreRol, $puedeTenerMaterias, $privilegios) {
         throw new ValidacionExcepcion('Seleccione los privilegios del Rol');
     }
     $conn = ConexionBD::getConexion();
-    $conn->autocommit(false);
+    pg_query($conn, "BEGIN");
     
     $insertarRol = 'INSERT INTO rol (nombre_rol, puede_tener_materias)';
     $insertarRol .= " VALUES ('$nombreRol', '$puedeTenerMaterias')";
-    if ($conn->query($insertarRol)) {
+    if (pg_query($conn, $insertarRol)) {
         $baseInsertarPriv = 'INSERT INTO privilegio (nombre_rol, nombre_privilegio) VALUES';
         foreach ($privilegios as $privilegio) {
             $insertarPrivilegio = $baseInsertarPriv . " ('$nombreRol', '$privilegio')";
             
-            if (!$conn->query($insertarPrivilegio)) {
-                $conn->rollback();
+            if (!pg_query($conn,$insertarPrivilegio)) {
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('privilegio');
             }
             $insertarPrivilegio = '';
         }
-        $conn->commit();
+        pg_query($conn, "COMMIT");
     } else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new ValidacionExcepcion('Ya existe un rol con ese nombre');
     }
 }

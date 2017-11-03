@@ -10,9 +10,9 @@ function obtenerUsuario($user) {
     $consulta .= " '";
     $consulta .= $user;
     $consulta .= "'";
-    $resultado = ConexionBD::getConexion()->query($consulta);
-    if ($resultado->num_rows > 0) {
-        return $resultado->fetch_assoc();
+    $resultado = pg_query(ConexionBD::getConexion(), $consulta);
+    if (pg_num_rows($resultado) > 0) {
+        return pg_fetch_assoc($resultado);
     } else {
         return false;
     }
@@ -24,9 +24,9 @@ function obtenerPrivilegio($rol) {
     $consulta .= " '";
     $consulta .= $rol;
     $consulta .= "'";
-    $resultado = ConexionBD::getConexion()->query($consulta);
+    $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     $lista = [];
-    while ($fila = $resultado->fetch_assoc()) {
+    while ($fila = pg_fetch_assoc($resultado)) {
         array_push($lista, $fila);
     }
     return $lista;

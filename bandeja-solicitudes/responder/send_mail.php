@@ -15,17 +15,18 @@ function marcarLeido($idSolicitudReserva) {
     $consulta = 'UPDATE solicitud_reserva SET';
     $consulta .= " leido=1";
     $consulta .= " WHERE solicitud_reserva.id_solicitud_reserva='$idSolicitudReserva'";
-    return ConexionBD::getConexion()->query($consulta);
+     return pg_query(ConexionBD::getConexion(), $consulta);
 }
 
 function insertarMensaje (
     $mensaje,$idSolicitudReserva,$aceptadoRechazado, $representante,$cargoRepresentante){
     global $idRespuesta;
     $consulta = 'INSERT INTO respuesta';
-    $consulta .= ' (id_respuesta, aceptado, mensaje, id_solicitud_reserva, representante, cargo_representante) VALUES';
-    $consulta .= " ( NULL,'$aceptadoRechazado', '$mensaje', '$idSolicitudReserva', '$representante', '$cargoRepresentante')";
-    $resultadoConsulta = ConexionBD::getConexion()->query($consulta);
-    $idRespuesta = ConexionBD::getConexion()->insert_id;
+    $consulta .= ' (aceptado, mensaje, id_solicitud_reserva, representante, cargo_representante) VALUES';
+    $consulta .= " ('$aceptadoRechazado', '$mensaje', '$idSolicitudReserva', '$representante', '$cargoRepresentante')";
+    $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    $consulta_insercion = pg_query(ConexionBD::getConexion(), "SELECT lastval();");
+    $idRespuesta = pg_fetch_row($consulta_insercion)[0];
     return $resultadoConsulta;
 }
 
@@ -35,7 +36,7 @@ function eliminarReservas($listaConflictos){
             $idEliminar = $listaConflictos[$indice]['id_reserva'];
             $consulta = "DELETE FROM reserva WHERE reserva.id_reserva = '$idEliminar'";
             
-            if (!ConexionBD::getConexion()->query($consulta)) {
+            if (!pg_query(ConexionBD::getConexion(), $consulta)) {
                 return false;
             }
         }
@@ -46,10 +47,11 @@ function eliminarReservas($listaConflictos){
 function crearReserva($fecha,$horaInicio,$horaFin,$evento){
     global $idReserva;
     $consulta = 'INSERT INTO reserva';
-    $consulta .= ' (id_reserva,fecha, hora_inicio, hora_fin, evento) VALUES';
-    $consulta .= " ( NULL,'$fecha', '$horaInicio', '$horaFin', '$evento')";
-    $resultadoConsulta = ConexionBD::getConexion()->query($consulta);
-    $idReserva = ConexionBD::getConexion()->insert_id;
+    $consulta .= ' (fecha, hora_inicio, hora_fin, evento) VALUES';
+    $consulta .= " ('$fecha', '$horaInicio', '$horaFin', '$evento')";
+    $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    $consulta_insercion = pg_query(ConexionBD::getConexion(), "SELECT lastval();");
+    $idReserva = pg_fetch_row($consulta_insercion)[0];
     return $resultadoConsulta;
 }
 
@@ -58,43 +60,44 @@ function crearReservaSolicitada($responsable,$descripcion,$institucion){
     $consulta = 'INSERT INTO reserva_solicitada';
     $consulta .= ' (id_reserva,responsable, descripcion, institucion, id_respuesta) VALUES';
     $consulta .= " ( '$idReserva','$responsable', '$descripcion', '$institucion', '$idRespuesta')";
-    $resultadoConsulta = ConexionBD::getConexion()->query($consulta);
+    $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     return $resultadoConsulta;
 }
 
 function realizarReservaCompleta($mensaje,$idSolicitudReserva,$aceptadoRechazado, $representante,$cargoRepresentante,$listaConflictos,
         $fecha,$horaInicio,$horaFin,$evento,$responsable,$descripcion,$institucion){
-    ConexionBD::getConexion()->autocommit(false);
+    //pg_query(ConexionBD::getConexion(), "BEGIN work");
+    //pg_query(ConexionBD::getConexion(), "lock table reserva in exclusive mode");
     if (insertarMensaje($mensaje, $idSolicitudReserva, $aceptadoRechazado, $representante, $cargoRepresentante)) {
         if (marcarLeido($idSolicitudReserva)) {
             if ($aceptadoRechazado == 1) {
                 if (eliminarReservas($listaConflictos)){
                     if (crearReserva($fecha,$horaInicio,$horaFin,$evento)) {
                         if (crearReservaSolicitada($responsable, $descripcion, $institucion)) {
-                            ConexionBD::getConexion()->commit();
+                            pg_query(ConexionBD::getConexion(), "COMMIT work");
                             return true;
                         }else{
-                            ConexionBD::getConexion()->rollback();
+                            pg_query(ConexionBD::getConexion(), "ROLLBACK work");
                             return false;
                         }
                     }else{
-                        ConexionBD::getConexion()->rollback();
+                        pg_query(ConexionBD::getConexion(), "ROLLBACK work");
                         return false;
                     }
                 }else{
-                    ConexionBD::getConexion()->rollback();
+                    pg_query(ConexionBD::getConexion(), "ROLLBACK work");
                     return false;
                 }
             }else{
-                ConexionBD::getConexion()->commit();
+                pg_query(ConexionBD::getConexion(), "COMMIT work");
                 return true;
             }
         }else{
-            ConexionBD::getConexion()->rollback();
+            pg_query(ConexionBD::getConexion(), "ROLLBACK work");
             return false;
         }
     }else{
-        ConexionBD::getConexion()->rollback();
+        pg_query(ConexionBD::getConexion(), "ROLLBACK work");
         return false;
     }
 }
@@ -134,8 +137,8 @@ function obtenerCorreos($listaAcademicas){
     for($i = 0 ; $i<count($listaAcademicas);$i++){
         $idBuscarCorreo = $listaAcademicas[$i]['id_reserva'];
         $consulta = "SELECT correo_usuario.correo FROM responsable_reserva, correo_usuario WHERE responsable_reserva.id_reserva = '$idBuscarCorreo' AND correo_usuario.nombre_usuario = responsable_reserva.nombre_usuario ";
-        $resultadoConsulta = $conexion->query($consulta);
-        while ($fila = $resultadoConsulta->fetch_assoc()) {
+        $resultadoConsulta = pg_query($conexion, $consulta);
+        while ($fila = pg_fetch_assoc($resultadoConsulta)) {
             array_push($lista, $fila);
         }
     }

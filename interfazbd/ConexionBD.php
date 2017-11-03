@@ -17,7 +17,6 @@ class ConexionBD {
      * @var mysqli Conexion con la base de datos
      */
     private static $conexion;
-
     /**
      * Conectar con la Base de Datos MySql
      * Si no es posible crear la conexion, termina la ejecucion de la aplicacion
@@ -28,11 +27,11 @@ class ConexionBD {
 
         if (ConexionBD::$conexion === null) {
             require_once 'propiedades.php';
-            ConexionBD::$conexion = new mysqli(HOST, USER, PASSWORD, DATABASE);
-            if (ConexionBD::$conexion->connect_error) {
-                die("Conexion fallida: " . ConexionBD::$conexion->connect_error);
+            ConexionBD::$conexion = pg_connect("host=".HOST." port=".PORT." dbname=".DATABASE." user=".USER." password=".PASSWORD."");
+            if(ConexionBD::$conexion == false){
+                die("Error en la Conexion: ".pg_last_error());
             }
-            self::$conexion->query("SET NAMES 'utf8'");
+            pg_query(self::$conexion,"SET NAMES 'utf8'");
             return true;
         }
         return false;

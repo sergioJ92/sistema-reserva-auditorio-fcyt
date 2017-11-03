@@ -5,11 +5,11 @@ class InterfazReservasCalendario {
     public static function obternerReservasSimple($fecha) {
         $conexion = ConexionBD::getConexion();
         $consulta = "SELECT RES.*, ASUN.asunto FROM reserva AS RES, reserva_academica AS ACADE, asunto AS ASUN WHERE RES.fecha = '$fecha' AND RES.id_reserva = ACADE.id_reserva AND ASUN.id_asunto = ACADE.id_asunto";
-        return self::obtenerEnLista($conexion->query($consulta));
+        return self::obtenerEnLista(pg_query($conexion, $consulta));
     }
     private static function obtenerEnLista($resultado_consulta) {
         $lista = [];
-        while ($fila = $resultado_consulta->fetch_assoc()) {
+         while ($fila = pg_fetch_assoc($resultado_consulta)) {
             array_push($lista, $fila);
         }
         return $lista;
@@ -17,7 +17,7 @@ class InterfazReservasCalendario {
     public static function obternerReservasSolicitada($fecha) {
         $conexion = ConexionBD::getConexion();
         $consulta = "SELECT RES.* ,SOLIC.id_respuesta FROM reserva AS RES, reserva_solicitada AS SOLIC WHERE RES.fecha = '$fecha' AND RES.id_reserva = SOLIC.id_reserva ";
-        return self::obtenerEnLista($conexion->query($consulta));
+        return self::obtenerEnLista(pg_query($conexion, $consulta));
     }
     public static function obtenerTodasLasReservas ($fecha){
         $lista1 = self::obternerReservasSimple($fecha);

@@ -9,7 +9,7 @@ function eliminarReserva($fecha, $horaInicio, $horaFin) {
     
     ConexionBD::conectar();
     $consulta = "DELETE FROM reserva WHERE fecha='$fecha' AND hora_inicio='$horaInicio' AND hora_fin='$horaFin'";
-    return ConexionBD::getConexion()->query($consulta);
+    return pg_query(ConexionBD::getConexion(),$consulta);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

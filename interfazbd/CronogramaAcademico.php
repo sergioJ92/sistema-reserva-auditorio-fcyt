@@ -49,7 +49,7 @@ class CronogramaAcademico extends ConexionBD {
         $consulta .= ' (anio, gestion, fecha_hora_inicio, fecha_hora_fin) VALUES';
         $consulta .= " ('$anio', '$gestion', '$fechaHoraInicio', '$fechaHoraFin')";
         
-        return ConexionBD::getConexion()->query($consulta);
+        return pg_query(ConexionBD::getConexion(), $consulta);    
     }
 
     public static function actualizar(
@@ -60,7 +60,7 @@ class CronogramaAcademico extends ConexionBD {
         $consulta .= " fecha_hora_inicio='$fechaHoraInicio',";
         $consulta .= " fecha_hora_fin='$fechaHoraFin'";
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion'";
-        return ConexionBD::getConexion()->query($consulta);
+        return pg_query(ConexionBD::getConexion(), $consulta);
     }
     
     public static function validarConfiguracionPeriodo($periodoHoras, $periodoMinutos) {
@@ -97,25 +97,25 @@ class CronogramaAcademico extends ConexionBD {
         $consulta .= ' (anio, gestion, fecha_hora_inicio, fecha_hora_fin, fecha_activacion) VALUES';
         $consulta .= " ('$anio', '$gestion', '$fechaHoraInicio', '$fechaHoraFin', '$fechaActivacion')";
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
+        pg_query($conn, "BEGIN");
         
-        if ($conn->query($consulta)) {
+        if (pg_query($conn, $consulta)) {
             $consultaConfig = ConexionBD::construirConsultaInsert('configuracion', 
                     ['anio', 'gestion', 'duracion_periodo', 'hora_inicio_jornada', 
                         'hora_fin_jornada', 'hora_fin_sabado'], [$anio, $gestion, 
                             $duracionPeriodo, $horaInicioJornada, $horaFinJornada, $horaFinSabado]);
 
-            if ($conn->query($consultaConfig)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaConfig)) {
+                pg_query($conn, "COMMIT");
                 return true;
             }
             else {
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Configuracion');
             }
         }
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             return false;
         }
     }
@@ -137,25 +137,25 @@ class CronogramaAcademico extends ConexionBD {
         $consulta .= " WHERE anio='$anio' AND gestion='$gestion'";
         
         $conn = ConexionBD::getConexion();
-        $conn->autocommit(false);
-        if ($conn->query($consulta)) {
+        pg_query($conn, "BEGIN");
+        if (pg_query($conn, $consulta)) {
             
             $consultaConfig=ConexionBD::construirConsultaUpdate('configuracion', 
                     ['duracion_periodo', 'hora_inicio_jornada', 'hora_fin_jornada',
                         'hora_fin_sabado'], [$duracionPeriodo, $horaInicioJornada, 
                             $horaFinJornada, $horaFinSabado], ['anio', 'gestion'], [$anio, $gestion]);
 
-            if ($conn->query($consultaConfig)) {
-                $conn->commit();
+            if (pg_query($conn, $consultaConfig)) {
+                pg_query($conn, "COMMIT");
                 return true;
             }else{
-                $conn->rollback();
+                pg_query($conn, "ROLLBACK");
                 throw new ActualizarExcepcion('Configuracion desde método actualizarCronogramaConfi');
                 
                 
             }
         }else{
-            $conn ->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new ActualizarExcepcion('Cronograma académico');
         }
     }
@@ -164,9 +164,9 @@ class CronogramaAcademico extends ConexionBD {
 
         self::validarAnioGestion($anio, $gestion);
         $consulta = "SELECT * FROM cronograma_academico WHERE anio='$anio' AND gestion='$gestion'";
-        $resultado = ConexionBD::getConexion()->query($consulta);
-        if ($resultado->num_rows > 0) {
-            return $resultado->fetch_assoc();
+        $resultado = pg_query(ConexionBD::getConexion(), $consulta);
+        if (pg_num_rows($resultado) > 0) {
+            return pg_fetch_assoc($resultado);
         } else {
             return null;
         }
@@ -178,9 +178,9 @@ class CronogramaAcademico extends ConexionBD {
         $consulta = "SELECT CRO.*, CON.duracion_periodo, CON.hora_inicio_jornada, CON.hora_fin_jornada, CON.hora_fin_sabado "
                 . "FROM cronograma_academico AS CRO, configuracion AS CON "
                 . "WHERE CON.anio='$anio' AND CON.gestion='$gestion' AND CRO.anio=CON.anio AND CRO.gestion=CON.gestion";
-        $resultado = ConexionBD::getConexion()->query($consulta);
-        if ($resultado->num_rows > 0) {
-            return $resultado->fetch_assoc();
+        $resultado = pg_query(ConexionBD::getConexion(), $consulta);
+        if (pg_num_rows($resultado) > 0) {
+            return pg_fetch_assoc($resultado);
         } else {
             return null;
         }
@@ -190,10 +190,10 @@ class CronogramaAcademico extends ConexionBD {
 
         self::validarAnioGestion($anio, $gestion);
         $consulta = "SELECT * FROM cronograma_academico WHERE anio='$anio'";
-        $resultado = ConexionBD::getConexion()->query($consulta);
+        $resultado = pg_query(ConexionBD::getConexion(), $consulta);
 
-        if($resultado->num_rows > 0){
-            $res =  $resultado->fetCh_assoc();
+        if(pg_num_rows($resultado) > 0){
+            $res =  pg_fetch_assoc($resultado);
         }else{
             $res =  null;
         }
@@ -203,7 +203,7 @@ class CronogramaAcademico extends ConexionBD {
     public static function obtenerFechaActivacionCronograma($anio, $gestion) {
         
         $consulta = "SELECT fecha_activacion FROM cronograma_academico WHERE anio='$anio' AND gestion='$gestion'";
-        return ConexionBD::getConexion()->query($consulta)->fetch_assoc()['fecha_activacion'];
+        return pg_fetch_assoc(pg_query(ConexionBD::getConexion(), $consulta)) ['fecha_activacion'];
     }
     
     public static function eliminar($anio, $gestion) {
@@ -216,7 +216,7 @@ class CronogramaAcademico extends ConexionBD {
         }
         else {
             $consulta = "DELETE FROM cronograma_academico WHERE anio=$anio AND gestion=$gestion";
-            if (!ConexionBD::getConexion()->query($consulta)) {
+            if (!pg_query(ConexionBD::getConexion(), $consulta)) {
                 throw new EliminarExcepcion('Cronograma académico');
             }
         }
@@ -226,10 +226,10 @@ class CronogramaAcademico extends ConexionBD {
 
         $consulta = 'SELECT * FROM cronograma_academico';
         $conn = ConexionBD::getConexion();
-        $consultaResultado = $conn->query($consulta);
+        $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
         
-        while ($fila = $consultaResultado->fetch_assoc()) {
+        while ($fila = pg_fetch_assoc($consultaResultado)) {
             $anio = $fila['anio'];
             $gestion = $fila['gestion'];
             $fechaActivacion = $fila['fecha_activacion'];
@@ -244,9 +244,9 @@ class CronogramaAcademico extends ConexionBD {
 
         $consulta = 'SELECT anio, gestion FROM cronograma_academico';
         $conn = ConexionBD::getConexion();
-        $consultaResultado = $conn->query($consulta);
+        $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
-        while ($fila = $consultaResultado->fetch_assoc()) {
+        while ($fila = pg_fetch_assoc($consultaResultado)) {
             $anio = $fila['anio'];
             $gestion = $fila['gestion'];
             array_push($resultado, "$anio - $gestion");

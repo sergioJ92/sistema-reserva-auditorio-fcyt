@@ -47,8 +47,8 @@ function llenarModal(idLista) {
 
     $('#modalInstitucion').text(datos[idLista]['institucion']);
     $('#modalResponsable').text(datos[idLista]['responsable']);
-    $('#modalCorreo').text(datos[idLista]['correo']);
-    $('#modalTelefono').text(datos[idLista]['telefono']);
+    $('#modalCorreo').text(datos[idLista]['correo1']);
+    $('#modalTelefono').text(datos[idLista]['telefono1']);
     $('#modalFecha').text(datos[idLista]['fecha']);
     $('#modalHoraInicio').text(datos[idLista]['hora_inicio']);
     $('#modalHoraFin').text(datos[idLista]['hora_fin']);

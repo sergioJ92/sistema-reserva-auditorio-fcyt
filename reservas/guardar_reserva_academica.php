@@ -56,40 +56,41 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     
     $evento = 'Reserva académica';
     $conn = ConexionBD::getConexion();
-    $conn->autocommit(false);
-    
+    pg_query($conn, "BEGIN;");
+    pg_query($conn, "lock table reserva in exclusive mode;");
     $insertarReserva = 'INSERT INTO reserva (fecha, hora_inicio, hora_fin, evento)';
     $insertarReserva .= " VALUES ('$fecha', '$horaInicio', '$horaFin', '$evento')";
-    if ($conn->query($insertarReserva)) {
+    if (pg_query($conn, $insertarReserva)) {
         return guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario);
     }
     else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new ValidacionExcepcion('Ya existe una reserva en esa hora y fecha');
     }
 }
 
 function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario) {
     
-    $idReserva = $conn->insert_id;
+    $consulta_insercion = pg_query($conn, "SELECT lastval();");
+    $idReserva = pg_fetch_row($consulta_insercion)[0];
     $insertarAcademica = 'INSERT INTO reserva_academica (id_reserva, codigo_materia, id_contenido, id_asunto)';
     $insertarAcademica .= " VALUES ('$idReserva', '$codigoMateria', '$idContenido', '$idAsunto')";
 
-    if ($conn->query($insertarAcademica)) {
+    if (pg_query($conn, $insertarAcademica)) {
         $insertarResponsable = 'INSERT INTO responsable_reserva (id_reserva, nombre_usuario)';
         $insertarResponsable .= " VALUES ('$idReserva', '$nombreUsuario')";
 
-        if ($conn->query($insertarResponsable)) {
-            $conn->commit();
+        if (pg_query($conn, $insertarResponsable)) {
+            pg_query($conn, "COMMIT");
             return $idReserva;
         }
         else {
-            $conn->rollback();
+            pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Responsable reserva');
         }
     }
     else {
-        $conn->rollback();
+        pg_query($conn, "ROLLBACK");
         throw new GuardarExcepcion('Reserva académica');
     }
 }
@@ -97,9 +98,9 @@ function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto
 function obtenerReservaAcademica($idReserva) {
     
     $consulta = "SELECT r.fecha, r.hora_inicio, r.hora_fin, r.evento, asu.asunto, ma.nombre_materia materia, u.nombres responsable FROM reserva r, reserva_academica ra, asunto asu, materia ma, responsable_reserva rr, usuario u WHERE r.id_reserva = ra.id_reserva AND asu.id_asunto = ra.id_asunto AND ma.codigo_materia = ra.codigo_materia AND ra.id_reserva = rr.id_reserva AND rr.nombre_usuario = u.nombre_usuario AND r.id_reserva = '$idReserva'";
-    $resConsulta = ConexionBD::getConexion()->query($consulta);
-    if ($resConsulta->num_rows == 1) {
-        return $resConsulta->fetch_assoc();
+    $resConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    if (pg_num_rows($resConsulta) == 1) {
+        return pg_fetch_assoc($resConsulta);
     }
     else {
         throw new Exception("No se encontro la reserva con el id '$idReserva'");
