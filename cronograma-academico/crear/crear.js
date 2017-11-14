@@ -71,29 +71,32 @@ function controlarSolapamiento(fechaFin){
         success: function(data){
             if(data !== null){
                 
+                var fechaInicio = cambiarFechaADate(data['fecha_hora_inicio']);
                 var fechaFinTabla = cambiarFechaADate(data['fecha_hora_fin']);
                 var fechaFinACrear = ajustarFecha($('#fechahorafin').val()); 
                 var fechaInicialACrear =ajustarFecha($('#fechahorainicio').val());
 
                 if(fechaInicialACrear < fechaFinTabla && fechaFinACrear > fechaFinTabla){
                     $('#contenedor-msg').empty();
-                    $fecha = data['fecha_hora_fin'].split(' ');
-                    $fecha = ' con fecha a finalizar el '+$fecha[0];
-                    $gestion = data['gestion']+'-'+ data['anio'];
-                    $msg = 'Existe solapamiento con la gestion '+ $gestion + $fecha;
-
-                    mostrarMensajeCronograma('alert-warning', $msg);
+                    $msjSolapamiento = crearMensajeAlertaSolapamiento(data['anio'],
+                                                                      data['gestion'],
+                                                                      data['fecha_hora_inicio'],
+                                                                      data['fecha_hora_fin']); 
+                    mostrarMensajeCronograma('alert-warning', $msjSolapamiento);
                     $('#guardar').attr('disabled', false);
                 }else{
                     if(fechaInicialACrear < fechaFinTabla && fechaFinACrear <= fechaFinTabla){
                         ///bloquear el crear y alertar
-                        mostrarMensajeCronograma('alert-danger', 'El cronograma no debe crearce dentro de otro cronograma');
-                        $('#guardar').attr('disabled',true);    
+                        $mensaje = crearMensajeAlertaCronogramaSolapadoTotal(data['anio'],
+                                                                             data['gestion'],
+                                                                             data['fecha_hora_inicio'],
+                                                                             data['fecha_hora_fin'])
+                        mostrarMensajeCronograma('alert-warning', $mensaje);
+                        $('#guardar').attr('disabled',true);   
                     }else{
                         mostrarMensajeCronograma('alert-success', 'Este cronograma aun no existe');    
                         $('#guardar').attr('disabled', false);
                     }
-                    
                 }                
             }            
         },
@@ -149,7 +152,6 @@ function obtenerCronograma() {
         data: {anio: $('#selecAnio').val(), gestion: $('#selecGestion').val()},
         success: function (data) {
             if (data !== null) {
-                debugger;
                 $('#contenedor-msg').empty();
                 modificarFecha('fechahorainicio', data['fecha_hora_inicio']);
                 modificarFecha('fechahorafin', data['fecha_hora_fin']);
@@ -277,9 +279,39 @@ function mostrarMensaje(tipo, mensaje) {
     $('html,body').animate({scrollTop: 80}, "fast");
 }
 
+
+
 function mostrarMensajeCronograma(tipo, mensaje) {
     
     $('#contenedor-msg-cronograma').empty().append(crearAlerta(tipo, mensaje));
+}
+
+function crearMensajeAlertaCronogramaSolapadoTotal(anio, gestion, fechaInicio, fechaFin){
+    $gestion = gestion +'-'+ anio;
+    $fechaInicio = cambiarFechaDDMMYY(fechaInicio);
+    $fechaInicio = ' con fecha inicio en ' +$fechaInicio;
+    $fechaFin = cambiarFechaDDMMYY(fechaFin);
+    $fechaFin = ' y fecha a finalizar el '+$fechaFin;
+    $mensaje = 'No debe crearce un cronograma dentro de otro cronogrma: '
+    $mensaje = $mensaje + 'Solapamiento completo con gestion '+ $gestion + $fechaInicio + $fechaFin;
+    return $mensaje
+}
+
+function crearMensajeAlertaSolapamiento(anio, gestion, fechaInicio, fechaFin){
+    $gestion = gestion +'-'+ anio;
+    $fechaInicio = cambiarFechaDDMMYY(fechaInicio);
+    $fechaInicio = ' con fecha inicio en ' +$fechaInicio;
+    $fechaFin = cambiarFechaDDMMYY(fechaFin);
+    $fechaFin = ' y fecha a finalizar el '+$fechaFin;
+    $mensaje = 'Existe solapamiento con la gestion '+ $gestion + $fechaInicio + $fechaFin;
+    return $mensaje
+}
+
+function cambiarFechaDDMMYY(fecha){
+    $fechaCad = fecha.split(' ');
+    $fechaCad = $fechaCad[0].split('-');
+    $diaMesAnio = $fechaCad[2]+'-'+$fechaCad[1]+'-'+$fechaCad[0];
+    return $diaMesAnio;
 }
 
 function eliminarCronograma() {
@@ -313,7 +345,6 @@ function eliminarCronograma() {
             }).always(function () {
 
             });
-
         });
     } else {
         mostrarMensaje('alert-danger', "Debe seleccionar un cronograma para poder eliminarlo");
