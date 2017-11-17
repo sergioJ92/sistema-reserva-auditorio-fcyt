@@ -142,6 +142,10 @@ drop index USUARIO_LOG_PK;
 
 drop table USUARIO_LOG;
 
+drop index BLOQUEO_FECHA_PK;
+
+drop table BLOQUEO_FECHA;
+
 /*==============================================================*/
 /* Table: ACTIVIDAD                                             */
 /*==============================================================*/
@@ -740,6 +744,24 @@ create  index RELATIONSHIP_33_FK on USUARIO_LOG (
 NOMBRE_USUARIO
 );
 
+/*==============================================================*/
+/* Table: BLOQUEO_FECHA                                   */
+/*==============================================================*/
+create table BLOQUEO_FECHA (
+   ID_BLOQUEO           SERIAL               not null,
+   BLOQUEADO            NUMERIC(1)           null,
+   FECHA                DATE                 null,
+   FECHA_HORA_BLOQUEO   TIMESTAMP            null,
+   constraint PK_BLOQUEO_FECHA primary key (ID_BLOQUEO)
+);
+
+/*==============================================================*/
+/* Index: SOLICITUD_RESERVA_PK                                  */
+/*==============================================================*/
+create unique index BLOQUEO_FECHA_PK on BLOQUEO_FECHA (
+ID_BLOQUEO
+);
+
 alter table ACTIVIDAD
    add constraint FK_ACTIVIDA_RELATIONS_CONTENID foreign key (ID_CONTENIDO)
       references CONTENIDO (ID_CONTENIDO)
@@ -914,3 +936,65 @@ alter table RESERVA_ACADEMICA
    add constraint FK_RESERVA__RELATIONS_ACTIVIDA foreign key (ID_CONTENIDO)
       references ACTIVIDAD (ID_CONTENIDO)
       on delete restrict on update cascade;
+
+alter table reserva add constraint uniqueconstraint unique (fecha, hora_inicio, hora_fin);
+
+alter table BLOQUEO_FECHA add constraint fecha_unique_constraint unique (fecha);
+
+
+DROP FUNCTION bloquear(date);
+
+CREATE OR REPLACE FUNCTION bloquear(fecha_bloq date)
+  RETURNS bigint AS
+$BODY$
+DECLARE
+   fecha_bloqueo TIMESTAMP;
+BEGIN
+IF (SELECT COUNT(*) FROM BLOQUEO_FECHA WHERE fecha=$1)>0 THEN
+   IF (SELECT BLOQUEADO FROM BLOQUEO_FECHA WHERE fecha=$1)=1.0 THEN
+      fecha_bloqueo := (SELECT FECHA_HORA_BLOQUEO FROM BLOQUEO_FECHA WHERE fecha=$1);
+      IF (SELECT (DATE_PART('day', (select now())::timestamp - fecha_bloqueo::timestamp) * 24 + 
+               DATE_PART('hour', (select now())::timestamp - fecha_bloqueo::timestamp)) * 60 +
+               DATE_PART('minute', (select now())::timestamp - fecha_bloqueo::timestamp))>10.0 THEN
+         UPDATE BLOQUEO_FECHA SET BLOQUEADO=1, FECHA_HORA_BLOQUEO=(select now()) WHERE FECHA=$1;
+         RETURN 1;
+      ELSE
+         RETURN 0;
+      END IF;
+   ELSE
+      UPDATE BLOQUEO_FECHA SET BLOQUEADO=1, FECHA_HORA_BLOQUEO=(select now()) WHERE FECHA=$1;
+      RETURN 1; 
+   END IF;
+ELSE
+   INSERT INTO BLOQUEO_FECHA (fecha, BLOQUEADO, FECHA_HORA_BLOQUEO) VALUES ($1, 1, (select now()));
+   RETURN 1;
+END IF;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION bloquear(date)
+  OWNER TO postgres;
+
+DROP FUNCTION desbloquear(date);
+
+CREATE OR REPLACE FUNCTION desbloquear(fecha_desbloq date)
+  RETURNS bigint AS
+$BODY$
+BEGIN
+IF (SELECT COUNT(*) FROM BLOQUEO_FECHA WHERE fecha=$1)>0 THEN
+   IF (SELECT BLOQUEADO FROM BLOQUEO_FECHA WHERE fecha=$1)=1.0 THEN
+      UPDATE BLOQUEO_FECHA SET BLOQUEADO=0, FECHA_HORA_BLOQUEO=null WHERE FECHA=$1;
+      RETURN 1;
+   ELSE
+      RETURN 1; 
+   END IF;
+ELSE
+   RETURN 0;
+END IF;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION desbloquear(date)
+  OWNER TO postgres;

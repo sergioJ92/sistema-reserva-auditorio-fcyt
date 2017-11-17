@@ -180,9 +180,27 @@ function anadirAccionReservar(argumentos, siguiente) {
             fecha, horaInicio, horaFin, 
             materia, asunto, idContenido, nombreUsuario) {
 
-        reservar(fecha, horaInicio, horaFin, 
-                materia, asunto, idContenido, 
-                nombreUsuario, calendario);
+            var fecha_bloq = formatearSoloFecha(fecha);
+            $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "../bandeja-solicitudes/bloquear_fecha.php",
+            data: {'fecha': fecha_bloq},
+            success : function(msm)  {
+                if  (msm.exito)
+                {
+                    reservar(fecha, horaInicio, horaFin, 
+                    materia, asunto, idContenido, 
+                    nombreUsuario, calendario);
+                
+                }else {        
+                    mostrarMensaje('alert-danger', msm.error);
+                }
+            },
+            error: function (xhr, desc, err){
+                    console.log("error"+err);
+                }
+            });  
     });
     calendario.forzarActualizar();
     siguiente(argumentos);

@@ -24,6 +24,7 @@ $(document).ready(function () {
                 setCookie('hora_fin', $('#modalHoraFin').text());
                 setCookie('evento', $('#modalEvento').text());
                 setCookie('descripcion', $('#modalDescripccion').text());
+                obtener_bloqueo(datos[this.id]['fecha']);
             });
 
         },
@@ -69,7 +70,7 @@ function llenarDatos(valores) {
             var filaContenido = '<li class="list-group-item lista-foco ' + leido + '" >';
 
             if (fechaValida(valores[fila])) {
-                filaContenido += '<div class"resto-lista"><a class="btn btn-default resto-lista boton-responder" type="button" id=' + fila + ' href="./responder/">Responder</a></div>';
+                filaContenido += '<div class"resto-lista"><a class="btn btn-default resto-lista boton-responder" type="button" id=' + fila + '>Responder</a></div>';
             } else {
                 filaContenido += '<div class"resto-lista"><a class="btn btn-default resto-lista" type="button" id=' + fila + ' href="#" disabled>Responder</a></div>';
             }
@@ -101,4 +102,31 @@ function llenarDatos(valores) {
 function fechaValida(fechaReserva) {
     var fecha = parseFechaHora(fechaReserva['fecha'] + ' ' + fechaReserva['hora_inicio'] + ':00');
     return fecha >= new Date();
+}
+
+function mostrarMensaje(tipo, mensaje) {
+
+    $('#contenedor-msg').empty().append(crearAlerta(tipo, mensaje));
+    $('html,body').animate({scrollTop: 80}, "fast");
+}
+
+function obtener_bloqueo(fecha_bloq) {
+    $.ajax({
+    type: "POST",
+    dataType: 'json',
+    url: "bloquear_fecha.php",
+    data: {'fecha': fecha_bloq},
+    success : function(msm)  {
+        if  (msm.exito)
+        {
+            window.location.replace("./responder/");
+        
+        }else {        
+            mostrarMensaje('alert-danger', msm.error);
+        }
+    },
+    error: function (xhr, desc, err){
+            console.log("error"+err);
+        }
+    });
 }
