@@ -57,7 +57,6 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     $evento = 'Reserva académica';
     $conn = ConexionBD::getConexion();
     pg_query($conn, "BEGIN;");
-    pg_query($conn, "lock table reserva in exclusive mode;");
     $insertarReserva = 'INSERT INTO reserva (fecha, hora_inicio, hora_fin, evento)';
     $insertarReserva .= " VALUES ('$fecha', '$horaInicio', '$horaFin', '$evento')";
     if (pg_query($conn, $insertarReserva)) {
