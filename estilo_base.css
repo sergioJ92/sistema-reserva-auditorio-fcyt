@@ -54,7 +54,7 @@ body {
 }
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > ul > li > a:hover, .navbar-default .navbar-header a:hover {
-    color: #e3cc41;
+    color: #0000;
     background-color: #024959;
 }
 

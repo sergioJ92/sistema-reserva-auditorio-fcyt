@@ -24,7 +24,19 @@
                         addCrearUsuarios();
                     }
                 ?>
-                <li><a href="<?php echo DOMINIO;?>/crear-solicitud/index.php">Solicitar Reserva</a></li>
+                <?php
+                $a = 'auditorio';
+                $b = 'laboratorio';
+                $c = 'aula';
+                ?>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Solicitar Reserva <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li value="auditorio"><a href="<?php echo DOMINIO;?>/crear-solicitud/index.php?variable1=<?php echo $a ?>">Solicitar Reserva Auditorio</a></li>
+                    <li value="laboratorio"><a href="<?php echo DOMINIO;?>/crear-solicitud/index.php?variable1=<?php echo $b ?>">Solicitar Reserva Laboratorio</a></li>
+                    <li value="aula"><a href="<?php echo DOMINIO;?>/crear-solicitud/index.php?variable1=<?php echo $c ?>">Solicitar Reserva Aula</a></li>
+                  </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php 
