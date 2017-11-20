@@ -45,7 +45,27 @@ INSERT INTO usuario (nombre_usuario, contrasenia, nombres, apellidos, nombre_rol
 INSERT INTO correo_usuario (nombre_usuario, correo) VALUES
 ('root', 'cusi.evelyn@gmail.com');
 
+SELECT * FROM insertar_auditorio('Auditorio Edificio Nuevo');
+SELECT * FROM insertar_auditorio('Palacio de Ciencias y Tecnologia');
+SELECT * FROM insertar_auditorio('Auditorio de Ingenieria Civil');
 
+SELECT * FROM insertar_aula('Edificio Nuevo', 'Planta Baja', '690 A');
+SELECT * FROM insertar_aula('Edificio Nuevo', 'Planta Baja', '690 B');
+SELECT * FROM insertar_aula('Edificio Nuevo', 'Piso 1', '691 A');
+SELECT * FROM insertar_aula('Edificio Nuevo', 'Piso 1', '691 B');
+SELECT * FROM insertar_aula('Edificio Nuevo', 'Piso 2', '692 C');
+SELECT * FROM insertar_aula('Bloque Antiguo', 'Planta Baja', '622');
+SELECT * FROM insertar_aula('Bloque Antiguo', 'Planta Baja', '624');
+SELECT * FROM insertar_aula('Bloque Antiguo', 'Planta Baja', '623');
+SELECT * FROM insertar_aula('Departamento de Fisica', 'Planta Baja', '617 C');
+SELECT * FROM insertar_aula('Departamento de Fisica', 'Planta Baja', '617 B');
+SELECT * FROM insertar_aula('Departamento de Fisica', 'Piso 1', '617');
+
+SELECT * FROM insertar_laboratorio('Departamento INFOSIS', 'Laboratorio 1');
+SELECT * FROM insertar_laboratorio('Departamento INFOSIS', 'Laboratorio 2');
+SELECT * FROM insertar_laboratorio('Departamento INFOSIS', 'Laboratorio de Redes');
+SELECT * FROM insertar_laboratorio('Departamento Fisica', 'Labo 1');
+SELECT * FROM insertar_laboratorio('Departamento Fisica', 'Labo 2');
 
 INSERT INTO fechas_nacionales ( titulo, dia, mes, feriado) VALUES
 ('Año nuevo', 1, 1, 1),
@@ -112,13 +132,13 @@ INSERT INTO privilegio (nombre_privilegio, nombre_rol) VALUES
 ('Usuarios', 'Super usuario');
 
 
-INSERT INTO reserva (fecha, hora_inicio, hora_fin, evento) VALUES
-('2017-07-12', '08:15', '09:45', 'Reserva'),
-('2017-07-07', '08:15', '09:45', 'Reserva'),
-('2017-07-08', '11:15', '12:45', 'Reserva'),
-('2017-06-30', '12:45', '14:15', 'Reserva'),
-('2017-06-30', '17:15', '18:45', 'Reserva'),
-('2017-07-01', '11:15', '12:45', 'Reserva');
+INSERT INTO reserva (id_ambiente, fecha, hora_inicio, hora_fin, evento) VALUES
+(1, '2017-07-12', '08:15', '09:45', 'Reserva'),
+(1, '2017-07-07', '08:15', '09:45', 'Reserva'),
+(1, '2017-07-08', '11:15', '12:45', 'Reserva'),
+(1, '2017-06-30', '12:45', '14:15', 'Reserva'),
+(1, '2017-06-30', '17:15', '18:45', 'Reserva'),
+(1, '2017-07-01', '11:15', '12:45', 'Reserva');
 
 
 
@@ -141,10 +161,10 @@ INSERT INTO responsable_reserva (nombre_usuario, id_reserva) VALUES
 
 
 
-INSERT INTO solicitud_reserva (leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES
-(1, '2017-06-20', '6:45', '8:15', 'Mark', 'Jala Soft', 'TDD', 'expo'),
-(0, '2017-06-23', '10:00', '17:00', 'Leticia Blanco', 'UMSS', 'obi', 'olimpiadas'),
-(0, '2017-06-22', '20:30', '21:50', 'Juan', 'Laboratorio', 'Curso de mantenimiento', '');
+INSERT INTO solicitud_reserva (id_ambiente, leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES
+(1, 1, '2017-06-20', '6:45', '8:15', 'Mark', 'Jala Soft', 'TDD', 'expo'),
+(1, 0, '2017-06-23', '10:00', '17:00', 'Leticia Blanco', 'UMSS', 'obi', 'olimpiadas'),
+(1, 0, '2017-06-22', '20:30', '21:50', 'Juan', 'Laboratorio', 'Curso de mantenimiento', '');
 
 
 INSERT INTO telefono (id_solicitud_reserva, telefono1) VALUES
@@ -165,7 +185,6 @@ INSERT INTO tiene_materia (nombre_usuario, codigo_materia) VALUES
 INSERT INTO tolerancia (id_contenido) VALUES
 (2),
 (7);
-
 
 INSERT INTO correo (id_solicitud_reserva, correo1) VALUES
 (1, 'cusi.evelyn@gmail.com'),

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     24/10/2017 12:10:38                          */
+/* Created on:     20/11/2017 12:56:02                          */
 /*==============================================================*/
 
 
@@ -8,9 +8,21 @@ drop index ACTIVIDAD_PK;
 
 drop table ACTIVIDAD;
 
+drop index AMBIENTE_PK;
+
+drop table AMBIENTE;
+
 drop index ASUNTO_PK;
 
 drop table ASUNTO;
+
+drop index AUDITORIO_PK;
+
+drop table AUDITORIO;
+
+drop index AULA_PK;
+
+drop table AULA;
 
 drop index CONFIGURACION_PK;
 
@@ -46,6 +58,10 @@ drop index FERIADO_ESPECIAL_PK;
 
 drop table FERIADO_ESPECIAL;
 
+drop index LABORATORIO_PK;
+
+drop table LABORATORIO;
+
 drop index MATERIA_PK;
 
 drop table MATERIA;
@@ -59,6 +75,8 @@ drop index RELATIONSHIP_18_FK;
 drop index PRIVILEGIO_PK;
 
 drop table PRIVILEGIO;
+
+drop index RELATIONSHIP_40_FK;
 
 drop index RESERVA_PK;
 
@@ -101,6 +119,8 @@ drop table RESPUESTA;
 drop index ROL_PK;
 
 drop table ROL;
+
+drop index RELATIONSHIP_41_FK;
 
 drop index SOLICITUD_RESERVA_PK;
 
@@ -164,6 +184,21 @@ ID_CONTENIDO
 );
 
 /*==============================================================*/
+/* Table: AMBIENTE                                              */
+/*==============================================================*/
+create table AMBIENTE (
+   ID_AMBIENTE          SERIAL               not null,
+   constraint PK_AMBIENTE primary key (ID_AMBIENTE)
+);
+
+/*==============================================================*/
+/* Index: AMBIENTE_PK                                           */
+/*==============================================================*/
+create unique index AMBIENTE_PK on AMBIENTE (
+ID_AMBIENTE
+);
+
+/*==============================================================*/
 /* Table: ASUNTO                                                */
 /*==============================================================*/
 create table ASUNTO (
@@ -177,6 +212,40 @@ create table ASUNTO (
 /*==============================================================*/
 create unique index ASUNTO_PK on ASUNTO (
 ID_ASUNTO
+);
+
+/*==============================================================*/
+/* Table: AUDITORIO                                             */
+/*==============================================================*/
+create table AUDITORIO (
+   ID_AMBIENTE          INT4                 not null,
+   NOMBRE_AUDITORIO     TEXT                 null,
+   constraint PK_AUDITORIO primary key (ID_AMBIENTE)
+);
+
+/*==============================================================*/
+/* Index: AUDITORIO_PK                                          */
+/*==============================================================*/
+create unique index AUDITORIO_PK on AUDITORIO (
+ID_AMBIENTE
+);
+
+/*==============================================================*/
+/* Table: AULA                                                  */
+/*==============================================================*/
+create table AULA (
+   ID_AMBIENTE          INT4                 not null,
+   EDIFICIO             TEXT                 null,
+   PISO                 TEXT                 null,
+   NOMBRE_AULA          TEXT                 null,
+   constraint PK_AULA primary key (ID_AMBIENTE)
+);
+
+/*==============================================================*/
+/* Index: AULA_PK                                               */
+/*==============================================================*/
+create unique index AULA_PK on AULA (
+ID_AMBIENTE
 );
 
 /*==============================================================*/
@@ -214,6 +283,7 @@ create table CONTENIDO (
    DESCRIPCION          TEXT                 null,
    constraint PK_CONTENIDO primary key (ID_CONTENIDO)
 );
+
 
 /*==============================================================*/
 /* Index: CONTENIDO_PK                                          */
@@ -253,6 +323,7 @@ CORREO1
 create  index RELATIONSHIP_16_FK on CORREO (
 ID_SOLICITUD_RESERVA
 );
+
 
 /*==============================================================*/
 /* Table: CORREO_USUARIO                                        */
@@ -334,6 +405,23 @@ ID_CONTENIDO
 );
 
 /*==============================================================*/
+/* Table: LABORATORIO                                           */
+/*==============================================================*/
+create table LABORATORIO (
+   ID_AMBIENTE          INT4                 not null,
+   DEPARTAMENTO         TEXT                 null,
+   NOMBRE_LABORATORIO   TEXT                 null,
+   constraint PK_LABORATORIO primary key (ID_AMBIENTE)
+);
+
+/*==============================================================*/
+/* Index: LABORATORIO_PK                                        */
+/*==============================================================*/
+create unique index LABORATORIO_PK on LABORATORIO (
+ID_AMBIENTE
+);
+
+/*==============================================================*/
 /* Table: MATERIA                                               */
 /*==============================================================*/
 create table MATERIA (
@@ -395,6 +483,7 @@ NOMBRE_ROL
 /*==============================================================*/
 create table RESERVA (
    ID_RESERVA           SERIAL               not null,
+   ID_AMBIENTE          INT4                 not null,
    FECHA                DATE                 null,
    HORA_INICIO          TEXT                 null,
    HORA_FIN             TEXT                 null,
@@ -407,6 +496,13 @@ create table RESERVA (
 /*==============================================================*/
 create unique index RESERVA_PK on RESERVA (
 ID_RESERVA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_40_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_40_FK on RESERVA (
+ID_AMBIENTE
 );
 
 /*==============================================================*/
@@ -497,6 +593,7 @@ create table RESPONSABLE_RESERVA (
    constraint PK_RESPONSABLE_RESERVA primary key (ID_RESERVA, NOMBRE_USUARIO)
 );
 
+
 /*==============================================================*/
 /* Index: RESPONSABLE_RESERVA_PK                                */
 /*==============================================================*/
@@ -577,6 +674,7 @@ NOMBRE_ROL
 /*==============================================================*/
 create table SOLICITUD_RESERVA (
    ID_SOLICITUD_RESERVA SERIAL               not null,
+   ID_AMBIENTE          INT4                 not null,
    LEIDO                NUMERIC(1)           null,
    FECHA                DATE                 null,
    HORA_INICIO          TEXT                 null,
@@ -593,6 +691,13 @@ create table SOLICITUD_RESERVA (
 /*==============================================================*/
 create unique index SOLICITUD_RESERVA_PK on SOLICITUD_RESERVA (
 ID_SOLICITUD_RESERVA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_41_FK                                    */
+/*==============================================================*/
+create  index RELATIONSHIP_41_FK on SOLICITUD_RESERVA (
+ID_AMBIENTE
 );
 
 /*==============================================================*/
@@ -666,6 +771,7 @@ CODIGO_MATERIA
 create  index RELATIONSHIP_28_FK on TIENE_MATERIA (
 NOMBRE_USUARIO
 );
+
 
 /*==============================================================*/
 /* Index: RELATIONSHIP_29_FK                                    */
@@ -767,6 +873,16 @@ alter table ACTIVIDAD
       references CONTENIDO (ID_CONTENIDO)
       on delete restrict on update restrict;
 
+alter table AUDITORIO
+   add constraint FK_AUDITORI_RELATIONS_AMBIENTE foreign key (ID_AMBIENTE)
+      references AMBIENTE (ID_AMBIENTE)
+      on delete restrict on update restrict;
+
+alter table AULA
+   add constraint FK_AULA_RELATIONS_AMBIENTE foreign key (ID_AMBIENTE)
+      references AMBIENTE (ID_AMBIENTE)
+      on delete restrict on update restrict;
+
 alter table CONFIGURACION
    add constraint FK_CONFIGUR_TIENE1_CRONOGRA foreign key (ANIO, GESTION)
       references CRONOGRAMA_ACADEMICO (ANIO, GESTION)
@@ -792,6 +908,11 @@ alter table FERIADO_ESPECIAL
       references CONTENIDO (ID_CONTENIDO)
       on delete restrict on update restrict;
 
+alter table LABORATORIO
+   add constraint FK_LABORATO_RELATIONS_AMBIENTE foreign key (ID_AMBIENTE)
+      references AMBIENTE (ID_AMBIENTE)
+      on delete restrict on update restrict;
+
 alter table OTRO
    add constraint FK_OTRO_RELATIONS_CONTENID foreign key (ID_CONTENIDO)
       references CONTENIDO (ID_CONTENIDO)
@@ -800,6 +921,11 @@ alter table OTRO
 alter table PRIVILEGIO
    add constraint FK_PRIVILEG_RELATIONS_ROL foreign key (NOMBRE_ROL)
       references ROL (NOMBRE_ROL)
+      on delete restrict on update restrict;
+
+alter table RESERVA
+   add constraint FK_RESERVA_RELATIONS_AMBIENTE foreign key (ID_AMBIENTE)
+      references AMBIENTE (ID_AMBIENTE)
       on delete restrict on update restrict;
 
 alter table RESERVA_ACADEMICA
@@ -847,6 +973,11 @@ alter table RESPUESTA
       references RESERVA_SOLICITADA (ID_RESERVA)
       on delete restrict on update restrict;
 
+alter table SOLICITUD_RESERVA
+   add constraint FK_SOLICITU_RELATIONS_AMBIENTE foreign key (ID_AMBIENTE)
+      references AMBIENTE (ID_AMBIENTE)
+      on delete restrict on update restrict;
+
 alter table TELEFONO
    add constraint FK_TELEFONO_RELATIONS_SOLICITU foreign key (ID_SOLICITUD_RESERVA)
       references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
@@ -882,6 +1013,7 @@ alter table USUARIO_LOG
       references USUARIO (NOMBRE_USUARIO)
       on delete restrict on update restrict;
 
+
 ALTER TABLE "reserva_solicitada" 
    ADD COLUMN id_respuesta integer;
 
@@ -892,18 +1024,35 @@ ALTER TABLE "reserva_solicitada"
 
 
 alter table reserva_academica 
-drop constraint fk_reserva__relations_reserva,
-add constraint fk_reserva__relations_reserva foreign key(id_reserva) references public.reserva(id_reserva) on delete cascade;
+   drop constraint fk_reserva__relations_reserva,
+   add constraint fk_reserva__relations_reserva foreign key(id_reserva) 
+   references public.reserva(id_reserva) on delete cascade;
 
 
 alter table reserva_solicitada
-drop constraint fk_reserva__relations_reserva,
-add constraint fk_reserva__relations_reserva foreign key(id_reserva) references public.reserva(id_reserva) on delete cascade;
-
+   drop constraint fk_reserva__relations_reserva,
+   add constraint fk_reserva__relations_reserva foreign key(id_reserva) 
+   references public.reserva(id_reserva) on delete cascade;
 
 alter table responsable_reserva
 drop constraint FK_RESPONSA_RELATIONS_RESERVA_,
-add constraint FK_RESPONSA_RELATIONS_RESERVA_ foreign key(id_reserva) references public.reserva(id_reserva) on delete cascade;
+add constraint FK_RESPONSA_RELATIONS_RESERVA_ foreign key(id_reserva) 
+references public.reserva(id_reserva) on delete cascade;
+
+alter table auditorio 
+   drop constraint FK_AUDITORI_RELATIONS_AMBIENTE,
+   add constraint FK_AUDITORI_RELATIONS_AMBIENTE foreign key(id_ambiente) 
+   references public.ambiente(id_ambiente) on delete cascade;
+
+alter table aula
+   drop constraint FK_AULA_RELATIONS_AMBIENTE,
+   add constraint FK_AULA_RELATIONS_AMBIENTE foreign key(id_ambiente) 
+   references public.ambiente(id_ambiente) on delete cascade;
+
+alter table laboratorio
+drop constraint FK_LABORATO_RELATIONS_AMBIENTE,
+add constraint FK_LABORATO_RELATIONS_AMBIENTE foreign key(id_ambiente) 
+references public.ambiente(id_ambiente) on delete cascade;
 
 alter table ACTIVIDAD
    drop constraint FK_ACTIVIDA_RELATIONS_CONTENID,
@@ -998,3 +1147,60 @@ $BODY$
   COST 100;
 ALTER FUNCTION desbloquear(date)
   OWNER TO postgres;
+
+
+
+CREATE OR REPLACE FUNCTION INSERTAR_AULA(edif text, pis text, nom_aula text)
+   RETURNS bigint AS
+$BODY$
+DECLARE
+   id_amb integer;
+BEGIN
+
+   insert into ambiente(id_ambiente) values (nextval('ambiente_id_ambiente_seq'));
+   id_amb := (select * from lastval());
+   INSERT INTO AULA(ID_AMBIENTE, EDIFICIO, PISO, NOMBRE_AULA) VALUES(id_amb, $1, $2, $3);
+   RETURN 1;
+END
+$BODY$
+   LANGUAGE plpgsql VOLATILE
+   COST 100;
+ALTER FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT)
+   OWNER TO postgres;
+
+
+CREATE OR REPLACE FUNCTION INSERTAR_LABORATORIO(depto text, nom_lab text)
+   RETURNS bigint AS
+$BODY$
+DECLARE
+   id_amb integer;
+BEGIN
+
+   insert into ambiente(id_ambiente) values (nextval('ambiente_id_ambiente_seq'));
+   id_amb := (select * from lastval());
+   INSERT INTO LABORATORIO(ID_AMBIENTE, DEPARTAMENTO, NOMBRE_LABORATORIO) VALUES(id_amb, $1, $2);
+   RETURN 1;
+END
+$BODY$
+   LANGUAGE plpgsql VOLATILE
+   COST 100;
+ALTER FUNCTION INSERTAR_LABORATORIO(TEXT, TEXT)
+   OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION INSERTAR_AUDITORIO(nom_audi text)
+   RETURNS bigint AS
+$BODY$
+DECLARE
+   id_amb integer;
+BEGIN
+
+   insert into ambiente(id_ambiente) values (nextval('ambiente_id_ambiente_seq'));
+   id_amb := (select * from lastval());
+   INSERT INTO AUDITORIO(ID_AMBIENTE, NOMBRE_AUDITORIO) VALUES(id_amb, $1);
+   RETURN 1;
+END
+$BODY$
+   LANGUAGE plpgsql VOLATILE
+   COST 100;
+ALTER FUNCTION INSERTAR_AUDITORIO(TEXT)
+   OWNER TO postgres;
