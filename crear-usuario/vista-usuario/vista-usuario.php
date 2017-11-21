@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	
     echo json_encode($resConsulta);
 
-}
+}   
 
 function llenarDatos(){
     $consulta = "SELECT nombres, apellidos, nombre_rol, nombre_usuario FROM usuario";

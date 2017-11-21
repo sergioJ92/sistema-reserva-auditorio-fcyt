@@ -35,22 +35,32 @@ $(document).ready(function () {
 
 	}
 
+	function mostrarDatosUsuario(lista){
+		$('#nombres').val(lista['nombres']);
+		$('#apellidos').val(lista['apellidos']);
+		$('#telefonos').val(lista['telefono']);
+		$('#correo').val(lista['correo']);
+		$('#nombreDeUsuario').val(lista['nombre_usuario']);
+		
+
+	}
+
 	function recuperarDatos(llave){
 		var res = null;
 		$.ajax({
-			dataType: 'json',
 			type: 'POST',
 			url:'recuperarDatos.php',
 			data:{id:llave},
-		}).done(function(data){
-			debugger;
-			console.log(termine);
+		}).done(function(res){
+			var fila = JSON.parse(res);
+			mostrarDatosUsuario(fila[0]);
+			console.log(fila);
+			console.log("recupere datos");
 		});
 		return res;
 	}
 
 	function eliminarUsuario(dato,columna){
-    	debugger;
     	$.ajax({
 //		    dataType: 'json',
 		    type:'POST',
@@ -91,14 +101,9 @@ $(document).ready(function () {
     	$("body").on("click",".edit-item",function(){
     		
     		var id = $(this).parent("td").data("id");
-    		//var nombre = $(this).parent("td").prev("td").prev("td").prev("td").text();
-    		//var apellido = $(this).parent("td").prev("td").prev("td").text();
-    		//var rol = $(this).parent("td").prev("td").text();
     		var llave = document.getElementById("primary"+id).innerHTML;
     		var tablaDatos = recuperarDatos(llave);
-    		console.log(llave);
-
-    		debugger;
+    		
     		$("#nombres").val();
     		$("#apellidos").val();
     		$("#telefonos").val();

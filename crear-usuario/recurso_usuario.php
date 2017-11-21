@@ -80,7 +80,6 @@ function guardarUsuario(
             if (pg_query($conn, $insertarCorreo)) {
                 if (count($materias) > 0) {
                     $baseAnadirMateria = 'INSERT INTO tiene_materia (codigo_materia, nombre_usuario)';
-
                     foreach ($materias as $materia) {
                         $anadirMateria = $baseAnadirMateria . " VALUES ('$materia', '$nombreUsuario')";
                         if (!pg_query($conn, $anadirMateria)) {
@@ -120,8 +119,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirmarContrasenia = Validador::desinfectarEntrada($entrada['confirmar_contrasenia']);
     $nombreRol = Validador::desinfectarEntrada($entrada['nombre_rol']);
     $materias = [];
-    foreach ($entrada['materias'] as $materia) {
-        array_push($materias, Validador::desinfectarEntrada($materia));
+
+    if ($entrada['materias'] != null){
+        foreach ($entrada['materias'] as $materia) {
+            array_push($materias, Validador::desinfectarEntrada($materia));
+        }
     }
          
     try {

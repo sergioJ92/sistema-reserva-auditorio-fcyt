@@ -9,7 +9,8 @@ $id = $_POST["id"];
 
 $consulta = "DELETE FROM usuario WHERE nombre_usuario='".$id."'";
 
-ConexionBD::getConexion()->pg_query($consulta);
+$resultado = ConexionBD::getConexion();
+$resultado = pg_query($consulta);
 
 echo json_encode([$id]);
 

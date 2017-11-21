@@ -59,12 +59,15 @@ $(document).ready(function () {
     
     function quitarNulos(arreglo) {
         
-        var resultado = [];
-        arreglo.forEach(function (elem) {
-            if (elem !== null && elem !== undefined) {
-                resultado.push(elem);
-            }
-        });
+        var resultado = null;
+        if(arreglo.length > 0){
+            resultado = [];
+            arreglo.forEach(function (elem) {
+                if (elem !== null && elem !== undefined) {
+                    resultado.push(elem);
+                }
+            });
+        }
         return resultado;
     }
     
@@ -76,7 +79,7 @@ $(document).ready(function () {
             type: 'POST',
             url:'recurso_usuario.php',
             data:usuario,
-        }).done(function(data){  
+        }).done(function(data){
             data = JSON.parse(data);
             if (data.exito) {
                 reiniciarControles();
@@ -102,7 +105,7 @@ $(document).ready(function () {
             contrasenia: $('#contrasenia').val(),
             confirmar_contrasenia: $('#confirmar-contrasenia').val(),
             nombre_rol: $('#nombre-rol').val(),
-            materia: materias
+            materias: []
         };
         return mapRes;
     }
