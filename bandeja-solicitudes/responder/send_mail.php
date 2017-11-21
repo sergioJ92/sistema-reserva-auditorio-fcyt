@@ -66,38 +66,38 @@ function crearReservaSolicitada($responsable,$descripcion,$institucion){
 
 function realizarReservaCompleta($mensaje,$idSolicitudReserva,$aceptadoRechazado, $representante,$cargoRepresentante,$listaConflictos,
         $fecha,$horaInicio,$horaFin,$evento,$responsable,$descripcion,$institucion){
-    //pg_query(ConexionBD::getConexion(), "BEGIN work");
-    //pg_query(ConexionBD::getConexion(), "lock table reserva in exclusive mode");
+    pg_query(ConexionBD::getConexion(), "BEGIN");
     if (insertarMensaje($mensaje, $idSolicitudReserva, $aceptadoRechazado, $representante, $cargoRepresentante)) {
         if (marcarLeido($idSolicitudReserva)) {
             if ($aceptadoRechazado == 1) {
                 if (eliminarReservas($listaConflictos)){
                     if (crearReserva($fecha,$horaInicio,$horaFin,$evento)) {
                         if (crearReservaSolicitada($responsable, $descripcion, $institucion)) {
-                            pg_query(ConexionBD::getConexion(), "COMMIT work");
+                            pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
+                            pg_query(ConexionBD::getConexion(), "COMMIT");
                             return true;
                         }else{
-                            pg_query(ConexionBD::getConexion(), "ROLLBACK work");
+                            pg_query(ConexionBD::getConexion(), "ROLLBACK");
                             return false;
                         }
                     }else{
-                        pg_query(ConexionBD::getConexion(), "ROLLBACK work");
+                        pg_query(ConexionBD::getConexion(), "ROLLBACK");
                         return false;
                     }
                 }else{
-                    pg_query(ConexionBD::getConexion(), "ROLLBACK work");
+                    pg_query(ConexionBD::getConexion(), "ROLLBACK");
                     return false;
                 }
             }else{
-                pg_query(ConexionBD::getConexion(), "COMMIT work");
+                pg_query(ConexionBD::getConexion(), "COMMIT");
                 return true;
             }
         }else{
-            pg_query(ConexionBD::getConexion(), "ROLLBACK work");
+            pg_query(ConexionBD::getConexion(), "ROLLBACK");
             return false;
         }
     }else{
-        pg_query(ConexionBD::getConexion(), "ROLLBACK work");
+        pg_query(ConexionBD::getConexion(), "ROLLBACK");
         return false;
     }
 }

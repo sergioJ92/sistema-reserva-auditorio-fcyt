@@ -6,8 +6,6 @@ class InterfazSolicitudReserva {
 
     public static function obtenerSolicitudesReserva() {
         $conexion = ConexionBD::getConexion();
-        pg_query($conexion, "BEGIN work;");
-        pg_query($conexion, "lock table reserva in exclusive mode;");
         $consulta = 'SELECT S.* , C.correo1 , T.telefono1 FROM solicitud_reserva AS S, correo as C, telefono as T WHERE S.id_solicitud_reserva= C.id_solicitud_reserva AND S.leido = 0 AND S.id_solicitud_reserva=T.id_solicitud_reserva ORDER BY S.id_solicitud_reserva ASC';
         return self::obtenerEnLista(pg_query($conexion,$consulta));
     }

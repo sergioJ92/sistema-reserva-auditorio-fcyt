@@ -16,6 +16,9 @@ bloquearBandejaSolicitudes();
     <body>
         <div class="container">
             <!--h2>Solicitudes de Reserva</h2-->
+
+            <div id="contenedor-msg" class="margen-contenedor-msg"></div>
+            
             <ul class="list-group" id="notificaciones">
                 <li class="list-group-item filaTitulo no-select"><h4>Bandeja de Solicitudes</h4></li>
             </ul>        
