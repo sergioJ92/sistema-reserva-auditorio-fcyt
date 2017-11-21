@@ -17,7 +17,7 @@ include_once RAIZ . '/lib/funciones_privilegios.php';
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <?php  
-        $val = ($_GET['variable1']);
+        $val = ($_GET['var']);
 
         if($val == 'auditorio')
         {

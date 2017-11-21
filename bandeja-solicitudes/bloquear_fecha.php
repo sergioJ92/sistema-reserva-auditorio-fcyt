@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form_data['error'] = $ex->getMessage();
     }
     echo json_encode($form_data);
-    exit;
+    //exit;
 }
 else {
     header('Location: index.php');

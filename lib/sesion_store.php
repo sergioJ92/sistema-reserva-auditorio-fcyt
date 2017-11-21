@@ -1,6 +1,5 @@
 <?php
     
-
   $time = 600; // 10 minutos en mili-segundos 
    
   // verificamos si existe la sesión 
@@ -10,7 +9,6 @@
     // verificamos si existe la sesión que se encarga del tiempo 
     // si existe, y el tiempo es mayor que una hora, expiramos la sesión  
     if(isset($_SESSION["expire"]) && time() > $_SESSION["expire"] + $time) 
-
     { 
       echo'<script type="text/javascript">alert("Su sesion ha expirado por inactividad'; 
       echo', vuelva a logearse para continuar");window.location.href="index.php";</script>';  

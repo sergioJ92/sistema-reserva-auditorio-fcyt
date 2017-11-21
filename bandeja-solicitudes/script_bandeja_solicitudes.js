@@ -113,10 +113,11 @@ function mostrarMensaje(tipo, mensaje) {
 function obtener_bloqueo(fecha_bloq) {
     $.ajax({
     type: "POST",
-    dataType: 'json',
+    //dataType: 'json',
     url: "bloquear_fecha.php",
     data: {'fecha': fecha_bloq},
     success : function(msm)  {
+        msm = JSON.parse(msm);
         if  (msm.exito)
         {
             window.location.replace("./responder/");
