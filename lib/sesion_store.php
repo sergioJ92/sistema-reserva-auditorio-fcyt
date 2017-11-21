@@ -1,6 +1,6 @@
 <?php
     
-    $time = 5; // una hora en mili-segundos 
+    $time = 6000; // una hora en mili-segundos 
      
     // verificamos si existe la sesión 
     // el nombre "session_name" es como ejemplo

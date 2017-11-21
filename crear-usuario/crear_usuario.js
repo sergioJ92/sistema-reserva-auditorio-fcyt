@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     
     var materias = [];
@@ -73,21 +72,28 @@ $(document).ready(function () {
 
         var usuario = obtenerDatosNuevoUsuario();
         usuario['materias'] = quitarNulos(materias);
-        ajaxPost('recurso_usuario.php', usuario, function(respuesta) {
-            if (respuesta.exito) {
+        $.ajax({
+            type: 'POST',
+            url:'recurso_usuario.php',
+            data:usuario,
+        }).done(function(data){  
+            data = JSON.parse(data);
+            if (data.exito) {
                 reiniciarControles();
                 materias = [];
                 mostrarMensaje('alert-success', 'Se creo el usuario con éxito');
-            }
+           }
             else {
-                mostrarMensaje('alert-danger', respuesta.mensaje);
+                mostrarMensaje('alert-danger', data.mensaje);   
             }
-        });
+        }).fail(function(data) {
+                console.log(data);
+              });
     }
-    
+
     function obtenerDatosNuevoUsuario() {
-        
-        return {
+        var matRes = "";
+        mapRes = {
             nombres: $('#nombres').val(),
             apellidos: $('#apellidos').val(),
             telefono: $('#telefono').val(),
@@ -95,8 +101,20 @@ $(document).ready(function () {
             nombre_usuario: $('#nombre-usuario').val(),
             contrasenia: $('#contrasenia').val(),
             confirmar_contrasenia: $('#confirmar-contrasenia').val(),
-            nombre_rol: $('#nombre-rol').val()
+            nombre_rol: $('#nombre-rol').val(),
+            materia: materias
         };
+        return mapRes;
+    }
+
+    function materiasCapturadas(){
+        var lista = [];
+        var i=0;
+        while($('#rol-m'+i).val() == ""){
+            lista.push($('#rol-m'+i).text());
+            i=i+1;
+        }
+        return lista;
     }
 
     function abrirModalCrearRol() {
@@ -212,8 +230,10 @@ $(document).ready(function () {
     ajaxGet('recurso_rol.php', {}, cargarRoles);
     ajaxGet('recurso_materia.php', {}, rellenarMaterias);
     
-    $('#btn-abrir-crear-rol').click(abrirModalCrearRol);
-    $('#btn-crear-nuevo-rol').click(crearNuevoRol);
-    $('#btn-crear-nuevo-usuario').click(crearNuevoUsuario);
-    $('#btn-anadir-materia').click(anadirMateria);
+    setTimeout(function(){
+        $('#btn-abrir-crear-rol').click(abrirModalCrearRol);
+        $('#btn-crear-nuevo-rol').click(crearNuevoRol);
+        $('#btn-crear-nuevo-usuario').click(crearNuevoUsuario);
+        $('#btn-anadir-materia').click(anadirMateria);
+    },1000);
 });

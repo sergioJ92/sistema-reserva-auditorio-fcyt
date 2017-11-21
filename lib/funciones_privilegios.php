@@ -44,7 +44,7 @@
     }
     function addCrearUsuarios(){
         if(tienePrivilegio(USUARIOS)){
-            echo '<li><a href="'.DOMINIO.'/crear-usuario/">Crear Usuario</a></li>';
+            echo '<li><a href="'.DOMINIO.'/crear-usuario/vista-usuario/">Usuarios</a></li>';
         }
     }         
     function addMisReservas(){

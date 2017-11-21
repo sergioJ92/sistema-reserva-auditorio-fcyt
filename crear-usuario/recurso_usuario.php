@@ -1,5 +1,7 @@
 <?php
 
+//error_reporting(0);
+
 const RAIZ = '..';
 
 require_once RAIZ . '/interfazbd/ConexionBD.php';
@@ -107,7 +109,7 @@ function guardarUsuario(
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+
     $entrada = $_POST;
     $nombres = Validador::desinfectarEntrada($entrada['nombres']);
     $apellidos = Validador::desinfectarEntrada($entrada['apellidos']);
@@ -121,13 +123,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($entrada['materias'] as $materia) {
         array_push($materias, Validador::desinfectarEntrada($materia));
     }
-    
+         
     try {
         guardarUsuario(
                 $nombres, $apellidos, $telefono, $correo, 
                 $nombreUsuario, $contrasenia, $confirmarContrasenia, 
                 $nombreRol, $materias);
-        echo json_encode(array('exito' => true));
+        $arreglo = array('exito' => true);
+
+        echo json_encode($arreglo, true);
+        
     }
     catch (ValidacionExcepcion $ex) {
         echo json_encode(array('exito' => false, 'mensaje' => $ex->getMessage()));
