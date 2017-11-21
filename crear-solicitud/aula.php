@@ -1,3 +1,13 @@
+    <?php
+include_once './../lib/sesion_store.php';
+include_once './../lib/funciones_privilegios.php';
+require_once './../interfazbd/SolicitudReserva.php';
+
+function crearOption($elemento) {
+
+    echo "<option value=\"$elemento\">$elemento</option>";
+}
+?>
     <body>
         <?php include RAIZ . '/navegacion.inc'; ?>
         <div class="container">
@@ -19,9 +29,9 @@
                         <div  class="col-md-4 form-group" id="auditorio">
                             <label>Seleccionar Edificio</label>
                             <select class="form-control" id="sel1" ">
-                                <option selected="" value="null" hidden="">Nombre Auditorio</option>
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                                <option selected="" value="null" hidden="">Nombre Edificio</option>
+                                <?php array_map(crearOption, SolicitudReserva::obtenerTodosLosEdificios()); ?>
+
                             </select>
                         </div>
                         <div  class="col-md-4 form-group" id="auditorio">

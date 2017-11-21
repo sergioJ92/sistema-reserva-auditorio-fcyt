@@ -1086,6 +1086,31 @@ alter table RESERVA_ACADEMICA
       references ACTIVIDAD (ID_CONTENIDO)
       on delete restrict on update cascade;
 
+alter table TELEFONO_USUARIO
+   drop constraint FK_TELEFONO_RELATIONS_USUARIO,
+   add constraint FK_TELEFONO_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
+      references USUARIO ( NOMBRE_USUARIO)
+      on delete cascade on update cascade;
+
+alter table CORREO_USUARIO
+   drop constraint FK_CORREO_U_RELATIONS_USUARIO,
+   add constraint FK_CORREO_U_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
+      references USUARIO (NOMBRE_USUARIO)
+      on delete cascade on update cascade;
+
+alter table TIENE_MATERIA
+   drop constraint FK_TIENE_MA_RELATIONS_USUARIO,
+   add constraint FK_TIENE_MA_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
+      references USUARIO (NOMBRE_USUARIO)
+      on delete cascade on update cascade;
+
+
+alter table RESPONSABLE_RESERVA
+   drop constraint FK_RESPONSA_RELATIONS_USUARIO,
+   add constraint FK_RESPONSA_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
+      references USUARIO (NOMBRE_USUARIO)
+      on delete cascade on update cascade;
+
 alter table reserva add constraint uniqueconstraint unique (fecha, hora_inicio, hora_fin);
 
 alter table BLOQUEO_FECHA add constraint fecha_unique_constraint unique (fecha);
