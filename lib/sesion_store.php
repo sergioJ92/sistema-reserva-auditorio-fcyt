@@ -1,13 +1,13 @@
 <?php
     
-<<<<<<< HEAD
-    $time = 6000; // una hora en mili-segundos 
+//<<<<<<< HEAD
+    //$time = 6000; // una hora en mili-segundos 
      
     // verificamos si existe la sesión 
     // el nombre "session_name" es como ejemplo
-    session_start(); 
-    if(isset($_SESSION["nombres"])) 
-=======
+    //session_start(); 
+    //if(isset($_SESSION["nombres"])) 
+//=======
   $time = 600; // 10 minutos en mili-segundos 
    
   // verificamos si existe la sesión 
@@ -17,7 +17,7 @@
     // verificamos si existe la sesión que se encarga del tiempo 
     // si existe, y el tiempo es mayor que una hora, expiramos la sesión  
     if(isset($_SESSION["expire"]) && time() > $_SESSION["expire"] + $time) 
->>>>>>> f5a736ba352a5d0c0c18ddfe214ee9c76f6bf16b
+//>>>>>>> f5a736ba352a5d0c0c18ddfe214ee9c76f6bf16b
     { 
       echo'<script type="text/javascript">alert("Su sesion ha expirado por inactividad'; 
       echo', vuelva a logearse para continuar");window.location.href="index.php";</script>';  
