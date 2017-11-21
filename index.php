@@ -41,7 +41,7 @@
                         <a href="<?php echo DOMINIO;?>/crear-solicitud/index.php?var=<?php echo 'laboratorio' ?>"><img src="./lib/imagen/labo.png" alt="Smiley face" height="100" width="100"></a>
                     </div>
                     <div class="col-sm-9">
-                        <a class="<?php echo DOMINIO;?>/crear-solicitud/index.php?var=<?php echo 'laboratorio' ?>"> Reservar Laboratorio</a>
+                        <a class="estilo-secundario" href="<?php echo DOMINIO;?>/crear-solicitud/index.php?var=<?php echo 'laboratorio' ?>"> Reservar Laboratorio</a>
                         <p class="estilo-contenido">Solicitar reserva<br> del laboratorio</p>
                     </div>
                 </div>
@@ -58,32 +58,7 @@
                         <p class="estilo-contenido">Solicitar reserva<br> de Aula</p>
                     </div>
                 </div>
-                
             </div>
-            
-            <?php 
-                if (isset($_SESSION['nombres'])||isset($_SESSION['privilegios'])) {
-                    if (buscarPrivilegio($_SESSION['privilegios'], CALENDARIO)) {
-            ?>  
-                        <div class="col-sm-6">
-                            <div class="row text-center">
-                                <div class="col-sm-3">
-                                    <a href="<?php echo DOMINIO;?>/reservas/index.php"><img src="./lib/imagen/calendario.jpg" alt="Smiley face" height="100" width="100"></a>
-                                </div>
-                                <div class="col-sm-9">
-                                    <a class="estilo-secundario" href="<?php echo DOMINIO;?>/reservas/index.php">Calendario</a>
-                                    <p class="estilo-contenido">Visita el Calendario Academico</p>
-                                </div>
-                            </div>
-
-                        </div>
-            <?php 
-                    }
-                }else{
-            ?>
-            <?php 
-                }
-            ?>
         </div>
     </div>
     

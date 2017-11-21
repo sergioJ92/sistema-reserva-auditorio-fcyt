@@ -28,10 +28,13 @@ include_once RAIZ . '/lib/funciones_privilegios.php';
         {
             include  "laboratorio.php";
         }
-        else
+        elseif($val == 'aula')
         {
             include  "aula.php";
         }
-        
+        else
+        {
+            header('Location: ./index.php');
+        }
     ?>
 </html>

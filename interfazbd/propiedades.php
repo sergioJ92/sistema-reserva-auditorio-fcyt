@@ -2,8 +2,8 @@
 
 const HOST = "localhost";
 const PORT = "5432";
-const DATABASE = "sisresaudifcyt";
+const DATABASE = "tis";
 const USER = "postgres";
-const PASSWORD = "postgres";
+const PASSWORD = "lyn123";
 //"saltamontes"
 ?>
