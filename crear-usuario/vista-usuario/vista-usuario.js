@@ -52,7 +52,7 @@ $(document).ready(function () {
 	function eliminarUsuario(dato,columna){
     	debugger;
     	$.ajax({
-		    dataType: 'json',
+//		    dataType: 'json',
 		    type:'POST',
 		    url:'eliminar_usuario.php',
 		    data:{id:dato}
