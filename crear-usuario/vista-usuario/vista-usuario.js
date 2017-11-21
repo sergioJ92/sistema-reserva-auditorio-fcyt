@@ -3,9 +3,7 @@ $(document).ready(function () {
 	var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/"
     
     function mostrarUsuarios(usuarios){
-		
-		
-		var filas = "";
+    	var filas = "";
 		for (var i = 0; i < usuarios.length; ++i) {
 			filas = filas + anadirNuevaFila(usuarios[i],i);
 		}
@@ -70,8 +68,6 @@ $(document).ready(function () {
 	var cadena = id.split('-');
 	return cadena[1];
 	}
-
-
 	//function mostrarAlerta(tipoAlerta,mensaje){
 	//	$('#contenedor-msg').empty().append(crearAlerta(tipo, mensaje));
 	//}
