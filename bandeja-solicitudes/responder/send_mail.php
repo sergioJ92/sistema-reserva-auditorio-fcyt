@@ -47,8 +47,8 @@ function eliminarReservas($listaConflictos){
 function crearReserva($fecha,$horaInicio,$horaFin,$evento){
     global $idReserva;
     $consulta = 'INSERT INTO reserva';
-    $consulta .= ' (fecha, hora_inicio, hora_fin, evento) VALUES';
-    $consulta .= " ('$fecha', '$horaInicio', '$horaFin', '$evento')";
+    $consulta .= ' (id_ambiente, fecha, hora_inicio, hora_fin, evento) VALUES';
+    $consulta .= " (1, '$fecha', '$horaInicio', '$horaFin', '$evento')";
     $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     $consulta_insercion = pg_query(ConexionBD::getConexion(), "SELECT lastval();");
     $idReserva = pg_fetch_row($consulta_insercion)[0];
@@ -77,26 +77,32 @@ function realizarReservaCompleta($mensaje,$idSolicitudReserva,$aceptadoRechazado
                             pg_query(ConexionBD::getConexion(), "COMMIT");
                             return true;
                         }else{
+                            pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                             pg_query(ConexionBD::getConexion(), "ROLLBACK");
                             return false;
                         }
                     }else{
+                        pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                         pg_query(ConexionBD::getConexion(), "ROLLBACK");
                         return false;
                     }
                 }else{
+                    pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                     pg_query(ConexionBD::getConexion(), "ROLLBACK");
                     return false;
                 }
             }else{
+                pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                 pg_query(ConexionBD::getConexion(), "COMMIT");
                 return true;
             }
         }else{
+            pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
             pg_query(ConexionBD::getConexion(), "ROLLBACK");
             return false;
         }
     }else{
+        pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
         pg_query(ConexionBD::getConexion(), "ROLLBACK");
         return false;
     }

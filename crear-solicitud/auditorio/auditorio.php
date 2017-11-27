@@ -27,14 +27,10 @@ function crearOption($elemento) {
                     <legend>Datos de la reserva</legend>
                     <div class="row">
                         <div  class="col-md-4 form-group" id="auditorio">
-                            <label>Seleccionar Auditorio</label>
-                            <select class="form-control" id="sel1">
+                            <label>Seleccionar Auditorio <span class="rojo">*</span></label>
+                            <select class="form-control" id="selAuditorio">
                                 <option selected="" value="null" hidden="">Nombre Auditorio</option>
                                 <?php array_map(crearOption, SolicitudReserva::obtenerTodosLosAuditorios()); ?>
-                                <!--
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>-->
-
                             </select>
                         </div>
                         <div class="col-md-12 form-group" id="auditorio"></div>
@@ -149,6 +145,6 @@ function crearOption($elemento) {
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="crear_solicitud.js"></script>
+        <script type="text/javascript" src="auditorio/crear_solicitud.js"></script>
         <?php include RAIZ . '/pie.inc'; ?>
     </body>

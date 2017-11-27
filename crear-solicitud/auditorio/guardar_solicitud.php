@@ -1,6 +1,6 @@
 <?php
 
-const RAIZ = '..';
+const RAIZ = './../..';
 require_once RAIZ.'/lib/phpmailer/PHPMailerAutoload.php';
 require_once RAIZ.'/lib/my-mailer/MyMailer.php';
 require_once RAIZ.'/interfazbd/ConexionBD.php';
@@ -45,17 +45,21 @@ function validarSolicitud(
 }
 
 function insertarSolicitudDeReserva(
-        $fecha, $horaInicio, $horaFin, $responsable, 
+        $auditorio, $fecha, $horaInicio, $horaFin, $responsable, 
         $institucion, $telefono, $correo, $evento, $descripcion) {
     
     validarSolicitud($fecha, $horaInicio, $horaFin, $responsable, $evento, $telefono, $correo, $institucion);
     
     $conn = ConexionBD::getConexion();
     pg_query($conn, "BEGIN");
+
+    $obtener_id_ambiente = "select id_ambiente from auditorio where NOMBRE_AUDITORIO = '$auditorio'";
+    $res_id_amb = pg_query($conn, $obtener_id_ambiente);
+    $id_amb = pg_fetch_row($res_id_amb)[0];
+
     $insertarSolicitud = 'INSERT INTO solicitud_reserva';
     $insertarSolicitud .= ' (id_ambiente, leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES';
-    $insertarSolicitud .= " (1, '0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
-    
+    $insertarSolicitud .= " ($id_amb, '0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
     if (pg_query($conn, $insertarSolicitud)) {
         return insertarTelefonoYCorreo($conn, $telefono, $correo);
     }
@@ -108,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conectado = ConexionBD::conectar();
     $entrada = $_POST;
     
+    $auditorio = Validador::desinfectarEntrada($entrada['auditorio']);
     $fecha = Validador::desinfectarEntrada($entrada['fecha']);
     $horaInicio= Validador::desinfectarEntrada($entrada['hora_inicio']);
     $horaFin= Validador::desinfectarEntrada($entrada['hora_fin']);
@@ -122,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mensajeContenido = 'El Código de su Solicitud de Reserva es: ';
         $asunto =  'Solicitud de Reserva';
         
-        $insertado = insertarSolicitudDeReserva($fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
+        $insertado = insertarSolicitudDeReserva($auditorio, $fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
         
         $smtpMailer = false;
         if ($smtpMailer) {
