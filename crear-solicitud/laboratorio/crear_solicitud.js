@@ -1,3 +1,5 @@
+var departamento = '';
+var nombre_laboratorio = '';
 
 $('input[id ^=fecha]').parent().datetimepicker({
     format: 'DD-MM-YYYY',
@@ -27,12 +29,29 @@ $('input[id ^=hora_fin]').click(function () {
     $(this).parent().data('DateTimePicker').toggle();
 });
 
+$( "#selLaboratorio" ).attr('disabled', 'disabled');
+
+$('#selDepartamento').change(function () {
+    departamento = $(this).val();
+    console.log(departamento);
+    var _departamento = departamento.replace(/\s/g,"_");
+    $("#selLaboratorio").load("obtener_datos.php?tipo="+"3"+"&nombre="+_departamento);
+    $("#selLaboratorio").removeAttr("disabled");
+});
+
+$("#selLaboratorio").change(function(){
+    nombre_laboratorio = $(this).val();
+    console.log(nombre_laboratorio);
+});
+
 $('#enviar').click(function () {
     
     $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
     $('#enviar').attr("disabled", true);
     
     var datos = {
+        departamento: departamento,
+        nombre_laboratorio: nombre_laboratorio,
         responsable: $('#responsable').val(),
         institucion: $('#institucion').val(),
         telefono: $('#telefono').val(),
@@ -44,7 +63,7 @@ $('#enviar').click(function () {
         descripcion: $('#descripcion').val()
     };
     
-    if (datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
+    if (datos['departamento']==='' || datos['nombre_laboratorio'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
             datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
             datos['hora_fin'] === '') {
         
@@ -53,9 +72,17 @@ $('#enviar').click(function () {
     else {
         datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
         
-        ajaxPost('guardar_solicitud.php', datos, manejarGuardarSolicitud);
+        ajaxPost('laboratorio/guardar_solicitud.php', datos, manejarGuardarSolicitud);
     }
 });
+
+function cargarDatos(respuesta){
+    if(respuesta.exito){
+
+    }else{
+        
+    }
+}
 
 function manejarGuardarSolicitud(respuesta) {
             

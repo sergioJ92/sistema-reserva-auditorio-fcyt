@@ -30,23 +30,29 @@ $('input[id ^=hora_fin]').click(function () {
     $(this).parent().data('DateTimePicker').toggle();
 });
 
+$( "#selPiso" ).attr('disabled', 'disabled');
+
+$( "#selAula" ).attr('disabled', 'disabled');
+
 $('#selEdificio').change(function () {
-    var edificio = $(this).val();
-    console.log(edificio);
-    var datos = {
-        edificio: edificio,
-        tipo: 1
-    };
-    ajaxPost('obtener_datos.php', datos, cargarDatos);
+    edificio = $(this).val();
+    var _edificio = edificio.replace(/\s/g,"_");
+    $("#selPiso").load("obtener_datos.php?tipo="+"1"+"&nombre="+_edificio);
+    $("#selPiso").removeAttr("disabled");
 });
 
 $('#selPiso').change(function () {
-    var piso = $(this).val();
+    piso = $(this).val();
+    var _edificio = edificio.replace(/\s/g,"_");
+    var _piso = piso.replace(/\s/g,"_");
+    console.log(edificio);
     console.log(piso);
+    $("#selAula").load("obtener_datos.php?tipo="+"2"+"&nombre="+_edificio+"&piso="+_piso);
+    $("#selAula").removeAttr("disabled");
 });
 
 $('#selAula').change(function () {
-    var aula = $(this).val();
+    aula = $(this).val();
     console.log(aula);
 });
 
@@ -56,6 +62,9 @@ $('#enviar').click(function () {
     $('#enviar').attr("disabled", true);
     
     var datos = {
+        edificio: edificio,
+        piso: piso,
+        nombre_aula: aula,
         responsable: $('#responsable').val(),
         institucion: $('#institucion').val(),
         telefono: $('#telefono').val(),
@@ -67,7 +76,7 @@ $('#enviar').click(function () {
         descripcion: $('#descripcion').val()
     };
     
-    if (datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
+    if (datos['edificio'] === '' || datos['piso'] === '' || datos['nombre_aula'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
             datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
             datos['hora_fin'] === '') {
         
@@ -76,7 +85,7 @@ $('#enviar').click(function () {
     else {
         datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
         
-        ajaxPost('guardar_solicitud.php', datos, manejarGuardarSolicitud);
+        ajaxPost('aula/guardar_solicitud.php', datos, manejarGuardarSolicitud);
     }
 });
 

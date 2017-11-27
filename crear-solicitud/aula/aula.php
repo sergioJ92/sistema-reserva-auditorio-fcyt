@@ -28,7 +28,7 @@ function crearOption($elemento) {
                     <div class="row">
                         <div  class="col-md-4 form-group" id="edificio">
                             <label>Seleccionar Edificio <span class="rojo">*</span></label>
-                            <select class="form-control" id="selEdificio">
+                            <select name="selEdificio" class="form-control" id="selEdificio">
                                 <option selected="" value="null" hidden="">Nombre Edificio</option>
                                 <?php array_map(crearOption, SolicitudReserva::obtenerTodosLosEdificios()); ?>
 
@@ -36,18 +36,15 @@ function crearOption($elemento) {
                         </div>
                         <div  class="col-md-4 form-group" id="piso">
                             <label>Seleccionar Piso <span class="rojo">*</span></label>
-                            <select class="form-control" id="selPiso" >
+                            <select name="selPiso" class="form-control" id="selPiso"><!--
                                 <option selected="" value="null" hidden="">Numero de Piso</option>
                                 <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                                <option>auditorio edificio nuevo</option>-->
                             </select>
                         </div>
                         <div  class="col-md-4 form-group" id="aula">
                             <label>Seleccionar Aula <span class="rojo">*</span></label>
-                            <select class="form-control" id="selAula">
-                                <option selected="" value="null" hidden="">Nombre Aula</option>
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                            <select name="selAula" class="form-control" id="selAula">
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
@@ -161,6 +158,6 @@ function crearOption($elemento) {
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="crear_solicitud.js"></script>
+        <script type="text/javascript" src="aula/crear_solicitud.js"></script>
         <?php include RAIZ . '/pie.inc'; ?>
     </body>

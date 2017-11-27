@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mensajeContenido = 'El Código de su Solicitud de Reserva es: ';
         $asunto =  'Solicitud de Reserva';
         
-        $insertado = insertarSolicitudDeReserva($auditorio, $fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
+        $insertado = insertarSolicitudDeReserva($edificio, $piso, $nombre_aula, $fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
         
         $smtpMailer = false;
         if ($smtpMailer) {

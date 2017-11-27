@@ -21,7 +21,7 @@ class SolicitudReserva extends ConexionBD {
 
     public static function obtenerTodosLosDepartamentos() {
 
-        $consulta = 'SELECT departamento FROM laboratorio';
+        $consulta = 'SELECT departamento FROM laboratorio group by departamento';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
@@ -34,7 +34,7 @@ class SolicitudReserva extends ConexionBD {
 
     public static function obtenerTodosLosEdificios() {
 
-        $consulta = 'SELECT edificio FROM aula';
+        $consulta = 'SELECT edificio FROM aula group by edificio';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];

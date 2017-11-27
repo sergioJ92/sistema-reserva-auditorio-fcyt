@@ -1,3 +1,14 @@
+<?php
+    include_once './../lib/sesion_store.php';
+    include_once './../lib/funciones_privilegios.php';
+    require_once './../interfazbd/SolicitudReserva.php';
+
+    function crearOption($elemento) {
+
+        echo "<option value=\"$elemento\">$elemento</option>";
+    }
+?>
+
     <body>
         <?php include RAIZ . '/navegacion.inc'; ?>
         <div class="container">
@@ -18,18 +29,15 @@
                     <div class="row">
                         <div  class="col-md-6 form-group" id="departamento">
                             <label>Seleccionar Departamento <span class="rojo">*</span></label>
-                            <select class="form-control" id="selDepartamento">
+                            <select name="selDepartamento" class="form-control" id="selDepartamento">
                                 <option selected="" value="null" hidden="">Nombre Departamento</option>
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                                <?php array_map(crearOption, SolicitudReserva::obtenerTodosLosDepartamentos()); ?>
+
                             </select>
                         </div>
                         <div  class="col-md-6 form-group" id="laboratorio">
                             <label>Seleccionar Laboratorio <span class="rojo">*</span></label>
-                            <select class="form-control" id="selLaboratorio">
-                                <option selected="" value="null" hidden="">Nombre Laboratorio</option>
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                            <select name="selLaboratorio" class="form-control" id="selLaboratorio">
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
@@ -143,6 +151,6 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="crear_solicitud.js"></script>
+        <script type="text/javascript" src="laboratorio/crear_solicitud.js"></script>
         <?php include RAIZ . '/pie.inc'; ?>
     </body>
