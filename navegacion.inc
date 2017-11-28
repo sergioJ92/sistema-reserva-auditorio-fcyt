@@ -27,8 +27,8 @@
                 <?php  
 
                 $a = 'auditorio';
-                $c = 'aula';
                 $b = 'laboratorio';
+                $c = 'aula';
 
                 ?>
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitar Reserva<span class="caret"></span></a>

@@ -39,7 +39,14 @@
     }
     function addBandejaSolicitudes(){
         if(tienePrivilegio(SOLICITUDES)){
-            echo '<li><a href="'.DOMINIO.'/bandeja-solicitudes/">Solicitudes</a></li>';
+           echo '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitudes<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="'.DOMINIO.'/bandeja-solicitudes/index.php?var=auditorio">Solicitudes Auditorio</a></li>
+                      <li><a href="'.DOMINIO.'/bandeja-solicitudes/index.php?var=laboratorio">Solicitudes Laboratorio</a></li>
+                      <li><a href="'.DOMINIO.'/bandeja-solicitudes/index.php?var=aula">Solicitudes Aula</a></li>
+                    </ul>
+                </li>';
+            //echo '<li><a href="'.DOMINIO.'/bandeja-solicitudes/">Solicitudes</a></li>';
         }
     }
     function addCrearUsuarios(){
