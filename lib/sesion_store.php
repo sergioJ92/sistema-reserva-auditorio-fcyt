@@ -1,7 +1,5 @@
 <?php
-    
   $time = 600; // 10 minutos en mili-segundos 
-   
   // verificamos si existe la sesión 
   session_start(); 
   if(isset($_SESSION["nombres"])) 

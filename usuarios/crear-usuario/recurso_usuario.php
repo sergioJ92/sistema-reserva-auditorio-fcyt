@@ -2,17 +2,21 @@
 
 //error_reporting(0);
 
-const RAIZ = '..';
+const RAIZ = '../..';
 
 require_once RAIZ . '/interfazbd/ConexionBD.php';
 require_once RAIZ . '/interfazbd/Validador.php';
 require_once RAIZ . '/interfazbd/ValidacionExcepcion.php';
 
 function rolPuedeTenerMaterias($nombreRol) {
-    
+    $res = false;
     $conn = ConexionBD::getConexion();
     $rol = pg_query($conn,"SELECT * FROM rol WHERE nombre_rol='$nombreRol'");
-    return pg_fetch_assoc($rol)['puede_tener_materias'] == 1;
+    $datoMaterias = pg_fetch_assoc($rol)['puede_tener_materias'];
+    if($datoMaterias == 1){
+        $res = true;    
+    }
+    return $res;
 }
 
 function validarDatosUsuario(

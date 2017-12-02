@@ -152,7 +152,6 @@ function crearFecha(anio, mes, dia, hora='00', minuto='00', segundo='00') {
 }
 
 function ajaxGet(destino, mensaje, callback) {
-    
     $.get(destino, mensaje, function(respuesta, estado, xhr) {
         if (estado === 'success') {
             callback(respuesta);
@@ -161,6 +160,7 @@ function ajaxGet(destino, mensaje, callback) {
             console.log('Error: ' + estado);
         }
     }, 'json');
+
 }
 
 function ajaxPost(destino, mensaje, callback) {

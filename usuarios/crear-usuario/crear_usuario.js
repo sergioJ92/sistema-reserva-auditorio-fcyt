@@ -1,9 +1,9 @@
 $(document).ready(function () {
     
     var materias = [];
+    var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/usuarios/"
     
     function cargarRoles(entrada) {
-        
         var roles = {};
         entrada.forEach(function (rol) {
             if (!roles[rol['nombre_rol']]) {
@@ -75,6 +75,7 @@ $(document).ready(function () {
 
         var usuario = obtenerDatosNuevoUsuario();
         usuario['materias'] = quitarNulos(materias);
+        console.log(usuario);
         $.ajax({
             type: 'POST',
             url:'recurso_usuario.php',
@@ -96,6 +97,12 @@ $(document).ready(function () {
 
     function obtenerDatosNuevoUsuario() {
         var matRes = "";
+        var nombreRol = '';
+        if($('#nombre-rol').val()==null || $('#nombre-rol').val()==undefined || $('#nombre-rol').val()==''){
+            nombreRol = 'Ninguno';
+        }else{
+            nombreRol = $('#nombre-rol').val();
+        }
         mapRes = {
             nombres: $('#nombres').val(),
             apellidos: $('#apellidos').val(),
@@ -104,7 +111,7 @@ $(document).ready(function () {
             nombre_usuario: $('#nombre-usuario').val(),
             contrasenia: $('#contrasenia').val(),
             confirmar_contrasenia: $('#confirmar-contrasenia').val(),
-            nombre_rol: $('#nombre-rol').val(),
+            nombre_rol: nombreRol,
             materias: []
         };
         return mapRes;
@@ -143,7 +150,6 @@ $(document).ready(function () {
 
         var rol = obtenerDatosModalNuevoRol();
         ajaxPost('recurso_rol.php', rol, function (respuesta) {
-            
             if (respuesta.exito) {
                 actualizarPrivilegios('nuevo', []);
                 $('#nuevo-nombre-rol').val('');
@@ -158,17 +164,25 @@ $(document).ready(function () {
     }
 
     function obtenerDatosModalNuevoRol() {
-        
         var privilegios = [];
-        if ($('#nuevo-privilegio-cronograma').prop('checked')) privilegios.push('Cronograma');
-        if ($('#nuevo-privilegio-solicitudes').prop('checked')) privilegios.push('Solicitudes');
-        if ($('#nuevo-privilegio-reservas').prop('checked')) privilegios.push('Reservas');
-        if ($('#nuevo-privilegio-usuarios').prop('checked')) privilegios.push('Usuarios');
-        return {
-            nombre_rol: $('#nuevo-nombre-rol').val(),
-            puede_tener_materias: $('#puede-tener-materias').prop('checked') ? 1 : 0,
-            privilegios: privilegios
-        };
+        if($('#nuevo-nombre-rol').val() == ''){
+            privilegios.push('Ninguno');
+            res={
+                nombre_rol: 'Ninguno',
+                puede_tener_materias: 0,
+                privilegios: privilegios
+            }
+        }else{
+            if ($('#nuevo-privilegio-cronograma').prop('checked')) privilegios.push('Cronograma');
+            if ($('#nuevo-privilegio-solicitudes').prop('checked')) privilegios.push('Solicitudes');
+            if ($('#nuevo-privilegio-reservas').prop('checked')) privilegios.push('Reservas');
+            if ($('#nuevo-privilegio-usuarios').prop('checked')) privilegios.push('Usuarios');
+            res = { nombre_rol: $('#nuevo-nombre-rol').val(),
+                    puede_tener_materias: $('#puede-tener-materias').prop('checked') ? 1 : 0,
+                    privilegios: privilegios
+                    };
+        }
+        return res;
     }
     
     function rellenarMaterias(materias) {
@@ -180,9 +194,8 @@ $(document).ready(function () {
             selectMaterias.append(option);
         });
     }
-    
+     
     function crearVisualizadorMateria(nombreMateria, funcionEliminar, id) {
-        
         var contenedor = crear('DIV', null, 'list-group-item col-xs-6', id);
         contenedor.appendChild(crear('DIV', nombreMateria, 'col-md-8 padding-boton'));
         var botonEliminar = crear('BUTTON', 'Eliminar', 'btn btn-default');
@@ -205,13 +218,14 @@ $(document).ready(function () {
         var id = 'm' + posicion;
         materias.push(codigoMateria);
         $('#lista-materias').append(crearVisualizadorMateria(nombreMateria, function() {
-            
             $('#' + id).remove();
             delete materias[posicion];
             
         }, id));
     }
-    
+    function cancelar(){
+        window.location.href = dominio + "vista-usuario";      
+    }
     function reiniciarControles() {
         
         $('#nombres').val('');
@@ -229,7 +243,6 @@ $(document).ready(function () {
     }
     
     reiniciarControles();
-    
     ajaxGet('recurso_rol.php', {}, cargarRoles);
     ajaxGet('recurso_materia.php', {}, rellenarMaterias);
     
@@ -238,5 +251,6 @@ $(document).ready(function () {
         $('#btn-crear-nuevo-rol').click(crearNuevoRol);
         $('#btn-crear-nuevo-usuario').click(crearNuevoUsuario);
         $('#btn-anadir-materia').click(anadirMateria);
+        $('#btn-cancelar').click(cancelar)
     },1000);
 });

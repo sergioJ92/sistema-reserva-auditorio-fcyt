@@ -1,5 +1,5 @@
 <?php 
-const RAIZ = '..'; 
+const RAIZ = '../..'; 
 include_once RAIZ .'/lib/sesion_store.php';
 include_once RAIZ .'/lib/funciones_privilegios.php';
 bloquearCrearUsuarios();
@@ -60,6 +60,13 @@ bloquearCrearUsuarios();
                             <label for="confirmar-contrasenia">Confirmar contraseña <span class="rojo">*</span></label>
                             <input id="confirmar-contrasenia" type="password" placeholder="Confirme la contraseña" class="form-control">
                         </div>
+                        <div class="col-md-4 form-group">
+                            <label for="estado_usuario">Estado usuario <span class="rojo">*</span></label>
+                            <select id="select-estado" class="form-control">
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -111,6 +118,7 @@ bloquearCrearUsuarios();
                 </fieldset>
                 <div class="row text-center padding-pequeno sin-padding-bottom">
                     <button class="btn btn-primary" id="btn-crear-nuevo-usuario">Guardar Usuario</button>
+                    <button class="btn btn-danger" id="btn-cancelar">Cancelar</button>
                 </div>
             </div>
         </div>

@@ -27,16 +27,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 }   
 
-function llenarDatos(){
-    $consulta = "SELECT nombres, apellidos, nombre_rol, nombre_usuario FROM usuario";
-    $resultado = ConexionBD::getConexion()->query($consulta);
-    $resultadoLista = [];
-    while ($fila = $resultado->fetch_assoc()) {
-        array_push($resultadoLista, $fila);
-    }
-
-    return $resultadoLista;
-}
-
 ?>
 

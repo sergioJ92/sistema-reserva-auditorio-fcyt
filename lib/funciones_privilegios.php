@@ -44,7 +44,7 @@
     }
     function addCrearUsuarios(){
         if(tienePrivilegio(USUARIOS)){
-            echo '<li><a href="'.DOMINIO.'/crear-usuario/vista-usuario/">Usuarios</a></li>';
+            echo '<li><a href="'.DOMINIO.'/usuarios/">Usuarios</a></li>';
         }
     }         
     function addMisReservas(){
@@ -90,11 +90,11 @@
     function bloquearCrearUsuarios(){
         if (isset($_SESSION['nombres'])||isset($_SESSION['privilegios'])) {
             if (!buscarPrivilegio($_SESSION['privilegios'], USUARIOS)) {
-                header('Location: ../index.php');
+                header('Location: ../../index.php');
                 die();
             }
         }else{
-            header('Location: ../index.php');
+            header('Location: ../../index.php');
             die();
         }
     }

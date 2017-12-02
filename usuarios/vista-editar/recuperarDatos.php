@@ -10,9 +10,9 @@ require_once RAIZ . '/interfazbd/Validador.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-	 $id  = $_POST["id"];
+	 $id = $_POST["id"];
 
-	 $sql = "SELECT * FROM usuario u, telefono_usuario tu, correo_usuario cu ,rol r, tiene_materia tm WHERE u.nombre_usuario = '".$id."' AND u.nombre_usuario=tu.nombre_usuario AND u.nombre_usuario=cu.nombre_usuario AND u.nombre_usuario=tm.nombre_usuario AND u.nombre_rol=r.nombre_rol";
+	 $sql = "SELECT * FROM usuario u, telefono_usuario tu, correo_usuario cu ,rol r, tiene_materia tm, materia ma WHERE u.nombre_usuario = '".$id."' AND u.nombre_usuario=tu.nombre_usuario AND u.nombre_usuario=cu.nombre_usuario AND u.nombre_usuario=tm.nombre_usuario AND u.nombre_rol=r.nombre_rol AND ma.codigo_materia=tm.codigo_materia";
 
 	 $resultado = ConexionBD::getConexion();
 	 $resultado = pg_query($sql);

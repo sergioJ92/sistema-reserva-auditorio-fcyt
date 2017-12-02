@@ -1,6 +1,6 @@
 <?php
 
-const RAIZ = '..';
+const RAIZ = '../..';
 
 require_once RAIZ. '/interfazbd/ConexionBD.php';
 require_once RAIZ. '/interfazbd/Validador.php';
@@ -53,18 +53,56 @@ function guardarRol($nombreRol, $puedeTenerMaterias, $privilegios) {
     }
 }
 
+function guardarRolVacio($nombreRol, $puedeTenerMaterias, $privilegios){
+    $conn = ConexionBD::getConexion();
+    pg_query($conn, "BEGIN");
+    $consulta = 'INSERT INTO rol (nombre_rol, puede_tener_materias)';
+    $consulta = $consulta." VALUES ('$nombreRol', '$puedeTenerMaterias')";
+    pg_query($conn,$consulta);
+    pg_query($conn, "COMMIT");
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     header('Content-Type: application/json');
     echo json_encode(obtenerRoles());
-}
+}   
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
     header('Content-Type: application/json');
     $entrada = $_POST;
+    $nombreRol = '';
+    $puedeTenerMaterias = '';
+    $privilegios = [];
+    if($entrada['nombre_rol'] == 'Ninguno'){
+        //agregar como vacio
+        $nombreRol = $entrada['nombre_rol'];
+        $puedeTenerMaterias = 0;
+        try{
+            guardarRolVacio($nombreRol, $puedeTenerMaterias, $privilegios);
+            echo json_encode(array('exito' => true));
+        }catch (ValidacionExcepcion $ex) {
+            echo json_encode(array('exito' => false, 'mensaje' => 'El rol ya existe'));
+        }
+    }else{
+        $nombreRol = Validador::desinfectarEntrada($entrada['nombre_rol']);
+        $puedeTenerMaterias = Validador::desinfectarEntrada($entrada['puede_tener_materias']);
+        foreach ($entrada['privilegios'] as $privilegio) {
+            array_push($privilegios, Validador::desinfectarEntrada($privilegio));
+        }
+        
+        try {
+            guardarRol($nombreRol, $puedeTenerMaterias, $privilegios);
+            echo json_encode(array('exito' => true));
+        }
+        catch (ValidacionExcepcion $ex) {
+            echo json_encode(array('exito' => false, 'mensaje' => $ex->getMessage()));
+        }
+    }
+    /**
     $nombreRol = Validador::desinfectarEntrada($entrada['nombre_rol']);
     $puedeTenerMaterias = Validador::desinfectarEntrada($entrada['puede_tener_materias']);
     $privilegios = [];
+    
     foreach ($entrada['privilegios'] as $privilegio) {
         array_push($privilegios, Validador::desinfectarEntrada($privilegio));
     }
@@ -75,7 +113,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     catch (ValidacionExcepcion $ex) {
         echo json_encode(array('exito' => false, 'mensaje' => $ex->getMessage()));
-    }
+    }**/
 }
 else {
     

@@ -1,6 +1,6 @@
 <?php
 
-const RAIZ = '..';
+const RAIZ = '../..';
 
 require_once RAIZ . '/interfazbd/ConexionBD.php';
 require_once RAIZ . '/interfazbd/Validador.php';
