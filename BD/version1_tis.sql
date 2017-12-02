@@ -898,6 +898,12 @@ alter table CORREO
       references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
       on delete restrict on update restrict;
 
+alter table CORREO
+   drop constraint FK_CORREO_RELATIONS_SOLICITU,
+   add constraint FK_CORREO_RELATIONS_SOLICITU foreign key (ID_SOLICITUD_RESERVA)
+      references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
+      on delete cascade on update cascade;
+
 alter table CORREO_USUARIO
    add constraint FK_CORREO_U_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO (NOMBRE_USUARIO)
@@ -983,6 +989,12 @@ alter table TELEFONO
       references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
       on delete restrict on update restrict;
 
+alter table TELEFONO
+   drop constraint FK_TELEFONO_RELATIONS_SOLICITU,
+   add constraint FK_TELEFONO_RELATIONS_SOLICITU foreign key (ID_SOLICITUD_RESERVA)
+      references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
+      on delete cascade on update cascade;
+
 alter table TELEFONO_USUARIO
    add constraint FK_TELEFONO_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO ( NOMBRE_USUARIO)
@@ -1022,12 +1034,10 @@ ALTER TABLE "reserva_solicitada"
    FOREIGN KEY (id_respuesta) 
    REFERENCES "respuesta"(id_respuesta);
 
-
 alter table reserva_academica 
    drop constraint fk_reserva__relations_reserva,
    add constraint fk_reserva__relations_reserva foreign key(id_reserva) 
    references public.reserva(id_reserva) on delete cascade;
-
 
 alter table reserva_solicitada
    drop constraint fk_reserva__relations_reserva,

@@ -32,6 +32,7 @@ $('input[id ^=hora_fin]').click(function () {
 $( "#selLaboratorio" ).attr('disabled', 'disabled');
 
 $('#selDepartamento').change(function () {
+    nombre_laboratorio = '';
     departamento = $(this).val();
     console.log(departamento);
     var _departamento = departamento.replace(/\s/g,"_");
@@ -45,13 +46,9 @@ $("#selLaboratorio").change(function(){
 });
 
 $('#enviar').click(function () {
-    
-    $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
-    $('#enviar').attr("disabled", true);
-    
+    $('#body-modal').empty();
     var datos = {
-        departamento: departamento,
-        nombre_laboratorio: nombre_laboratorio,
+        id_ambiente: nombre_laboratorio,
         responsable: $('#responsable').val(),
         institucion: $('#institucion').val(),
         telefono: $('#telefono').val(),
@@ -62,19 +59,70 @@ $('#enviar').click(function () {
         hora_fin: $('#hora_fin').val(),
         descripcion: $('#descripcion').val()
     };
-    
-    if (datos['departamento']==='' || datos['nombre_laboratorio'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
+    if (datos['id_ambiente'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
             datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
             datos['hora_fin'] === '') {
-        
         mostrarMensaje('alert-danger', 'Debe rellenar todos los campos obligatorios');
-    }
-    else {
+    }else {
         datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
-        
-        ajaxPost('laboratorio/guardar_solicitud.php', datos, manejarGuardarSolicitud);
+        var datos ={id_ambiente:datos['id_ambiente'],
+                    fecha: datos['fecha'],
+                    hora_inicio: datos['hora_inicio'],
+                    hora_fin: datos['hora_fin']};
+        verificarConflictos(datos);   
     }
 });
+
+$('#btn-enviar-mensaje').click(function () {
+    
+    $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
+    $('#enviar').attr("disabled", true);
+    
+    var datos = {
+        id_ambiente: nombre_laboratorio,
+        responsable: $('#responsable').val(),
+        institucion: $('#institucion').val(),
+        telefono: $('#telefono').val(),
+        correo: $('#correo').val(),
+        evento: $('#evento').val(),
+        fecha: $('#fecha').parent().data("DateTimePicker").date(),
+        hora_inicio: $('#hora_inicio').val(),
+        hora_fin: $('#hora_fin').val(),
+        descripcion: $('#descripcion').val()
+    };
+        datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
+        ajaxPost('guardar_solicitud.php', datos, manejarGuardarSolicitud);
+});
+
+function verificarConflictos(datos){
+    var res = 0;
+    $.ajax({
+        type: 'POST',
+        data: datos,
+        url: "obtener_conflictos.php",
+        success: function (resultado) {
+            resultado = JSON.parse(resultado);
+            if(resultado.exito){
+                res = parseInt(resultado.conflictos);
+                console.log(res);
+                $('#titulo-modal').css({"background-color": "#337ab7", "color": "white"});
+                $('#btn-enviar-mensaje').css({"background-color": "#337ab7", "color": "white"});
+                console.log("pasaaaa");
+                if (res>0) {
+                    console.log("entra");
+                    var add = '<div id="cuerpo-modal" class="modal-body"><div class="form-group row"><div id="modal-mensaje" class="col-md-12 text-center">Existen '+res+' conflictos con otras Reservas <b>Si deseas continuar presiona ENVIAR</b></div></div></div>';
+                    $('#body-modal').append(add);
+                }
+                $('#myModal').modal();
+            }else{
+                console.log("entra error");
+            }
+        },
+        error: function(resultado){
+            console.log("no entra");
+        }
+    });   
+}
 
 function cargarDatos(respuesta){
     if(respuesta.exito){

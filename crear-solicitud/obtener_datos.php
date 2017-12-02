@@ -23,12 +23,13 @@ function obtenerAulas($edificio, $piso){
 
     $edificio = str_replace("_", " ", $edificio);
     $piso = str_replace("_", " ", $piso);
-    $consultaObtenerAulas = "select nombre_aula from aula where edificio='$edificio' and piso='$piso'";
+    $consultaObtenerAulas = "select id_ambiente, nombre_aula from aula where edificio='$edificio' and piso='$piso'";
     $res = pg_query($conn, $consultaObtenerAulas);
     echo '<option selected="" value="null" hidden="">Nombre de Aula</option>';
     while ($fila = pg_fetch_assoc($res)) {
+        $id_ambiente = $fila['id_ambiente'];
         $aula = $fila['nombre_aula'];
-        echo "<option value='$aula'>$aula</option>";
+        echo "<option value='$id_ambiente'>$aula</option>";
     }
 }
 
@@ -36,12 +37,13 @@ function obtenerAulas($edificio, $piso){
 function obtenerLaboratorios($departamento){
     $conn = ConexionBD::getConexion();
     $departamento = str_replace("_", " ", $departamento);
-    $consultaObtenerPisos = "select nombre_laboratorio from laboratorio where departamento='$departamento'";
+    $consultaObtenerPisos = "select id_ambiente, nombre_laboratorio from laboratorio where departamento='$departamento'";
     $res = pg_query($conn, $consultaObtenerPisos);
     echo '<option selected="" value="null" hidden="">Numero de Piso</option>';
     while ($fila = pg_fetch_assoc($res)) {
+        $id_ambiente = $fila['id_ambiente'];
         $nombre_laboratorio = $fila['nombre_laboratorio'];
-        echo '<option value="'.$nombre_laboratorio.'">'.$nombre_laboratorio.'</option>';
+        echo '<option value="'.$id_ambiente.'">'.$nombre_laboratorio.'</option>';
     }
 
 }

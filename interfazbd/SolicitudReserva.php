@@ -8,13 +8,15 @@ class SolicitudReserva extends ConexionBD {
     
     public static function obtenerTodosLosAuditorios() {
 
-        $consulta = 'SELECT nombre_auditorio FROM auditorio';
+        $consulta = 'SELECT id_ambiente, nombre_auditorio FROM auditorio';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
         while ($fila = pg_fetch_assoc($consultaResultado)) {
+            $idAmbiente = $fila['id_ambiente'];
             $nomAuditorio = $fila['nombre_auditorio'];
-            array_push($resultado, $nomAuditorio);
+            $agregar = [$idAmbiente, $nomAuditorio];
+            array_push($resultado, $agregar);
         }
         return $resultado;
     }

@@ -5,7 +5,7 @@ require_once './../interfazbd/SolicitudReserva.php';
 
 function crearOption($elemento) {
 
-    echo "<option value=\"$elemento\">$elemento</option>";
+    echo "<option value=\"$elemento[0]\">$elemento[1]</option>";
 }
 ?>
     <body>
@@ -143,6 +143,24 @@ function crearOption($elemento) {
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header estilo-modal-header" id="titulo-modal">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p>Usted esta ENVIANDO esta solicitud
+                        </p>
+                    </div>
+                    <div id="body-modal"></div>
+                    <div class="modal-footer text-center estilo-modal-footer">
+                        <button id="btn-enviar-mensaje" type="button" class="btn btn-primary boton-centreado " data-dismiss="modal">Enviar</button>
+                    </div>
+                </div>
+
             </div>
         </div>
         <script type="text/javascript" src="auditorio/crear_solicitud.js"></script>

@@ -16,6 +16,8 @@ $(document).ready(function () {
             $(".boton-responder").click(function () {
                 llenarModal(this.id);
                 setCookie('id_solicitud_reserva', datos[this.id]['id_solicitud_reserva']);
+                setCookie('id_ambiente', datos[this.id]['id_ambiente']);
+                setCookie('nombre_auditorio', $('#modalAmbiente').text());
                 setCookie('institucion', $('#modalInstitucion').text());
                 setCookie('responsable', $('#modalResponsable').text());
                 setCookie('correo', $('#modalCorreo').text());
@@ -36,6 +38,7 @@ $(document).ready(function () {
 });
 
 function llenarModal(idLista) {
+    $('#modalAmbiente').text("");
     $('#modalInstitucion').text("");
     $('#modalResponsable').text("");
     $('#modalCorreo').text("");
@@ -46,7 +49,7 @@ function llenarModal(idLista) {
     $('#modalEvento').text("");
     $('#modalDescripccion').text("");
 
-
+    $('#modalAmbiente').text(datos[idLista]['nombre_auditorio']);
     $('#modalInstitucion').text(datos[idLista]['institucion']);
     $('#modalResponsable').text(datos[idLista]['responsable']);
     $('#modalCorreo').text(datos[idLista]['correo1']);
@@ -80,7 +83,11 @@ function llenarDatos(valores) {
 
             filaContenido += '<div ><span>Solicitud de Reserva</span></div>';
 
-            filaContenido += '<div ><span>De: </span>';
+            filaContenido += '<div ><span>Del: </span>';
+            filaContenido += valores[fila]['nombre_auditorio'];
+            filaContenido += '</div>';
+
+            filaContenido += '<div ><span>Por: </span>';
             filaContenido += valores[fila]['responsable'];
             filaContenido += '</div>';
 
