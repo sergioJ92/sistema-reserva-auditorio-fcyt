@@ -57,8 +57,8 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     $evento = 'Reserva académica';
     $conn = ConexionBD::getConexion();
     pg_query($conn, "BEGIN;");
-    $insertarReserva = 'INSERT INTO reserva (fecha, hora_inicio, hora_fin, evento)';
-    $insertarReserva .= " VALUES ('$fecha', '$horaInicio', '$horaFin', '$evento')";
+    $insertarReserva = 'INSERT INTO reserva (id_ambiente, fecha, hora_inicio, hora_fin, evento)';
+    $insertarReserva .= " VALUES (1, '$fecha', '$horaInicio', '$horaFin', '$evento')";
     if (pg_query($conn, $insertarReserva)) {
         return guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha);
     }
@@ -85,11 +85,13 @@ function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto
             return $idReserva;
         }
         else {
+            pg_query($conn, "select * from desbloquear('".$fecha."')");
             pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Responsable reserva');
         }
     }
     else {
+        pg_query($conn, "select * from desbloquear('".$fecha."')");
         pg_query($conn, "ROLLBACK");
         throw new GuardarExcepcion('Reserva académica');
     }

@@ -8,20 +8,22 @@ class SolicitudReserva extends ConexionBD {
     
     public static function obtenerTodosLosAuditorios() {
 
-        $consulta = 'SELECT nombre_auditorio FROM auditorio';
+        $consulta = 'SELECT id_ambiente, nombre_auditorio FROM auditorio';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
         while ($fila = pg_fetch_assoc($consultaResultado)) {
+            $idAmbiente = $fila['id_ambiente'];
             $nomAuditorio = $fila['nombre_auditorio'];
-            array_push($resultado, $nomAuditorio);
+            $agregar = [$idAmbiente, $nomAuditorio];
+            array_push($resultado, $agregar);
         }
         return $resultado;
     }
 
     public static function obtenerTodosLosDepartamentos() {
 
-        $consulta = 'SELECT departamento FROM laboratorio';
+        $consulta = 'SELECT departamento FROM laboratorio group by departamento';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];
@@ -34,7 +36,7 @@ class SolicitudReserva extends ConexionBD {
 
     public static function obtenerTodosLosEdificios() {
 
-        $consulta = 'SELECT edificio FROM aula';
+        $consulta = 'SELECT edificio FROM aula group by edificio';
         $conn = ConexionBD::getConexion();
         $consultaResultado = pg_query($conn, $consulta);
         $resultado = [];

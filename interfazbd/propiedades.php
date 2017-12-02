@@ -2,7 +2,7 @@
 
 const HOST = "localhost";
 const PORT = "5432";
-const DATABASE = "prueba";
+const DATABASE = "prueba1";
 const USER = "postgres";
 const PASSWORD = "postgres";
 //"saltamontes"

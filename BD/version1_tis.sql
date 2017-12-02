@@ -898,6 +898,12 @@ alter table CORREO
       references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
       on delete restrict on update restrict;
 
+alter table CORREO
+   drop constraint FK_CORREO_RELATIONS_SOLICITU,
+   add constraint FK_CORREO_RELATIONS_SOLICITU foreign key (ID_SOLICITUD_RESERVA)
+      references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
+      on delete cascade on update cascade;
+
 alter table CORREO_USUARIO
    add constraint FK_CORREO_U_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO (NOMBRE_USUARIO)
@@ -983,6 +989,12 @@ alter table TELEFONO
       references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
       on delete restrict on update restrict;
 
+alter table TELEFONO
+   drop constraint FK_TELEFONO_RELATIONS_SOLICITU,
+   add constraint FK_TELEFONO_RELATIONS_SOLICITU foreign key (ID_SOLICITUD_RESERVA)
+      references SOLICITUD_RESERVA (ID_SOLICITUD_RESERVA)
+      on delete cascade on update cascade;
+
 alter table TELEFONO_USUARIO
    add constraint FK_TELEFONO_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO ( NOMBRE_USUARIO)
@@ -1022,12 +1034,10 @@ ALTER TABLE "reserva_solicitada"
    FOREIGN KEY (id_respuesta) 
    REFERENCES "respuesta"(id_respuesta);
 
-
 alter table reserva_academica 
    drop constraint fk_reserva__relations_reserva,
    add constraint fk_reserva__relations_reserva foreign key(id_reserva) 
    references public.reserva(id_reserva) on delete cascade;
-
 
 alter table reserva_solicitada
    drop constraint fk_reserva__relations_reserva,
@@ -1148,7 +1158,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION bloquear(date)
-  OWNER TO postgres;
+  OWNER TO chr;
 
 DROP FUNCTION desbloquear(date);
 
@@ -1171,9 +1181,10 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION desbloquear(date)
-  OWNER TO postgres;
+  OWNER TO chr;
 
 
+DROP FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT);
 
 CREATE OR REPLACE FUNCTION INSERTAR_AULA(edif text, pis text, nom_aula text)
    RETURNS bigint AS
@@ -1191,8 +1202,9 @@ $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
 ALTER FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT)
-   OWNER TO postgres;
+   OWNER TO chr;
 
+drop FUNCTION INSERTAR_LABORATORIO(TEXT, TEXT);
 
 CREATE OR REPLACE FUNCTION INSERTAR_LABORATORIO(depto text, nom_lab text)
    RETURNS bigint AS
@@ -1209,8 +1221,10 @@ END
 $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
-ALTER FUNCTION INSERTAR_LABORATORIO(TEXT, TEXT)
-   OWNER TO postgres;
+ALTER FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT)
+   OWNER TO chr;
+
+drop FUNCTION INSERTAR_AUDITORIO(TEXT);
 
 CREATE OR REPLACE FUNCTION INSERTAR_AUDITORIO(nom_audi text)
    RETURNS bigint AS
@@ -1228,4 +1242,4 @@ $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
 ALTER FUNCTION INSERTAR_AUDITORIO(TEXT)
-   OWNER TO postgres;
+   OWNER TO chr;

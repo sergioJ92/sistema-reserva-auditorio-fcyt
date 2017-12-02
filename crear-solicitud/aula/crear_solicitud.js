@@ -1,3 +1,6 @@
+var edificio = '';
+var piso = '';
+var aula = '';
 
 $('input[id ^=fecha]').parent().datetimepicker({
     format: 'DD-MM-YYYY',
@@ -27,12 +30,41 @@ $('input[id ^=hora_fin]').click(function () {
     $(this).parent().data('DateTimePicker').toggle();
 });
 
+$( "#selPiso" ).attr('disabled', 'disabled');
+
+$( "#selAula" ).attr('disabled', 'disabled');
+
+$('#selEdificio').change(function () {
+    piso = '';
+    aula = '';
+    edificio = $(this).val();
+    var _edificio = edificio.replace(/\s/g,"_");
+    $("#selPiso").load("obtener_datos.php?tipo="+"1"+"&nombre="+_edificio);
+    $("#selPiso").removeAttr("disabled");
+    //$("#selAula").load("");
+    //$("#selAula").attr('disabled', 'disabled');
+});
+
+$('#selPiso').change(function () {
+    aula = '';
+    piso = $(this).val();
+    var _edificio = edificio.replace(/\s/g,"_");
+    var _piso = piso.replace(/\s/g,"_");
+    console.log(edificio);
+    console.log(piso);
+    $("#selAula").load("obtener_datos.php?tipo="+"2"+"&nombre="+_edificio+"&piso="+_piso);
+    $("#selAula").removeAttr("disabled");
+});
+
+$('#selAula').change(function () {
+    aula = $(this).val();
+    console.log(aula);
+});
+
 $('#enviar').click(function () {
-    
-    $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
-    $('#enviar').attr("disabled", true);
-    
+    $('#body-modal').empty();
     var datos = {
+        id_ambiente: aula,
         responsable: $('#responsable').val(),
         institucion: $('#institucion').val(),
         telefono: $('#telefono').val(),
@@ -43,19 +75,78 @@ $('#enviar').click(function () {
         hora_fin: $('#hora_fin').val(),
         descripcion: $('#descripcion').val()
     };
-    
-    if (datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
+    if (datos['id_ambiente'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
             datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
             datos['hora_fin'] === '') {
-        
         mostrarMensaje('alert-danger', 'Debe rellenar todos los campos obligatorios');
-    }
-    else {
+    }else {
         datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
-        
-        ajaxPost('guardar_solicitud.php', datos, manejarGuardarSolicitud);
+        var datos ={id_ambiente:datos['id_ambiente'],
+                    fecha: datos['fecha'],
+                    hora_inicio: datos['hora_inicio'],
+                    hora_fin: datos['hora_fin']};
+        verificarConflictos(datos);   
     }
 });
+
+$('#btn-enviar-mensaje').click(function () {
+    
+    $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
+    $('#enviar').attr("disabled", true);
+    
+    var datos = {
+        id_ambiente: aula,
+        responsable: $('#responsable').val(),
+        institucion: $('#institucion').val(),
+        telefono: $('#telefono').val(),
+        correo: $('#correo').val(),
+        evento: $('#evento').val(),
+        fecha: $('#fecha').parent().data("DateTimePicker").date(),
+        hora_inicio: $('#hora_inicio').val(),
+        hora_fin: $('#hora_fin').val(),
+        descripcion: $('#descripcion').val()
+    };
+        datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
+        ajaxPost('guardar_solicitud.php', datos, manejarGuardarSolicitud);
+});
+
+function verificarConflictos(datos){
+    var res = 0;
+    $.ajax({
+        type: 'POST',
+        data: datos,
+        url: "obtener_conflictos.php",
+        success: function (resultado) {
+            resultado = JSON.parse(resultado);
+            if(resultado.exito){
+                res = parseInt(resultado.conflictos);
+                console.log(res);
+                $('#titulo-modal').css({"background-color": "#337ab7", "color": "white"});
+                $('#btn-enviar-mensaje').css({"background-color": "#337ab7", "color": "white"});
+                console.log("pasaaaa");
+                if (res>0) {
+                    console.log("entra");
+                    var add = '<div id="cuerpo-modal" class="modal-body"><div class="form-group row"><div id="modal-mensaje" class="col-md-12 text-center">Existen '+res+' conflictos con otras Reservas <b>Si deseas continuar presiona ENVIAR</b></div></div></div>';
+                    $('#body-modal').append(add);
+                }
+                $('#myModal').modal();
+            }else{
+                console.log("entra error");
+            }
+        },
+        error: function(resultado){
+            console.log("no entra");
+        }
+    });   
+}
+
+function cargarDatos(respuesta){
+    if(respuesta.exito){
+
+    }else{
+        
+    }
+}
 
 function manejarGuardarSolicitud(respuesta) {
             

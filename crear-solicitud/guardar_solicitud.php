@@ -1,6 +1,6 @@
 <?php
 
-const RAIZ = '..';
+const RAIZ = './..';
 require_once RAIZ.'/lib/phpmailer/PHPMailerAutoload.php';
 require_once RAIZ.'/lib/my-mailer/MyMailer.php';
 require_once RAIZ.'/interfazbd/ConexionBD.php';
@@ -45,17 +45,17 @@ function validarSolicitud(
 }
 
 function insertarSolicitudDeReserva(
-        $fecha, $horaInicio, $horaFin, $responsable, 
+        $idAmbiente, $fecha, $horaInicio, $horaFin, $responsable, 
         $institucion, $telefono, $correo, $evento, $descripcion) {
     
     validarSolicitud($fecha, $horaInicio, $horaFin, $responsable, $evento, $telefono, $correo, $institucion);
     
     $conn = ConexionBD::getConexion();
     pg_query($conn, "BEGIN");
+
     $insertarSolicitud = 'INSERT INTO solicitud_reserva';
-    $insertarSolicitud .= ' (leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES';
-    $insertarSolicitud .= " ('0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
-    
+    $insertarSolicitud .= ' (id_ambiente, leido, fecha, hora_inicio, hora_fin, responsable, institucion, evento, descripcion) VALUES';
+    $insertarSolicitud .= " ('$idAmbiente', '0', '$fecha', '$horaInicio', '$horaFin', '$responsable', '$institucion', '$evento', '$descripcion')";
     if (pg_query($conn, $insertarSolicitud)) {
         return insertarTelefonoYCorreo($conn, $telefono, $correo);
     }
@@ -108,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conectado = ConexionBD::conectar();
     $entrada = $_POST;
     
+    $idAmbiente = Validador::desinfectarEntrada($entrada['id_ambiente']);
     $fecha = Validador::desinfectarEntrada($entrada['fecha']);
     $horaInicio= Validador::desinfectarEntrada($entrada['hora_inicio']);
     $horaFin= Validador::desinfectarEntrada($entrada['hora_fin']);
@@ -122,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mensajeContenido = 'El Código de su Solicitud de Reserva es: ';
         $asunto =  'Solicitud de Reserva';
         
-        $insertado = insertarSolicitudDeReserva($fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
+        $insertado = insertarSolicitudDeReserva($idAmbiente, $fecha, $horaInicio, $horaFin, $responsable, $institucion, $telefono, $direccionCorreo, $evento, $descripcion);
         
         $smtpMailer = false;
         if ($smtpMailer) {

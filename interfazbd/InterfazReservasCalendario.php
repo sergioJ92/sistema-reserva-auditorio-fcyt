@@ -27,4 +27,10 @@ class InterfazReservasCalendario {
         array_push($respuesta, $lista2);
         return $respuesta;
     }
+    public static function obtenerTodasLasReservasAmbiente($ambiente, $fecha){
+        $conexion = ConexionBD::getConexion();
+        $consulta = "SELECT hora_inicio, hora_fin FROM reserva AS res WHERE id_ambiente=$ambiente AND fecha='$fecha'";
+        return self::obtenerEnLista(pg_query($conexion, $consulta));
+    }
+
 }

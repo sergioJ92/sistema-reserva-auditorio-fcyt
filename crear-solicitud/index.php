@@ -21,16 +21,16 @@ include_once RAIZ . '/lib/funciones_privilegios.php';
 
         if($val == 'auditorio')
         {
-            include  "auditorio.php";
+            include  "auditorio/auditorio.php";
 
         }
         elseif($val == 'laboratorio')
         {
-            include  "laboratorio.php";
+            include  "laboratorio/laboratorio.php";
         }
         elseif($val == 'aula')
         {
-            include  "aula.php";
+            include  "aula/aula.php";
         }
         else
         {

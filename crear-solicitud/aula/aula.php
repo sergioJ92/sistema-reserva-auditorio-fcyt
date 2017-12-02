@@ -26,28 +26,25 @@ function crearOption($elemento) {
                 <fieldset>
                     <legend>Datos de la reserva</legend>
                     <div class="row">
-                        <div  class="col-md-4 form-group" id="auditorio">
-                            <label>Seleccionar Edificio</label>
-                            <select class="form-control" id="sel1" ">
+                        <div  class="col-md-4 form-group" id="edificio">
+                            <label>Seleccionar Edificio <span class="rojo">*</span></label>
+                            <select name="selEdificio" class="form-control" id="selEdificio">
                                 <option selected="" value="null" hidden="">Nombre Edificio</option>
                                 <?php array_map(crearOption, SolicitudReserva::obtenerTodosLosEdificios()); ?>
 
                             </select>
                         </div>
-                        <div  class="col-md-4 form-group" id="auditorio">
-                            <label>Seleccionar Piso</label>
-                            <select class="form-control" id="sel1" ">
-                                <option selected="" value="null" hidden="">Nombre Auditorio</option>
+                        <div  class="col-md-4 form-group" id="piso">
+                            <label>Seleccionar Piso <span class="rojo">*</span></label>
+                            <select name="selPiso" class="form-control" id="selPiso"><!--
+                                <option selected="" value="null" hidden="">Numero de Piso</option>
                                 <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                                <option>auditorio edificio nuevo</option>-->
                             </select>
                         </div>
-                        <div  class="col-md-4 form-group" id="auditorio">
-                            <label>Seleccionar Aula</label>
-                            <select class="form-control" id="sel1" ">
-                                <option selected="" value="null" hidden="">Nombre Auditorio</option>
-                                <option>palacio de ciencia y tecnologia</option>
-                                <option>auditorio edificio nuevo</option>
+                        <div  class="col-md-4 form-group" id="aula">
+                            <label>Seleccionar Aula <span class="rojo">*</span></label>
+                            <select name="selAula" class="form-control" id="selAula">
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
@@ -161,6 +158,25 @@ function crearOption($elemento) {
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="crear_solicitud.js"></script>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header estilo-modal-header" id="titulo-modal">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p>Usted esta ENVIANDO esta solicitud
+                        </p>
+                    </div>
+                    <div id="body-modal"></div>
+                    <div class="modal-footer text-center estilo-modal-footer">
+                        <button id="btn-enviar-mensaje" type="button" class="btn btn-primary boton-centreado " data-dismiss="modal">Enviar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="aula/crear_solicitud.js"></script>
         <?php include RAIZ . '/pie.inc'; ?>
     </body>
