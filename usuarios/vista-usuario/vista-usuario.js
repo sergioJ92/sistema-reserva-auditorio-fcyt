@@ -4,7 +4,9 @@ $(document).ready(function () {
 	var materias = [];
     
     function mostrarUsuarios(usuarios){
+    	console.log("dddddddddd");
     	var filas = "";
+    	console.log(usuarios);
 		for (var i = 0; i < usuarios.length; ++i) {
 			filas = filas + anadirNuevaFila(usuarios[i],i);
 		}
@@ -13,12 +15,17 @@ $(document).ready(function () {
 	}
 
 	function anadirNuevaFila(data,id){
+		var estado = 'inactivo';
+		if(data['activo'] == 't'){
+			estado = "activo";
+		}
 	
 		var fila = '';
 		fila = fila + '<tr>';
 	  	fila = fila + '<td data-id="nombre-'+id+'">'+data['nombres']+'</td>';
 	  	fila = fila + '<td data-id="apeleidos'+id+'">'+data['apellidos']+'</td>';
 	  	fila = fila + '<td>'+data['nombre_rol']+'</td>';
+	  	fila = fila + '<td>'+estado+'</td>';
 	  	fila = fila + '<td data-id="llave-'+id+'">';
         fila = fila + '<button data-toggle="modal" data-target="#edit-item" class="btn btn-primary edit-item">Acceder</button> ';
         fila = fila + '<button id="boton-eliminar-llave-'+id+'" class="btn btn-danger remove-item">Eliminar</button>';

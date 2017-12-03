@@ -7,7 +7,7 @@ require_once RAIZ . '/interfazbd/Validador.php';
 
 function obtenerDatosUsuario(){
 
-	$consulta = "SELECT nombres, apellidos, nombre_rol, nombre_usuario FROM usuario";
+	$consulta = "SELECT u.nombres, u.apellidos, tr.nombre_rol, u.nombre_usuario, u.activo FROM usuario as u, tiene_rol as tr where u.nombre_usuario=tr.nombre_usuario";
 	$resultado = ConexionBD::getConexion();
     $resultado = pg_query($consulta);
     $resultadoLista = [];
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     header('Content-Type: application/json');
 	$resConsulta = obtenerDatosUsuario();
-	
+
     echo json_encode($resConsulta);
 
 }   

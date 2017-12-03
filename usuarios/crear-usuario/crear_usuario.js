@@ -82,9 +82,6 @@ $(document).ready(function () {
             data:usuario,
         }).done(function(data){
             data = JSON.parse(data);
-            console.log("yyyyyyyy");
-            console.log(data);
-            console.log("yyyyyyyy");
             if (data.exito) {
                 reiniciarControles();
                 materias = [];
@@ -94,7 +91,6 @@ $(document).ready(function () {
                 mostrarMensaje('alert-danger', data.mensaje);   
             }
         }).fail(function(data) {
-                console.log("mmmmmmmmm");
                 console.log(data);
               });
     }

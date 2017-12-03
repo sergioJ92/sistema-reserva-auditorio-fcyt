@@ -37,6 +37,7 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
                             <th scope="col-sm-2">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Rol</th>
+                            <th scope="col">Estado</th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>

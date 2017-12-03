@@ -81,26 +81,36 @@ function guardarUsuario(
             $insertarCorreo = 'INSERT INTO correo_usuario (correo, nombre_usuario)';
             $insertarCorreo .= " VALUES ('$correo', '$nombreUsuario')";
             
-            if (pg_query($conn, $insertarCorreo)) {
-                if (count($materias) > 0) {
-                    $baseAnadirMateria = 'INSERT INTO tiene_materia (codigo_materia, nombre_usuario)';
-                    foreach ($materias as $materia) {
-                        $anadirMateria = $baseAnadirMateria . " VALUES ('$materia', '$nombreUsuario')";
-                        if (!pg_query($conn, $anadirMateria)) {
-                            throw new GuardarExcepcion('Tiene materia');
-                        }
-                    }
+            if(pg_query($conn, $insertarCorreo)){
+                $insertarRol = 'INSERT INTO tiene_rol (nombre_usuario, nombre_rol)';
+                $insertarRol .= "VALUES ('$nombreUsuario', '$nombreRol')";
 
+                if (pg_query($conn, $insertarRol)) {
+                    if (count($materias) > 0) {
+                        $baseAnadirMateria = 'INSERT INTO tiene_materia (codigo_materia, nombre_usuario)';
+                        foreach ($materias as $materia) {
+                            $anadirMateria = $baseAnadirMateria . " VALUES ('$materia', '$nombreUsuario')";
+                            if (!pg_query($conn, $anadirMateria)) {
+                                throw new GuardarExcepcion('Tiene materia');
+                            }
+                        }
+
+                    } else {
+                        pg_query($conn, "INSERT INTO tiene_materia"
+                                . " (codigo_materia, nombre_usuario)"
+                                . " VALUES ('0', '$nombreUsuario')");
+                    }
+                    pg_query($conn, "COMMIT");
                 } else {
-                    pg_query($conn, "INSERT INTO tiene_materia"
-                            . " (codigo_materia, nombre_usuario)"
-                            . " VALUES ('0', '$nombreUsuario')");
+                    pg_query($conn, "ROLLBACK");
+                    throw new GuardarExcepcion('Rol de usuario');
                 }
-                pg_query($conn, "COMMIT");
-            } else {
+            }else{
                 pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Correo usuario');
-                }
+            }
+
+
         } else {
             pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Teléfono usuario');
