@@ -1,4 +1,4 @@
---SET NAMES 'latin9';
+﻿--SET NAMES 'latin9';
 
 INSERT INTO cronograma_academico (anio, gestion, fecha_hora_inicio, fecha_hora_fin, fecha_activacion) VALUES
 (2017, '1', '2017-06-15 08:53:00', '2017-09-30 08:53:00', '2017-06-07'),

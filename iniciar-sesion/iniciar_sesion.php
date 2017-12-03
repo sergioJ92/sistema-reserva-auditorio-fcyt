@@ -6,10 +6,7 @@ include_once RAIZ.'/interfazbd/Validador.php';
 
 function obtenerUsuario($user) {
     
-    $consulta = "SELECT * FROM usuario WHERE nombre_usuario = ";
-    $consulta .= " '";
-    $consulta .= $user;
-    $consulta .= "'";
+    $consulta = "select u.nombre_usuario, u.nombres, u.apellidos, u.contrasenia, tr.nombre_rol from usuario as u, tiene_rol as tr where u.nombre_usuario='".$user."' and u.nombre_usuario=tr.nombre_usuario";
     $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     if (pg_num_rows($resultado) > 0) {
         return pg_fetch_assoc($resultado);
@@ -20,10 +17,7 @@ function obtenerUsuario($user) {
 
 function obtenerPrivilegio($rol) {
     
-    $consulta = "SELECT nombre_privilegio FROM privilegio WHERE nombre_rol = ";
-    $consulta .= " '";
-    $consulta .= $rol;
-    $consulta .= "'";
+    $consulta = "select tp.nombre_privilegio from rol as r, tiene_privilegio as tp where r.nombre_rol='".$rol."' and r.nombre_rol=tp.nombre_rol";
     $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     $lista = [];
     while ($fila = pg_fetch_assoc($resultado)) {
@@ -38,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $passwordUsuario = Validador::desinfectarEntrada($_POST['contrasenia']);
 
     $resultado = obtenerUsuario($nombreUsuario);
-    
+  
     if ($resultado == false) {
         echo json_encode($resultado);
     }else{

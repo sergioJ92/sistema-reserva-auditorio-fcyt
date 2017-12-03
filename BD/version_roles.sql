@@ -463,6 +463,7 @@ create table PRIVILEGIO (
 );
 
 /*==============================================================*/
+
 /* Index: PRIVILEGIO_PK                                         */
 /*==============================================================*/
 create unique index PRIVILEGIO_PK on PRIVILEGIO (
@@ -763,8 +764,6 @@ CODIGO_MATERIA
 create  index RELATIONSHIP_28_FK on TIENE_MATERIA (
 NOMBRE_USUARIO
 );
-
-
 /*==============================================================*/
 /* Index: RELATIONSHIP_29_FK                                    */
 /*==============================================================*/
@@ -819,7 +818,7 @@ create table TIENE_PRIVILEGIO (
 /*==============================================================*/
 /* Index: TIENE_PRIVILEGIO_pk                                      */
 /*==============================================================*/
-create unique index TIENE_PRIVILEGIO_PK on TIENE_ROL (
+create unique index TIENE_PRIVILEGIO_PK on TIENE_PRIVILEGIO (
 NOMBRE_PRIVILEGIO,
 NOMBRE_ROL
 );
@@ -827,14 +826,14 @@ NOMBRE_ROL
 /*==============================================================*/
 /* Index: RELATIONSHIP_42_FK                                    */
 /*==============================================================*/
-create  index RELATIONSHIP_82_FK on TIENE_ROL (
+create  index RELATIONSHIP_82_FK on TIENE_PRIVILEGIO (
 NOMBRE_PRIVILEGIO
 );
 
 /*==============================================================*/
 /* Index: RELATIONSHIP_43_FK                                    */
 /*==============================================================*/
-create  index RELATIONSHIP_83_FK on TIENE_ROL (
+create  index RELATIONSHIP_83_FK on TIENE_PRIVILEGIO (
 NOMBRE_ROL
 );
 
@@ -872,12 +871,6 @@ create unique index USUARIO_PK on USUARIO (
 NOMBRE_USUARIO
 );
 
-/*==============================================================*/
-/* Index: RELATIONSHIP_22_FK                                    */
-/*==============================================================*/
-create  index RELATIONSHIP_22_FK on USUARIO (
-NOMBRE_ROL
-);
 
 /*==============================================================*/
 /* Table: USUARIO_LOG                                           */
@@ -1228,7 +1221,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION bloquear(date)
-  OWNER TO chr;
+  OWNER TO postgres;
 
 DROP FUNCTION desbloquear(date);
 
@@ -1251,7 +1244,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION desbloquear(date)
-  OWNER TO chr;
+  OWNER TO postgres;
 
 
 DROP FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT);
@@ -1272,7 +1265,7 @@ $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
 ALTER FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT)
-   OWNER TO chr;
+   OWNER TO postgres;
 
 drop FUNCTION INSERTAR_LABORATORIO(TEXT, TEXT);
 
@@ -1292,7 +1285,7 @@ $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
 ALTER FUNCTION INSERTAR_AULA(TEXT, TEXT, TEXT)
-   OWNER TO chr;
+   OWNER TO postgres;
 
 drop FUNCTION INSERTAR_AUDITORIO(TEXT);
 
@@ -1312,4 +1305,4 @@ $BODY$
    LANGUAGE plpgsql VOLATILE
    COST 100;
 ALTER FUNCTION INSERTAR_AUDITORIO(TEXT)
-   OWNER TO chr;
+   OWNER TO postgres;

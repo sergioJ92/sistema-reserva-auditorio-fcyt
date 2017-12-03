@@ -12,6 +12,7 @@ $('#boton-login').click(function () {
             data:datos,
             url: "./iniciar_sesion.php",
             success: function (data, textStatus, jqXHR) {
+                console.log(data);
                 if (data.exito) {
                     window.location.href = "../index.php";
                 } else {
