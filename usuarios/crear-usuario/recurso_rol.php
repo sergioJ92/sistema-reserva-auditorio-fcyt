@@ -8,7 +8,7 @@ require_once RAIZ. '/interfazbd/ValidacionExcepcion.php';
 
 function obtenerRoles() {
     
-    $consulta = 'SELECT * FROM rol r, privilegio p WHERE r.nombre_rol = p.nombre_rol';
+    $consulta = 'SELECT r.nombre_rol, r.puede_tener_materias, tp.nombre_privilegio  FROM rol r, tiene_privilegio tp WHERE r.nombre_rol = tp.nombre_rol';
     $resultado = pg_query(ConexionBD::getConexion(), $consulta);
     $resultadoLista = [];
     while ($fila = pg_fetch_assoc($resultado)) {

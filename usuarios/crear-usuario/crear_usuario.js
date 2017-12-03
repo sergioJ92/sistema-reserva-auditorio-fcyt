@@ -75,13 +75,16 @@ $(document).ready(function () {
 
         var usuario = obtenerDatosNuevoUsuario();
         usuario['materias'] = quitarNulos(materias);
-        console.log(usuario);
+        
         $.ajax({
             type: 'POST',
             url:'recurso_usuario.php',
             data:usuario,
         }).done(function(data){
             data = JSON.parse(data);
+            console.log("yyyyyyyy");
+            console.log(data);
+            console.log("yyyyyyyy");
             if (data.exito) {
                 reiniciarControles();
                 materias = [];
@@ -91,6 +94,7 @@ $(document).ready(function () {
                 mostrarMensaje('alert-danger', data.mensaje);   
             }
         }).fail(function(data) {
+                console.log("mmmmmmmmm");
                 console.log(data);
               });
     }
@@ -98,10 +102,14 @@ $(document).ready(function () {
     function obtenerDatosNuevoUsuario() {
         var matRes = "";
         var nombreRol = '';
+        var boolEstado = false;
         if($('#nombre-rol').val()==null || $('#nombre-rol').val()==undefined || $('#nombre-rol').val()==''){
             nombreRol = 'Ninguno';
         }else{
             nombreRol = $('#nombre-rol').val();
+        }
+        if($('#select-estado').val() == 1){
+            boolEstado = true;
         }
         mapRes = {
             nombres: $('#nombres').val(),
@@ -111,6 +119,7 @@ $(document).ready(function () {
             nombre_usuario: $('#nombre-usuario').val(),
             contrasenia: $('#contrasenia').val(),
             confirmar_contrasenia: $('#confirmar-contrasenia').val(),
+            estado_usuario: boolEstado,
             nombre_rol: nombreRol,
             materias: []
         };

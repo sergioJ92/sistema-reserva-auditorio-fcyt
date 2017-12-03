@@ -55,7 +55,7 @@ function validarDatosUsuario(
 function guardarUsuario(
                 $nombres, $apellidos, $telefono, $correo, 
                 $nombreUsuario, $contrasenia, $confirmarContrasenia, 
-                $nombreRol, $materias) {
+                $nombreRol, $estado, $materias) {
     
     validarDatosUsuario($nombres, $apellidos, $telefono, $correo, 
             $nombreUsuario, $contrasenia, $confirmarContrasenia, 
@@ -69,9 +69,9 @@ function guardarUsuario(
                 . 'Intente más tarde');
     }
     $insertarUsuario = 'INSERT INTO usuario (nombres, apellidos,';
-    $insertarUsuario .= ' nombre_usuario, contrasenia, nombre_rol)';
+    $insertarUsuario .= ' nombre_usuario, contrasenia, activo)';
     $insertarUsuario .= " VALUES ('$nombres', '$apellidos',";
-    $insertarUsuario .= " '$nombreUsuario', '$hashContrasenia', '$nombreRol')";
+    $insertarUsuario .= " '$nombreUsuario', '$hashContrasenia', '$estado')";
     
     if (pg_query($conn, $insertarUsuario)) {
         $insertarTelefono = 'INSERT INTO telefono_usuario (telefono, nombre_usuario)';
@@ -90,6 +90,7 @@ function guardarUsuario(
                             throw new GuardarExcepcion('Tiene materia');
                         }
                     }
+
                 } else {
                     pg_query($conn, "INSERT INTO tiene_materia"
                             . " (codigo_materia, nombre_usuario)"
@@ -99,7 +100,7 @@ function guardarUsuario(
             } else {
                 pg_query($conn, "ROLLBACK");
                 throw new GuardarExcepcion('Correo usuario');
-            }
+                }
         } else {
             pg_query($conn, "ROLLBACK");
             throw new GuardarExcepcion('Teléfono usuario');
@@ -122,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contrasenia = Validador::desinfectarEntrada($entrada['contrasenia']);
     $confirmarContrasenia = Validador::desinfectarEntrada($entrada['confirmar_contrasenia']);
     $nombreRol = Validador::desinfectarEntrada($entrada['nombre_rol']);
+    $estado = $entrada['estado_usuario'];
     $materias = [];
 
     if ($entrada['materias'] != null){
@@ -134,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         guardarUsuario(
                 $nombres, $apellidos, $telefono, $correo, 
                 $nombreUsuario, $contrasenia, $confirmarContrasenia, 
-                $nombreRol, $materias);
+                $nombreRol, $estado, $materias);
         $arreglo = array('exito' => true);
 
         echo json_encode($arreglo, true);
