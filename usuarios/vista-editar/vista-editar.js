@@ -12,12 +12,18 @@ $(document).ready(function () {
 			data:{id:dato}
 		}).done(function(entrada){
 			var fila = JSON.parse(entrada);
+			var estado ='inactivo';
+			if(fila['activo'] == 't'){
+				estado = 'activo';
+			}
 			fila = fila[0];
 			$('#editar-nombres').text(fila['nombres']);
 			$('#editar-apellidos').text(fila['apellidos']);	
 			$('#editar-correo').text(fila['correo']);
 			$('#editar-telefono').text(fila['telefono']);
 			$('#editar-nombre-usuario').text(fila['nombre_usuario']);
+			$('#editar-rol-usuario').text(fila['nombre_rol']);
+			$('#editar-estado-usuario').text(estado);
 			datojson = fila;
 
 		}).fail(function(error){
@@ -125,7 +131,7 @@ $(document).ready(function () {
             $('#' + id).remove();
             delete materias[posicion];
             
-        }, id));
+        }, id));	
 		        
 	}
 
@@ -140,12 +146,13 @@ $(document).ready(function () {
         return contenedor;
     }
 
-    function editarContracena(actual,contrasena,reContrasena){
+    function editarContrasena(actual,contrasena,reContrasena,nombreUsuario){
     	$.ajax({
 			type: 'POST',
 			url:'editar_contracena.php',
-			data:{actual:actual,contrasena:contrasena,reContrasena:reContrasena}
-		}).done(function(materias){
+			data:{actual:actual,contrasena:contrasena,reContrasena:reContrasena,id:nombreUsuario}
+		}).done(function(dato){
+			JSON.parse(dato);
 			console.log("entro");	
 			//mostrar mensaje de actualizacion
 		}).fail(function(error){
@@ -163,17 +170,34 @@ $(document).ready(function () {
     		url: 'recuperarRol.php',
     		data: {id:dato}
     	}).done(function(dat){
-    		dat = JSON.parse(dat)[0];
-    		console.log(dat);
-    		debugger;
-    		if(dat['nombre_rol'] == 'Ninguno'){
+    		dat = JSON.parse(dat);
+    		if(datojson['nombre_rol'] == 'Ninguno'){
     			$('#nombre-rol').val("selected");
     		}else{
-    			console.log(dat['nombre_rol']);
-    			$('#nombre-rol').val(dat['nombre_rol']);
+    			$('#nombre-rol').val(datojson['nombre_rol']);
+    			if(datojson['puede_tener_materias'] == 1){
+    				var n = 0;
+    				$('#seccion-materias').show('slow');
+					dat.forEach(function(materia){
+						var id = 'm'+n;
+						console.log(materia);
+						console.log(materia['codigo_materia']);
+						materias.push(materia['codigo_materia']);
+						var mat = $('#lista-materias-modal')
+						mat.append(agregarMateria(materia['nombre_materia'],function(){
+								$('#' + id).remove();
+	            				delete materias[n];
+	            			},id));
+	            		n = n+1;
+    				});
+				}else{
+					$('#seccion-materias').hide('slow');
+				}	
     		}
-
-    	}).fail(function(error){});
+    		
+    	}).fail(function(error){
+    		console.log('No se an podido cargar los datos');
+    	});
     	//verificar si es ninguno
     	//	si : que hacer
     	//	no : que hacer
@@ -181,6 +205,17 @@ $(document).ready(function () {
     	//Si es docente 
     	//cargar sus materias si las tiene
     	//otros
+    }
+
+    function agregarMateria(nombreMateria, funcionEliminar, id) {
+        var contenedor = crear('DIV', null, 'list-group-item col-xs-6', id);
+        contenedor.appendChild(crear('DIV', nombreMateria, 'col-md-8 padding-boton'));
+        var botonEliminar = crear('BUTTON', 'Eliminar', 'btn btn-default');
+        botonEliminar.onclick = funcionEliminar;
+        var divBoton = crear('DIV', null, 'col-md-4 text-right');
+        divBoton.appendChild(botonEliminar);
+        contenedor.appendChild(divBoton);
+        return contenedor;
     }
 
 	function cancelarEdicion(){
@@ -215,11 +250,22 @@ $(document).ready(function () {
 	});
 
 
-	$('body').on("click",".modal-editar-contracena",function(){
+
+	$('#modal-guardar-contrasena').click(function(){
+		console.log('hhh');
 		var actual = $('#mod-edit-contrcena-actual').val();
 		var contracena = $('#mod-edit-nueva-contracena').val();
 		var reContracena = $('#mod-edit-reingresar-contracena').val();
-		editarContracena(actual,contracena,reContracena);
+		var nombre_usuario = $('#editar-nombre-usuario').text();
+		editarContrasena(actual,contracena,reContracena,nombre_usuario);
+		$('#mod-edit-contrcena-actual').val('');
+		$('#mod-edit-nueva-contracena').val('');
+		$('#mod-edit-reingresar-contracena').val('');
+	});
+	$('#modal-contrasena-cerrar').click(function(){
+		$('#mod-edit-contrcena-actual').val('');
+		$('#mod-edit-nueva-contracena').val('');
+		$('#mod-edit-reingresar-contracena').val('');
 	});
 
 	},1000);

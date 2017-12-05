@@ -55,6 +55,11 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
                             </label>
                         </div>
                         <div class="col-md-6 form-group">
+                            <label for="estado-usuario">Rol: 
+                            	<label for="rol-usuario" id="editar-rol-usuario"> </label>
+                            </label>
+                        </div>
+                        <div class="col-md-6 form-group">
                             <label for="estado-usuario">Estado de usuario: 
                             	<label for="estado-recuperado" id="editar-estado-usuario"> </label>
                             </label>
@@ -174,6 +179,7 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
 	            </div>
 	            <!-- Modal editar contracena -->
 	            <div class="modal fade" id="modal-editar-contracena" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	            <label class="control-label" id="id-contrasena-editar"></label>
 				  	<div class="modal-dialog" role="document">
 				    	<div class="modal-content">
 				      		<div class="modal-header">
@@ -185,21 +191,21 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
 					        	<form>
 					        		<div class="form-group">
 	                                    <label class="control-label" for="title">Ingrese contraseña actual</label>
-	                                    <input type="text" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-contrcena-actual" required /><div class="help-block with-errors"></div>
+	                                    <input type="password" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-contrcena-actual" required /><div class="help-block with-errors"></div>
 	                              	</div>
 	                              	<div class="form-group">
 	                                    <label class="control-label" for="title">Nueva contraseña</label>
-	                                    <input type="text" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-nueva-contracena" required /><div class="help-block with-errors"></div>
+	                                    <input type="password" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-nueva-contracena" required /><div class="help-block with-errors"></div>
 	                              	</div>
 	                              	<div class="form-group">
 	                                    <label class="control-label" for="title">Repita contraseña</label>
-	                                    <input type="text" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-reingresar-contracena" required /><div class="help-block with-errors"></div>
+	                                    <input type="password" name="telefonos" class="form-control" data-error="Please enter title." id="mod-edit-reingresar-contracena" required /><div class="help-block with-errors"></div>
 	                                </div>
 					        	</form>
 					      	</div>
 					      	<div class="modal-footer">
-					        	<button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-guargar-contracena">Guardar</button>
-					        	<button type="button" class="btn btn-danger" data-dismiss="modal" id="modal-contracena-cerrar">Cancelar</button>
+					        	<button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-guardar-contrasena">Guardar</button>
+					        	<button type="button" class="btn btn-danger" data-dismiss="modal" id="modal-contrasena-cerrar">Cancelar</button>
 					      	</div>
 				    	</div>
 				  	</div>
