@@ -194,17 +194,9 @@ $(document).ready(function () {
 					$('#seccion-materias').hide('slow');
 				}	
     		}
-    		
     	}).fail(function(error){
     		console.log('No se an podido cargar los datos');
     	});
-    	//verificar si es ninguno
-    	//	si : que hacer
-    	//	no : que hacer
-    	//cargar el rol en el selected
-    	//Si es docente 
-    	//cargar sus materias si las tiene
-    	//otros
     }
 
     function agregarMateria(nombreMateria, funcionEliminar, id) {
@@ -218,39 +210,68 @@ $(document).ready(function () {
         return contenedor;
     }
 
+    function actualizarDatos(){
+    	var nombre = $('#modal-nombres').val();
+    	var apellido = $('#modal-apellidos').val();
+    	var telefonos = $('#modal-telefonos').val();
+    	var correos = $('#modal-correo').val();
+    	var nombre_usuario = $('#modal-nombre-usuario').val();
+    	var estado = false;//activo 1  -  inactivo 2
+    	if($('#select-estado').val()==1){
+			estado = true;
+    	}
+    	guardarDatosNuevos(nombre, apellido, telefonos, correos, nombre_usuario, estado);
+    }
+
+    function guardarDatosNuevos(nombres,apellidos,telefonos,correos,nombreUsuario,estado){
+    	$.ajax({
+    		type:'POST',
+    		url:'editar-datos.php',
+    		data:{usuario_actual:datojson['nombre_usuario'],
+    			 nombre:nombres,
+    			 apellido:apellidos,
+    			 telefonos:telefonos,
+    			 correos:correos,
+    			 nombre_usuario:
+    			 nombreUsuario,
+    			 estado:estado}
+    	}).done(function(dato){
+    		var a = JSON.parse(dato);
+    		window.location.href = dominio+a.id_get;
+
+    	}).fail(function(error){
+    		var e = JSON.parse(error);
+    		console.log(e['mensaje']);
+    	});
+    }
+
+    function limpiarModal(){
+    	$('#lista-materias-modal').empty();
+    }
+
 	function cancelarEdicion(){
 		window.location.href = dominio + "vista-usuario";	 	
 	}
-	/////
+	//////////////////////////////////////////////////
 	cargarDatos();
 	setTimeout(function(){
 	////////////////////////////////////////////////////////////
+///////////////editar datos generales///////////////////////////
+
 	$('#btn-cancelar').click(cancelarEdicion);
+	$('#modal-datos-cerrar').click(limpiarModal);
+	$('#x-datos-cerrar').click(limpiarModal);
+	$('#modal-editar-usuario').on('hidden.bs.modal', limpiarModal);
+
 	$('body').on("click","#btn-editar-usuario",function(){
 		cargarDatosModal();
 		crearOpcionesRoles();
 		crearAgregarMateria();
 		cargarRolDeUsuario();
 	});
-	/*
-	$('body').on("click","#anadir-materia-modal",function(){
-		
-		console.log("entre")
-		insertarMateria();
-		console.log("termina");
+	$('#actualizar-datos').click(actualizarDatos);
 
-	});
-	*/
-	$('#anadir-materia-modal').click(function(e){
-		e.preventDefault();
-		console.log("entre")
-		insertarMateria();
-		console.log("termina");
-		//e.stopPropagation();
-	});
-
-
-
+//////////////editar contrasena///////////////////
 	$('#modal-guardar-contrasena').click(function(){
 		console.log('hhh');
 		var actual = $('#mod-edit-contrcena-actual').val();
@@ -268,6 +289,24 @@ $(document).ready(function () {
 		$('#mod-edit-reingresar-contracena').val('');
 	});
 
+
+
+//////////////////////////////////////////////////////////////////////////////
+	/*
+	$('body').on("click","#anadir-materia-modal",function(){
+		console.log("entre")
+		insertarMateria();
+		console.log("termina");
+	});
+	*/
+	$('#anadir-materia-modal').click(function(e){
+		e.preventDefault();
+		console.log("entre")
+		insertarMateria();
+		console.log("termina");
+		//e.stopPropagation();
+	});
+
+
 	},1000);
-	////////////////////////////////////////////////////////////
 });

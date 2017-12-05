@@ -4,6 +4,7 @@ include_once RAIZ .'/lib/sesion_store.php';
 include_once RAIZ .'/lib/funciones_privilegios.php';
 //include_once RAIZ .'/crear-usuario/vista-usuario/vista-usuario.php';
 require_once RAIZ . '/interfazbd/ConexionBD.php';
+bloquearCrearUsuarios();
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,11 +73,11 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
                 <button class="btn btn-danger" id="btn-cancelar">Cancelar</button>
             
                 <!-- Edit Item Modal -->
-	            <div class="modal fade" id="modal-editar-usuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	            <div class="modal fade" id="modal-editar-usuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
 	              <div class="modal-dialog" role="document">
 	                <div class="modal-content">
 	                  <div class="modal-header">
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="x-datos-cerrar"><span aria-hidden="true">×</span></button>
 	                    <h4 class="modal-title" id="myModalLabel">Editar usuario</h4>
 	                  </div>
 
@@ -105,7 +106,7 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
 
 	                              <div class="form-group">
 	                                  <label class="control-label" for="title">Correo</label>
-	                                  <input type="ema" name="correo" class="form-control" data-error="Please enter title." id="modal-correo" required /><div class="help-block with-errors"></div>
+	                                  <input type="email" name="correo" class="form-control" data-error="Please enter title." id="modal-correo" required /><div class="help-block with-errors"></div>
 	                              </div>
 	                              <div class="form-group">
 	                                  <label class="control-label" for="title">Nombre de usuario</label>
@@ -153,25 +154,22 @@ require_once RAIZ . '/interfazbd/ConexionBD.php';
 	                                <div class="col-xs-12 form-group"><b>Añadir materias al usuario</b></div>
 	                                <div class="col-xs-12 form-group">
 	                                    <div id="lista-materias-modal" class="list-group lista-materias-anadidas">
-
-
-	                                    </div>
+										</div>
 	                                </div>
 	                                <div class="col-xs-12">
 	                                    <div class="col-xs-6 padding-select-materia">
 	                                        <select id="select-materias" class="form-control"></select>
 	                                    </div>
 	                                    <div class="col-xs-6">
-	                                        <button id="anadir-materia-modal" class="btn btn-default ensanchar-boton">Añadir</button>
+	                                        <button type="button" id="anadir-materia-modal" class="btn btn-default ensanchar-boton">Añadir</button>
 	                                    </div>
 	                                </div>
 	                            </div>
 	                        </fieldset>    
 	                          <div class="form-group">
-	                              <button type="submit" class="btn btn-primary crud-submit-edit">Guardar</button>
-	                              <button type="submit" class="btn btn-danger" data-dismiss="modal" id="modal-datos-cerrar">Cancelar</button>
+	                              <button type="button" class="btn btn-primary crud-submit-edit" id="actualizar-datos">Guardar</button>
+	                              <button type="button" class="btn btn-danger" data-dismiss="modal" id="modal-datos-cerrar">Cancelar</button>
 	                          </div>
-
 	                      </form>
 	                  </div>
 	                </div>

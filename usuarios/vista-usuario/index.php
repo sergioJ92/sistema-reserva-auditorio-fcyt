@@ -4,7 +4,7 @@ include_once RAIZ .'/lib/sesion_store.php';
 include_once RAIZ .'/lib/funciones_privilegios.php';
 //include_once RAIZ .'/crear-usuario/vista-usuario/vista-usuario.php';
 require_once RAIZ . '/interfazbd/ConexionBD.php';
-
+bloquearCrearUsuarios();
 ?>
 <!DOCTYPE html>
 <html>

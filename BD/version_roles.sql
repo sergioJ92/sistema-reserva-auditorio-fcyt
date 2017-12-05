@@ -1050,27 +1050,27 @@ alter table TELEFONO_USUARIO
 alter table TIENE_MATERIA
    add constraint FK_TIENE_MA_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO (NOMBRE_USUARIO)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table TIENE_MATERIA
    add constraint FK_TIENE_MA_RELATIONS_MATERIA foreign key (CODIGO_MATERIA)
       references MATERIA (CODIGO_MATERIA)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table TIENE_ROL
    add constraint FK_TIENE_RO_RELATIONS_USUARIO foreign key (NOMBRE_USUARIO)
       references USUARIO (NOMBRE_USUARIO)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table TIENE_ROL
    add constraint FK_TIENE_RO_RELATIONS_ROL foreign key (NOMBRE_ROL)
       references ROL (NOMBRE_ROL)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table TIENE_PRIVILEGIO
    add constraint FK_TIENE_PR_RELATIONS_PRIVILEGIO foreign key (NOMBRE_PRIVILEGIO)
       references PRIVILEGIO (NOMBRE_PRIVILEGIO)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table TIENE_PRIVILEGIO
    add constraint FK_TIENE_PR_RELATIONS_ROL foreign key (NOMBRE_ROL)

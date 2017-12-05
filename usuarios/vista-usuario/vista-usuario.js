@@ -19,7 +19,6 @@ $(document).ready(function () {
 		if(data['activo'] == 't'){
 			estado = "Activo";
 		}
-	
 		var fila = '';
 		fila = fila + '<tr>';
 	  	fila = fila + '<td data-id="nombre-'+id+'">'+data['nombres']+'</td>';
@@ -28,7 +27,7 @@ $(document).ready(function () {
 	  	fila = fila + '<td id="estado-activo-llave-'+id+'">'+estado+'</td>';
 	  	fila = fila + '<td data-id="llave-'+id+'">';
         fila = fila + '<button data-toggle="modal" data-target="#edit-item" class="btn btn-primary edit-item">Acceder</button> ';
-        fila = fila + '<button id="boton-eliminar-llave-'+id+'" class="btn btn-danger remove-item">Eliminar</button>';
+        fila = fila + '<button id="boton-eliminar-llave-'+id+'" class="btn btn-danger remove-item">Cambiar estado</button>';
         fila = fila + '</td>';
         fila = fila + '<td id="primaryllave-'+id+'">'+data['nombre_usuario']+'</td>';
 	  	fila = fila + '</tr>';
@@ -232,7 +231,6 @@ $(document).ready(function () {
 	setTimeout(function(){
 		$('#btn-crear-nuevo-usuario').click(redireccionarCrearUsuario);
 
-    	
     	//eliminar usuario
     	$("body").on("click",".remove-item",function(){
    			
@@ -248,7 +246,7 @@ $(document).ready(function () {
     		//mostrarAlerta('alert-success',"Se elimino el usuariocorrectamente")
     	});
     	//editar usuario
-    	$("body").on("click",".edit-item",function(){
+        $("body").on("click",".edit-item",function(){
     		
     		var id = $(this).parent("td").data("id");
     		var llave = document.getElementById("primary"+id).innerHTML;
