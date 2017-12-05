@@ -32,29 +32,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $passwordUsuario = Validador::desinfectarEntrada($_POST['contrasenia']);
 
     $resultado = obtenerUsuario($nombreUsuario);
-    //if($resultado['activo'] == true){
+
         
         if ($resultado == false) {
-            echo json_encode($resultado);
+            echo json_encode(['exito' => false, 'mensaje' => 'El nombre de usuario no existe']);
         }else{
-            if(password_verify($passwordUsuario, $resultado['contrasenia'])){
-            //if($passwordUsuario == $resultado['contrasenia']){
-                //password_hash('password', PASSWORD_DEFAULT);
-                $privilegios = obtenerPrivilegio($resultado['nombre_rol']);
-                session_start();
-                $_SESSION['nombres'] = $resultado['nombres'];
-                $_SESSION['apellidos'] = $resultado['apellidos'];
-                $_SESSION['usuario'] = $resultado['nombre_usuario'];
-                $_SESSION['nombre_rol'] = $resultado['nombre_rol'];
-                $_SESSION['privilegios'] = $privilegios;
-                echo json_encode(['exito' => true]);
+
+            if($resultado['activo'] == 't'){        
+                if(password_verify($passwordUsuario, $resultado['contrasenia'])){
+                //if($passwordUsuario == $resultado['contrasenia']){
+                    //password_hash('password', PASSWORD_DEFAULT);
+                    $privilegios = obtenerPrivilegio($resultado['nombre_rol']);
+                    session_start();
+                    $_SESSION['nombres'] = $resultado['nombres'];
+                    $_SESSION['apellidos'] = $resultado['apellidos'];
+                    $_SESSION['usuario'] = $resultado['nombre_usuario'];
+                    $_SESSION['nombre_rol'] = $resultado['nombre_rol'];
+                    $_SESSION['privilegios'] = $privilegios;
+                    echo json_encode(['exito' => true]);
+                }else{
+                    echo json_encode(['exito' => false, 'mensaje' => 'El nombre de usuario o contraseña son incorrectos']);
+                }
             }else{
-                echo json_encode(['exito' => false]);
+                echo json_encode(['exito' => false,'mensaje' => 'El usuario esta inactivo no puede ingresar al sistema']);
             }
         }
-    //}else{
-    //    echo json_encode(['exito' => false,'mensaje' => 'El usuario esta inactivo no puede ingresar al sistema']);
-    //}
+    
 }else{
     header('Location: index.php');
 }

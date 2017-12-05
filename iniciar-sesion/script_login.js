@@ -12,14 +12,16 @@ $('#boton-login').click(function () {
             data:datos,
             url: "./iniciar_sesion.php",
             success: function (data, textStatus, jqXHR) {
+                console.log(data);
                 if (data.exito) {
                     window.location.href = "../index.php";
                 } else {
-                    mostrarMensaje('alert-danger', 'El nombre de usuario o contraseña son incorrectos');
+                    mostrarMensaje('alert-danger', data['mensaje']);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert(errorThrown+jqXHR+textStatus);
+                console.log(jqXHR);
+                //alert(errorThrown+jqXHR+textStatus);
             }
         }).always();
     }

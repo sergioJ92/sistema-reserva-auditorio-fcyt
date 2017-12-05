@@ -4,20 +4,20 @@ $(document).ready(function () {
 	var materias = [];
     
     function mostrarUsuarios(usuarios){
-    	console.log("dddddddddd");
     	var filas = "";
-    	console.log(usuarios);
 		for (var i = 0; i < usuarios.length; ++i) {
-			filas = filas + anadirNuevaFila(usuarios[i],i);
+			filas = anadirNuevaFila(usuarios[i],i);
+			$('#cuerpo-tabla').append(filas);
+			$('#primaryllave-'+i).hide();
 		}
-		$('#cuerpo-tabla').html(filas);
+		
 		
 	}
 
 	function anadirNuevaFila(data,id){
-		var estado = 'inactivo';
+		var estado = 'Inactivo';
 		if(data['activo'] == 't'){
-			estado = "activo";
+			estado = "Activo";
 		}
 	
 		var fila = '';
@@ -25,7 +25,7 @@ $(document).ready(function () {
 	  	fila = fila + '<td data-id="nombre-'+id+'">'+data['nombres']+'</td>';
 	  	fila = fila + '<td data-id="apeleidos'+id+'">'+data['apellidos']+'</td>';
 	  	fila = fila + '<td>'+data['nombre_rol']+'</td>';
-	  	fila = fila + '<td>'+estado+'</td>';
+	  	fila = fila + '<td id="estado-activo-llave-'+id+'">'+estado+'</td>';
 	  	fila = fila + '<td data-id="llave-'+id+'">';
         fila = fila + '<button data-toggle="modal" data-target="#edit-item" class="btn btn-primary edit-item">Acceder</button> ';
         fila = fila + '<button id="boton-eliminar-llave-'+id+'" class="btn btn-danger remove-item">Eliminar</button>';
@@ -200,17 +200,25 @@ $(document).ready(function () {
 		return res;
 	}
 
-	function eliminarUsuario(dato,columna){
+	function cambiarEstadoUsuario(dato, id, estado){
     	$.ajax({
-//		    dataType: 'json',
 		    type:'POST',
 		    url:'eliminar_usuario.php',
-		    data:{id:dato}
+		    data:{id:dato,estado_activo:estado}
 		}).done(function(data){
-		  	columna.remove();
-		    console.log(data);
-		    console.log("ya esta eliminado: " + data);
-		    //getPageData();
+			var dat = JSON.parse(data);
+			var cadena = '';
+			if(dat['activo'] == "t"){
+				$('#estado-activo-'+id).text('Activo');
+				cadena = 'Activo';
+			}else{
+				$('#estado-activo-'+id).text('Inactivo');
+				cadena = 'Inactivo';
+			}
+		    console.log("Se a cambiado el estado del usuario: " + dat['nombre_usuario']+ " a "+cadena);
+		    //Falta mostrar el mensaje de la actualizacion en la pantalla
+		    }).fail(function(error){
+
 		    });	
 	}
 
@@ -218,15 +226,12 @@ $(document).ready(function () {
 	var cadena = id.split('-');
 	return cadena[1];
 	}
-	//function mostrarAlerta(tipoAlerta,mensaje){
-	//	$('#contenedor-msg').empty().append(crearAlerta(tipo, mensaje));
-	//}
 
 	ajaxGet('vista-usuario.php',{},mostrarUsuarios);
 
 	setTimeout(function(){
 		$('#btn-crear-nuevo-usuario').click(redireccionarCrearUsuario);
-    	//$('#botonEditar').click(editarUsuario);
+
     	
     	//eliminar usuario
     	$("body").on("click",".remove-item",function(){
@@ -234,7 +239,12 @@ $(document).ready(function () {
     		var id = $(this).parent("td").data('id');
     		var columna = $(this).parents("tr");
     		var dato = document.getElementById("primary"+id).innerHTML;
-    		eliminarUsuario(dato,columna)
+    		if($('#estado-activo-'+id).text() == 'Activo'){
+    			cambiarEstadoUsuario(dato,id,true);	
+    		}else{
+    			cambiarEstadoUsuario(dato,id,false);	
+    		}
+    		
     		//mostrarAlerta('alert-success',"Se elimino el usuariocorrectamente")
     	});
     	//editar usuario
@@ -242,7 +252,6 @@ $(document).ready(function () {
     		
     		var id = $(this).parent("td").data("id");
     		var llave = document.getElementById("primary"+id).innerHTML;
-    		console.log(llave);
     		redireccionarEditar(llave);
     		//cargarVentana();
     		//var tablaDatos = recuperarDatos(llave);
