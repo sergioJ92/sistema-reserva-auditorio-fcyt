@@ -35,32 +35,33 @@ $('#selAuditorio').change(function () {
 });
 
 $('#enviar').click(function () {
-        $('#body-modal').empty();
-        var datos = {
-            id_ambiente: auditorio,
-            responsable: $('#responsable').val(),
-            institucion: $('#institucion').val(),
-            telefono: $('#telefono').val(),
-            correo: $('#correo').val(),
-            evento: $('#evento').val(),
-            fecha: $('#fecha').parent().data("DateTimePicker").date(),
-            hora_inicio: $('#hora_inicio').val(),
-            hora_fin: $('#hora_fin').val(),
-            descripcion: $('#descripcion').val()
-        };
-        if (datos['id_ambiente'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
-                datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
-                datos['hora_fin'] === '') {
-            mostrarMensaje('alert-danger', 'Debe rellenar todos los campos obligatorios');
-        }else {
-            datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
-            var datos ={id_ambiente:datos['id_ambiente'],
-                        fecha: datos['fecha'],
-                        hora_inicio: datos['hora_inicio'],
-                        hora_fin: datos['hora_fin']};
-            verificarConflictos(datos);   
-        }
-    });
+    $('#body-modal').empty();
+    var datos = {
+        id_ambiente: auditorio,
+        responsable: $('#responsable').val(),
+        institucion: $('#institucion').val(),
+        telefono: $('#telefono').val(),
+        correo: $('#correo').val(),
+        evento: $('#evento').val(),
+        fecha: $('#fecha').parent().data("DateTimePicker").date(),
+        hora_inicio: $('#hora_inicio').val(),
+        hora_fin: $('#hora_fin').val(),
+        descripcion: $('#descripcion').val()
+    };
+    if (datos['id_ambiente'] === '' || datos['responsable'] === '' || datos['telefono'] === '' || datos['correo'] === '' ||
+            datos['evento'] === '' || datos['fecha'] === null || datos['hora_inicio'] === '' || 
+            datos['hora_fin'] === '') {
+        mostrarMensaje('alert-danger', 'Debe rellenar todos los campos obligatorios');
+    }else {
+        datos.fecha = formatearFecha(datos.fecha).split(' ')[0];
+        var datos ={id_ambiente:datos['id_ambiente'],
+                    fecha: datos['fecha'],
+                    hora_inicio: datos['hora_inicio'],
+                    hora_fin: datos['hora_fin']};
+        verificarConflictos(datos);   
+    }
+});
+
 $('#btn-enviar-mensaje').click(function () {
     
     $('#ico-enviando').append('Enviando ... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
