@@ -2,7 +2,8 @@
     const CRONOGRAMA = 'Cronograma'; //administracion del cronograma
     const CALENDARIO = 'Reservas'; //vista calendario y realizar reservas
     const SOLICITUDES = 'Solicitudes'; //administrar bandeja de solicitudes y ver respuestas
-    const USUARIOS = 'Usuarios'; //crear usuarios y roles
+    const USUARIOS = 'Usuarios'; //crear usuarios
+    const ROLES = 'Roles'; //crear roles
     
     function buscarPrivilegio($lista, $elemento){
         for ($i=0 ; $i<count($lista);$i++){
@@ -53,6 +54,11 @@
         if(tienePrivilegio(USUARIOS)){
             echo '<li><a href="'.DOMINIO.'/usuarios/">Usuarios</a></li>';
         }
+    }
+    function addCrearRoles(){
+        if(tienePrivilegio(ROLES)){
+            echo '<li><a href="'.DOMINIO.'/roles/">Roles</a></li>';
+        }
     }         
     function addMisReservas(){
         if(tienePrivilegio(CALENDARIO)){
@@ -97,6 +103,18 @@
     function bloquearCrearUsuarios(){
         if (isset($_SESSION['nombres'])||isset($_SESSION['privilegios'])) {
             if (!buscarPrivilegio($_SESSION['privilegios'], USUARIOS)) {
+                header('Location: ../../index.php');
+                die();
+            }
+        }else{
+            header('Location: ../../index.php');
+            die();
+        }
+    }
+
+    function bloquearCrearRoles(){
+        if (isset($_SESSION['nombres'])||isset($_SESSION['privilegios'])) {
+            if (!buscarPrivilegio($_SESSION['privilegios'], ROLES)) {
                 header('Location: ../../index.php');
                 die();
             }

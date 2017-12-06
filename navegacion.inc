@@ -22,6 +22,7 @@
                         addCronograma();
                         addBandejaSolicitudes();
                         addCrearUsuarios();
+                        addCrearRoles();
                     }
                 ?>
                 <?php  
