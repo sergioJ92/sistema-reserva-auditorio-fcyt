@@ -33,15 +33,20 @@ $(document).ready(function () {
 		window.location.href = dominio + dom;
 	}
 
+	function redireccionarEditar(llave){
+		var dato = 'editar-rol/?next='+llave;
+		window.location.href = dominio + dato;
+	}
 
 
 	ajaxGet('recuperarDatos.php',{},cargarRoles);
 	$('#btn-crear-nuevo-rol').click(redireccionarCrearRol);
-    /*$("body").on("click",".edit-item",function(){
+    $("body").on("click",".edit-item",function(){
     	var id = $(this).parent("td").data("id");
     	var llave = document.getElementById("primary"+id).innerHTML;
+    	console.log(llave);
     	redireccionarEditar(llave);
     	//cargarVentana();
     	//var tablaDatos = recuperarDatos(llave);
-	});*/
+	});
 });

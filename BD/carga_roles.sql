@@ -125,7 +125,8 @@ INSERT INTO privilegio (nombre_privilegio) VALUES
 ('Cronograma'),
 ('Reservas'),
 ('Solicitudes'),
-('Usuarios');
+('Usuarios'),
+('Roles');
 
 insert into tiene_privilegio(nombre_privilegio, nombre_rol) VALUES
 ('Cronograma', 'Administrador'),
@@ -138,7 +139,9 @@ insert into tiene_privilegio(nombre_privilegio, nombre_rol) VALUES
 ('Solicitudes', 'secretaria'),
 ('Solicitudes', 'Super usuario'),
 ('Usuarios', 'Administrador'),
-('Usuarios', 'Super usuario');
+('Usuarios', 'Super usuario'),
+('Roles', 'Administrador'),
+('Roles', 'Super usuario');
 
 INSERT INTO reserva (id_ambiente, fecha, hora_inicio, hora_fin, evento) VALUES
 (1, '2017-07-12', '08:15', '09:45', 'Reserva'),

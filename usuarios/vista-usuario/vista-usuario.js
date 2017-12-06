@@ -230,10 +230,8 @@ $(document).ready(function () {
 
 	setTimeout(function(){
 		$('#btn-crear-nuevo-usuario').click(redireccionarCrearUsuario);
-
     	//eliminar usuario
     	$("body").on("click",".remove-item",function(){
-   			
     		var id = $(this).parent("td").data('id');
     		var columna = $(this).parents("tr");
     		var dato = document.getElementById("primary"+id).innerHTML;
@@ -241,19 +239,16 @@ $(document).ready(function () {
     			cambiarEstadoUsuario(dato,id,true);	
     		}else{
     			cambiarEstadoUsuario(dato,id,false);	
-    		}
-    		
+    		}	
     		//mostrarAlerta('alert-success',"Se elimino el usuariocorrectamente")
     	});
     	//editar usuario
         $("body").on("click",".edit-item",function(){
-    		
     		var id = $(this).parent("td").data("id");
     		var llave = document.getElementById("primary"+id).innerHTML;
     		redireccionarEditar(llave);
     		//cargarVentana();
     		//var tablaDatos = recuperarDatos(llave);
-    		
 		});
 		$('#btn-anadir-materia-modal').click(anadirMateria);
 	},1000)
