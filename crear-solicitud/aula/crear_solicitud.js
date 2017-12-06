@@ -41,8 +41,8 @@ $('#selEdificio').change(function () {
     var _edificio = edificio.replace(/\s/g,"_");
     $("#selPiso").load("obtener_datos.php?tipo="+"1"+"&nombre="+_edificio);
     $("#selPiso").removeAttr("disabled");
-    //$("#selAula").load("");
-    //$("#selAula").attr('disabled', 'disabled');
+    $('#selAula').html("");
+    $('#selAula').attr('disabled', 'disabled');
 });
 
 $('#selPiso').change(function () {
@@ -154,6 +154,11 @@ function manejarGuardarSolicitud(respuesta) {
         var msgExito ='La solicitud de reserva fue enviada con exito. \n';
         msgExito += 'Acabamos de enviar un codigo de solicitud a su correo, puede consultar el estado de su solicitud en cualquier momento';
         mostrarMensaje('alert-success', msgExito );
+        $('#selEdificio').val("null");
+        $('#selPiso').html("");
+        $('#selPiso').attr('disabled', 'disabled');
+        $('#selAula').html("");
+        $('#selAula').attr('disabled', 'disabled');
         $('#responsable').val("");
         $('#institucion').val("");
         $('#evento').val("");

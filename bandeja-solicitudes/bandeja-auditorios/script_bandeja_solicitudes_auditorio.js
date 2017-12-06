@@ -17,7 +17,8 @@ $(document).ready(function () {
                 llenarModal(this.id);
                 setCookie('id_solicitud_reserva', datos[this.id]['id_solicitud_reserva']);
                 setCookie('id_ambiente', datos[this.id]['id_ambiente']);
-                setCookie('nombre_auditorio', $('#modalAmbiente').text());
+                setCookie('tipo', 'auditorio');
+                setCookie('nombre_ambiente', $('#modalAmbiente').text());
                 setCookie('institucion', $('#modalInstitucion').text());
                 setCookie('responsable', $('#modalResponsable').text());
                 setCookie('correo', $('#modalCorreo').text());

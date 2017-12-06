@@ -59,7 +59,7 @@ function obtenerFechaActual() {
                                 <p id="tercer-bloque">Muy Señores Mios:</p>
                                 <p id="cuarto-bloque">
                                     En respuesta a la solicitud de 
-                                    reserva del AUDITORIO que se solicita 
+                                    reserva del ambiente <span id="ambiente"></span> que se solicita 
                                     para realizar el Evento 
                                     <span id="evento"></span>
                                     con fecha 
@@ -82,7 +82,7 @@ function obtenerFechaActual() {
                                 </p>
 
                                 <p id="sexto-bloque">
-                                    para el uso del AUDITORIO en dicha fecha.
+                                    para el uso de ese ambiente en dicha fecha.
                                 </p>
                             </div>
                             <div  class="fin-mensaje row-sm-12 espacio-top">

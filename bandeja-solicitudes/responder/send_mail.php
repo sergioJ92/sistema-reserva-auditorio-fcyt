@@ -44,11 +44,11 @@ function eliminarReservas($listaConflictos){
     return true;
 }
 
-function crearReserva($fecha,$horaInicio,$horaFin,$evento){
+function crearReserva($fecha,$horaInicio,$horaFin,$evento, $idAmbiente){
     global $idReserva;
     $consulta = 'INSERT INTO reserva';
     $consulta .= ' (id_ambiente, fecha, hora_inicio, hora_fin, evento) VALUES';
-    $consulta .= " (1, '$fecha', '$horaInicio', '$horaFin', '$evento')";
+    $consulta .= " ('$idAmbiente', '$fecha', '$horaInicio', '$horaFin', '$evento')";
     $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
     $consulta_insercion = pg_query(ConexionBD::getConexion(), "SELECT lastval();");
     $idReserva = pg_fetch_row($consulta_insercion)[0];
@@ -65,13 +65,13 @@ function crearReservaSolicitada($responsable,$descripcion,$institucion){
 }
 
 function realizarReservaCompleta($mensaje,$idSolicitudReserva,$aceptadoRechazado, $representante,$cargoRepresentante,$listaConflictos,
-        $fecha,$horaInicio,$horaFin,$evento,$responsable,$descripcion,$institucion){
+        $fecha,$horaInicio,$horaFin,$evento,$responsable,$descripcion,$institucion, $idAmbiente){
     pg_query(ConexionBD::getConexion(), "BEGIN");
     if (insertarMensaje($mensaje, $idSolicitudReserva, $aceptadoRechazado, $representante, $cargoRepresentante)) {
         if (marcarLeido($idSolicitudReserva)) {
             if ($aceptadoRechazado == 1) {
                 if (eliminarReservas($listaConflictos)){
-                    if (crearReserva($fecha,$horaInicio,$horaFin,$evento)) {
+                    if (crearReserva($fecha,$horaInicio,$horaFin,$evento, $idAmbiente)) {
                         if (crearReservaSolicitada($responsable, $descripcion, $institucion)) {
                             pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                             pg_query(ConexionBD::getConexion(), "COMMIT");
@@ -158,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $direccionCorreo = $_POST['correo'];
     $mensajeContenido = $_POST['content'];
     $idSolicitudReserva = $_POST['id_solicitud_reserva'];
+    $idAmbiente = $_POST['id_ambiente'];
     $aceptadoRechazado = $_POST['aceptado_rechazado'];
     $representante = $_POST['representante'];
     $cargoRepresentante = $_POST['cargo_representante'];
@@ -190,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $crearReserva = realizarReservaCompleta($mensajeContenido, $idSolicitudReserva, 
                     $aceptadoRechazado, $representante, $cargoRepresentante, 
                     $listaAcademicas, $fecha, $horaInicio, $horaFin, $evento,
-                    $responsable, $descripcion, $institucion);
+                    $responsable, $descripcion, $institucion, $idAmbiente);
         
         if($smtpMailer){
             if ($crearReserva) {

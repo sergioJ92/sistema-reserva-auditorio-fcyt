@@ -2,9 +2,9 @@
 include_once 'ConexionBD.php';
 
 class InterfazReservasCalendario {
-    public static function obternerReservasSimple($fecha) {
+    public static function obternerReservasSimple($fecha, $idAmbiente) {
         $conexion = ConexionBD::getConexion();
-        $consulta = "SELECT RES.*, ASUN.asunto FROM reserva AS RES, reserva_academica AS ACADE, asunto AS ASUN WHERE RES.fecha = '$fecha' AND RES.id_reserva = ACADE.id_reserva AND ASUN.id_asunto = ACADE.id_asunto";
+        $consulta = "SELECT RES.*, ASUN.asunto FROM reserva AS RES, reserva_academica AS ACADE, asunto AS ASUN WHERE RES.fecha = '$fecha' AND RES.id_reserva = ACADE.id_reserva AND ASUN.id_asunto = ACADE.id_asunto AND RES.id_ambiente = $idAmbiente";
         return self::obtenerEnLista(pg_query($conexion, $consulta));
     }
     private static function obtenerEnLista($resultado_consulta) {
@@ -14,14 +14,14 @@ class InterfazReservasCalendario {
         }
         return $lista;
     }
-    public static function obternerReservasSolicitada($fecha) {
+    public static function obternerReservasSolicitada($fecha, $idAmbiente) {
         $conexion = ConexionBD::getConexion();
-        $consulta = "SELECT RES.* ,SOLIC.id_respuesta FROM reserva AS RES, reserva_solicitada AS SOLIC WHERE RES.fecha = '$fecha' AND RES.id_reserva = SOLIC.id_reserva ";
+        $consulta = "SELECT RES.* ,SOLIC.id_respuesta FROM reserva AS RES, reserva_solicitada AS SOLIC WHERE RES.fecha = '$fecha' AND RES.id_reserva = SOLIC.id_reserva AND RES.id_ambiente=$idAmbiente";
         return self::obtenerEnLista(pg_query($conexion, $consulta));
     }
-    public static function obtenerTodasLasReservas ($fecha){
-        $lista1 = self::obternerReservasSimple($fecha);
-        $lista2 = self::obternerReservasSolicitada($fecha);
+    public static function obtenerTodasLasReservas ($fecha, $idAmbiente){
+        $lista1 = self::obternerReservasSimple($fecha, $idAmbiente);
+        $lista2 = self::obternerReservasSolicitada($fecha, $idAmbiente);
         $respuesta = [];
         array_push($respuesta, $lista1);
         array_push($respuesta, $lista2);
