@@ -19,6 +19,10 @@
 
                     <div class="modal-body">
                         <div class="form-group row">
+                            <div class="col-md-4"><b>Ambiente:</b></div>
+                            <div class="col-md-8" id="modalAmbiente"></div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-md-4"><b>Institucion:</b></div>
                             <div class="col-md-8" id="modalInstitucion"></div>
                         </div>

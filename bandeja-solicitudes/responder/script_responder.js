@@ -1,4 +1,5 @@
 var institucion = getCookie('institucion');
+var nombreAmbiente = getCookie('nombre_ambiente');
 var responsable = getCookie('responsable');
 var correo = getCookie('correo');
 var telefono = getCookie('telefono');
@@ -8,6 +9,8 @@ var horaFin = getCookie('hora_fin');
 var evento = getCookie('evento');
 var descripcion = getCookie('descripcion');
 var idSolicitudReserva = getCookie('id_solicitud_reserva');
+var idAmbiente = getCookie('id_ambiente');
+var tipoAmbiente = getCookie('tipo');
 var conflictoAcademicas = false;
 var conflictoSolicitadas = false;
 var listaConflictosAcademicas = [];
@@ -21,6 +24,7 @@ $(document).ready(function () {
     }
     $('#institucion').html(" " + institucion);
     $('#responsable').html(" " + responsable);
+    $('#ambiente').html(" " + nombreAmbiente);
     $('#fecha-solicitud').html(fecha);
     $('#hora_inicio').html(horaInicio);
     $('#hora_fin').html(horaFin);
@@ -30,7 +34,7 @@ $(document).ready(function () {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        data: {fecha: fecha},
+        data: {fecha: fecha, ambiente: idAmbiente},
         url: "./obtener_eventos_por_fecha.php",
         success: function (data) {
             llenarEventosAcademicosFecha(data[0]);
@@ -74,6 +78,7 @@ $(document).ready(function () {
         var envio = {correo: correo,
             content: contenidoMensaje,
             id_solicitud_reserva: idSolicitudReserva,
+            id_ambiente: idAmbiente,
             aceptado_rechazado: $('#aceptado-rechazado').val(),
             representante: $('#nombre-representante').val(),
             lista_academicas: listaConflictosAcademicas,
@@ -129,6 +134,9 @@ $(document).ready(function () {
                 $('#body-modal').empty();
                 $('#titulo-modal').css({"background-color": "#d9534f", "color": "white"});
                 $('#btn-enviar-mensaje').css({"background-color": "#d9534f", "color": "white"});
+                if(conflictoSolicitadas){
+                    $('#btn-enviar-mensaje').attr('disabled',false);    
+                }
                 
             }
             $('#descision-reserva').text(reservaAcetadoRechazado);
@@ -137,7 +145,7 @@ $(document).ready(function () {
     });
 });
 function redirigir() {
-    window.location.replace("../index.php");
+    window.location.replace("../index.php?var="+tipoAmbiente);
 }
 
 function hayConflictos(datosCartaActual, listaEventos, tipoAcademicoSolicitado){
