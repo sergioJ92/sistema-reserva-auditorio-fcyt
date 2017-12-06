@@ -23,7 +23,14 @@
     }
     function addCalendario(){
         if(tienePrivilegio(CALENDARIO)){
-            echo '<li><a href="'.DOMINIO.'/reservas/">Calendario</a></li>';
+            echo '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Calendario<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="'.DOMINIO.'/reservas/index.php?var=auditorio">Calendario Auditorio</a></li>
+                      <li><a href="'.DOMINIO.'/reservas/index.php?var=laboratorio">Calendario Laboratorio</a></li>
+                      <li><a href="'.DOMINIO.'/reservas/index.php?var=aula">Calendario Aula</a></li>
+                    </ul>
+                </li>';
+            //echo '<li><a href="'.DOMINIO.'/reservas/">Calendario</a></li>';
         }
     }
     function addCronograma(){
