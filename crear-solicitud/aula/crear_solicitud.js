@@ -2,6 +2,8 @@ var edificio = '';
 var piso = '';
 var aula = '';
 
+$('#aula-oculto').css("display", "block");
+
 $('input[id ^=fecha]').parent().datetimepicker({
     format: 'DD-MM-YYYY',
     locale: 'es',

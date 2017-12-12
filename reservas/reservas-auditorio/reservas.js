@@ -1,6 +1,5 @@
-
 $(document).ready(function() {
-    
+    $('#auditorio-oculto').css("display", "block");    
     var valor = $('#selAnioGestion').val();
     if (valor !== 'null') {
         var anio = parseInt(valor.split('-')[0]);

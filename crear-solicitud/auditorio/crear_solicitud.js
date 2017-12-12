@@ -1,5 +1,7 @@
 var auditorio = '';
 
+$('#auditorio-oculto').css("display", "block");
+
 $('input[id ^=fecha]').parent().datetimepicker({
     format: 'DD-MM-YYYY',
     locale: 'es',

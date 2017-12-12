@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+    $('#aula-oculto').css("display", "block");
     
     var valor = $('#selAnioGestion').val();
     if (valor !== 'null') {
@@ -12,6 +13,7 @@ $(document).ready(function() {
 var edificio = '';
 var piso = '';
 var aula = '';
+
 
 $('#selAnioGestion').attr('disabled', 'disabled');
 

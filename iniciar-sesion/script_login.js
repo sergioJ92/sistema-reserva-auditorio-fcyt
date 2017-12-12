@@ -32,4 +32,3 @@ function mostrarMensaje(tipo, mensaje) {
     $('#contenedor-msg').empty().append(crearAlerta(tipo, mensaje));
     $('html,body').animate({scrollTop: 80}, "fast");
 }
-

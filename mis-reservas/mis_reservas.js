@@ -23,6 +23,7 @@ function llenarModal(idLista) {
     $('#modalMateria').text(datos[idLista]['nombre_materia']);
     $('#modalHoraInicio').text(datos[idLista]['hora_inicio']);
     $('#modalHoraFin').text(datos[idLista]['hora_fin']);
+    $('#id_ambiente').text(datos[idLista]['id_ambiente']);
 }
 
 function llenarDatos() {
@@ -95,7 +96,8 @@ function eliminarReserva(boton) {
             asunto: datos[ideliminar]['asunto'],
             fecha: datos[ideliminar]['fecha'],
             hora_inicio: datos[ideliminar]['hora_inicio'],
-            hora_fin: datos[ideliminar]['hora_fin']
+            hora_fin: datos[ideliminar]['hora_fin'],
+            ambiente: datos[ideliminar]['id_ambiente']
         };
         ajaxPost('eliminar_reserva.php', datosReserva, function (respuesta) {
             if (respuesta === true) {

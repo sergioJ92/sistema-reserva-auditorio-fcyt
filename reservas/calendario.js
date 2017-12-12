@@ -360,7 +360,7 @@ class ModalReservar extends DialogoModal {
         marcadorAsunto.setAttribute('for', 'input-asunto');
         this.inputAsunto = crear('SELECT', null, 'form-control', 'input-asunto');
         
-        let vacioAsunto = crear('OPTION', 'Seleecione el Asunto');
+        let vacioAsunto = crear('OPTION', 'Seleccione el Asunto');
         vacioAsunto.setAttribute('selected', 'selected');
         vacioAsunto.setAttribute('hidden', 'hidden');
         vacioAsunto.setAttribute('value', 'null');

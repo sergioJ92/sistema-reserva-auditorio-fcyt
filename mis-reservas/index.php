@@ -53,6 +53,7 @@ bloquearCalendarioYMisReservas();
                             <div class="col-md-3"><b>Hora Fin:</b></div>
                             <div class="col-md-3" id="modalHoraFin"></div>
                         </div>
+                        <div id='id_ambiente' type='hidden'></div>
                     </div>
                     <div class="modal-footer estilo-modal-footer">
                         <div class="row boton-centreado">
