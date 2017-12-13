@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+    $('#laboratorio-oculto').css("display", "block");
     
     var valor = $('#selAnioGestion').val();
     if (valor !== 'null') {
@@ -11,7 +12,6 @@ $(document).ready(function() {
 
 var departamento = '';
 var laboratorio = '';
-
 
 $('#selAnioGestion').attr('disabled', 'disabled');
 $( "#selLaboratorio" ).attr('disabled', 'disabled');

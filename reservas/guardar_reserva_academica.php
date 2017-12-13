@@ -49,7 +49,7 @@ function validarReserva($fecha, $horaInicio, $horaFin,
 }
 
 function guardarReserva($fecha, $horaInicio, $horaFin, 
-        $codigoMateria, $idContenido, $idAsunto, $nombreUsuario) {
+        $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $ambiente) {
     
     validarReserva($fecha, $horaInicio, $horaFin, 
             $codigoMateria, $idContenido, $idAsunto, $nombreUsuario);
@@ -58,7 +58,7 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     $conn = ConexionBD::getConexion();
     pg_query($conn, "BEGIN;");
     $insertarReserva = 'INSERT INTO reserva (id_ambiente, fecha, hora_inicio, hora_fin, evento)';
-    $insertarReserva .= " VALUES (1, '$fecha', '$horaInicio', '$horaFin', '$evento')";
+    $insertarReserva .= " VALUES ('$ambiente', '$fecha', '$horaInicio', '$horaFin', '$evento')";
     if (pg_query($conn, $insertarReserva)) {
         return guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha);
     }
@@ -114,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     $entrada = $_POST;
     
+    $ambiente = Validador::desinfectarEntrada($entrada['ambiente']);
     $fecha = Validador::desinfectarEntrada($entrada['fecha']);
     $horaInicio = Validador::desinfectarEntrada($entrada['hora_inicio']);
     $horaFin = Validador::desinfectarEntrada($entrada['hora_fin']);
@@ -124,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     try {
         $idReserva = guardarReserva($fecha, $horaInicio, $horaFin, 
-                $codigoMateria, $idContenido, $idAsunto, $nombreUsuario);
+                $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $ambiente);
         $reserva = obtenerReservaAcademica($idReserva);
         echo json_encode(['exito' => true, 'reserva' => $reserva]);
     }

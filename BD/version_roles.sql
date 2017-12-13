@@ -903,7 +903,7 @@ NOMBRE_USUARIO
 );
 
 /*==============================================================*/
-/* Table: BLOQUEO_FECHA                                   */
+/* Table: BLOQUEO_FECHA                                         */
 /*==============================================================*/
 create table BLOQUEO_FECHA (
    ID_BLOQUEO           SERIAL               not null,
@@ -1153,7 +1153,6 @@ alter table TOLERANCIA
       references CONTENIDO (ID_CONTENIDO)
       on delete cascade on update cascade;
 
-
 alter table RESERVA_ACADEMICA
    drop constraint FK_RESERVA__RELATIONS_ACTIVIDA,
    add constraint FK_RESERVA__RELATIONS_ACTIVIDA foreign key (ID_CONTENIDO)
@@ -1185,10 +1184,9 @@ alter table RESPONSABLE_RESERVA
       references USUARIO (NOMBRE_USUARIO)
       on delete cascade on update cascade;
 
-alter table reserva add constraint uniqueconstraint unique (fecha, hora_inicio, hora_fin);
+alter table reserva add constraint uniqueconstraint unique (id_ambiente, fecha, hora_inicio, hora_fin);
 
 alter table BLOQUEO_FECHA add constraint fecha_unique_constraint unique (fecha);
-
 
 DROP FUNCTION bloquear(date);
 

@@ -7,7 +7,7 @@ require_once RAIZ . '/lib/sesion_store.php';
 header('Content-Type: application/json');
 
 function obtenerReservasAcademicas($usuario) {
-    $consulta = 'SELECT ASU.asunto, RESER.fecha,ACADE.id_asunto, RESER.hora_inicio,RESER.id_reserva, RESER.hora_fin, MAT.nombre_materia, CRON.anio, CRON.gestion ';
+    $consulta = 'SELECT ASU.asunto, RESER.fecha,ACADE.id_asunto, RESER.hora_inicio,RESER.id_reserva, RESER.hora_fin, RESER.id_ambiente, MAT.nombre_materia, CRON.anio, CRON.gestion ';
     $consulta .= 'FROM usuario AS us, responsable_reserva AS RESP, asunto AS ASU, reserva AS RESER, reserva_academica AS ACADE, materia AS MAT, actividad AS ACTI, contenido AS CONT, cronograma_academico AS CRON ';
     $consulta .= "WHERE us.nombre_usuario = '$usuario' AND CONT.id_contenido = ACTI.id_contenido AND CONT.anio = CRON.anio AND CONT.gestion = CRON.gestion AND ACTI.id_contenido = ACADE.id_contenido ";
     $consulta .= 'AND us.nombre_usuario = RESP.nombre_usuario AND RESP.id_reserva = ACADE.id_reserva AND ACADE.id_reserva = RESER.id_reserva AND ACADE.id_asunto = ASU.id_asunto AND ACADE.codigo_materia = MAT.codigo_materia ';

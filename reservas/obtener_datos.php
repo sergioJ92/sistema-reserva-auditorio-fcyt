@@ -39,7 +39,7 @@ function obtenerLaboratorios($departamento){
     $departamento = str_replace("_", " ", $departamento);
     $consultaObtenerPisos = "select id_ambiente, nombre_laboratorio from laboratorio where departamento='$departamento'";
     $res = pg_query($conn, $consultaObtenerPisos);
-    echo '<option selected="" value="null" hidden="">Numero de Piso</option>';
+    echo '<option selected="" value="null" hidden="">Nombre de laboratorio</option>';
     while ($fila = pg_fetch_assoc($res)) {
         $id_ambiente = $fila['id_ambiente'];
         $nombre_laboratorio = $fila['nombre_laboratorio'];

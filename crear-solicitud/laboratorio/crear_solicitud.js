@@ -1,6 +1,8 @@
 var departamento = '';
 var nombre_laboratorio = '';
 
+$('#laboratorio-oculto').css("display", "block");
+
 $('input[id ^=fecha]').parent().datetimepicker({
     format: 'DD-MM-YYYY',
     locale: 'es',
