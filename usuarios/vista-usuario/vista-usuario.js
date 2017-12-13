@@ -1,4 +1,4 @@
-$(document).ready(function () {
+ $(document).ready(function () {
 	
 	var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/usuarios/";
 	var materias = [];

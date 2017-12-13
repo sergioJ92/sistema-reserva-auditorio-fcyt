@@ -812,6 +812,7 @@ NOMBRE_ROL
 create table TIENE_PRIVILEGIO (
    NOMBRE_PRIVILEGIO    TEXT                 not null,
    NOMBRE_ROL           TEXT                 not null,
+   /*ESTADO_PRIVILEGIO    BOOLEAN              not null,------------------------------------------------*/
    constraint PK_TIENE_PRIVILEGIO primary key (NOMBRE_PRIVILEGIO, NOMBRE_ROL)
 );
 

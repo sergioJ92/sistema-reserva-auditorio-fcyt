@@ -1,0 +1,16 @@
+.margen-privilegios {
+    margin-top: 0px !important;
+}
+.padding-lista-privilegios {
+    padding-top: 15px;
+    padding-bottom: 80px;
+}
+
+.padding-lista-privilegios div {
+    border-color: #ccc;
+    border-radius: 0px !important;
+}
+
+.lista-privilegios-desabilitado div {
+    background-color: #f3f3f3;
+}

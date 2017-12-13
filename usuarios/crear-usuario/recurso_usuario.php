@@ -1,6 +1,6 @@
 <?php
 
-//error_reporting(0);
+error_reporting(0);
 
 const RAIZ = '../..';
 
@@ -89,7 +89,7 @@ function guardarUsuario(
                     if (count($materias) > 0) {
                         $baseAnadirMateria = 'INSERT INTO tiene_materia (codigo_materia, nombre_usuario)';
                         foreach ($materias as $materia) {
-                            $anadirMateria = $baseAnadirMateria . " VALUES ('$materia', '$nombreUsuario')";
+                            $anadirMateria = $baseAnadirMateria." VALUES ('$materia', '$nombreUsuario')";
                             if (!pg_query($conn, $anadirMateria)) {
                                 throw new GuardarExcepcion('Tiene materia');
                             }
@@ -140,8 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($entrada['materias'] as $materia) {
             array_push($materias, Validador::desinfectarEntrada($materia));
         }
-    }
-         
+    }         
+
     try {
         guardarUsuario(
                 $nombres, $apellidos, $telefono, $correo, 
@@ -153,8 +153,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
     catch (ValidacionExcepcion $ex) {
-        echo json_encode(array('exito' => false, 'mensaje' => $ex->getMessage()));
+        $res = array('exito' => false, 'mensaje' => $ex->getMessage());
+        echo json_encode($res);
+    
     }
+    //echo $res;
 }
 else {
     header('Location: index.php');
