@@ -115,10 +115,7 @@ $(document).ready(function () {
 
 	function insertarMateria(){
 		var selectMaterias = $('#select-materias');
-		console.log("lllllll");
-		console.log(selectMaterias);		
-		//return false;
-        var codigoMateria = selectMaterias.val();
+		var codigoMateria = selectMaterias.val();
         var nombreMateria = $('#select-materias option[value="'+codigoMateria+'"]').text();
         if (materias.includes(codigoMateria)) {
             return;
@@ -126,7 +123,6 @@ $(document).ready(function () {
         var posicion = materias.length;
         var id = 'm' + posicion;
         materias.push(codigoMateria);
-        console.log("fin");
         $('#lista-materias-modal').append(crearVisualizadorMateria(nombreMateria, function() {
             $('#' + id).remove();
             delete materias[posicion];
@@ -152,8 +148,7 @@ $(document).ready(function () {
 			url:'editar_contracena.php',
 			data:{actual:actual,contrasena:contrasena,reContrasena:reContrasena,id:nombreUsuario}
 		}).done(function(dato){
-			JSON.parse(dato);
-			console.log("entro");	
+			JSON.parse(dato);	
 			//mostrar mensaje de actualizacion
 		}).fail(function(error){
 			console.log("error");
@@ -164,7 +159,6 @@ $(document).ready(function () {
     }
 
     function cargarRolDeUsuario(){
-    	console.log(datojson);
     	$.ajax({
     		type: 'POST',
     		url: 'recuperarRol.php',
@@ -180,8 +174,6 @@ $(document).ready(function () {
     				$('#seccion-materias').show('slow');
 					dat.forEach(function(materia){
 						var id = 'm'+n;
-						console.log(materia);
-						console.log(materia['codigo_materia']);
 						materias.push(materia['codigo_materia']);
 						var mat = $('#lista-materias-modal')
 						mat.append(agregarMateria(materia['nombre_materia'],function(){
@@ -253,12 +245,10 @@ $(document).ready(function () {
 	function cancelarEdicion(){
 		window.location.href = dominio + "vista-usuario";	 	
 	}
-	//////////////////////////////////////////////////
+	
 	cargarDatos();
 	setTimeout(function(){
-	////////////////////////////////////////////////////////////
-///////////////editar datos generales///////////////////////////
-
+	
 	$('#btn-cancelar').click(cancelarEdicion);
 	$('#modal-datos-cerrar').click(limpiarModal);
 	$('#x-datos-cerrar').click(limpiarModal);
@@ -272,9 +262,7 @@ $(document).ready(function () {
 	});
 	$('#actualizar-datos').click(actualizarDatos);
 
-//////////////editar contrasena///////////////////
 	$('#modal-guardar-contrasena').click(function(){
-		console.log('hhh');
 		var actual = $('#mod-edit-contrcena-actual').val();
 		var contracena = $('#mod-edit-nueva-contracena').val();
 		var reContracena = $('#mod-edit-reingresar-contracena').val();
@@ -290,16 +278,6 @@ $(document).ready(function () {
 		$('#mod-edit-reingresar-contracena').val('');
 	});
 
-
-
-//////////////////////////////////////////////////////////////////////////////
-	/*
-	$('body').on("click","#anadir-materia-modal",function(){
-		console.log("entre")
-		insertarMateria();
-		console.log("termina");
-	});
-	*/
 	$('#anadir-materia-modal').click(function(e){
 		e.preventDefault();
 		insertarMateria();

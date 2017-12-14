@@ -37,7 +37,7 @@ $(document).ready(function () {
 			$('#campo-privilegios').append(cadenaRes);
 			$('#modal-campo-privilegios').append(cadenaModalRes);
 		}).fail(function(error){
-			console.log("errororororor");
+			console.log("error");
 		});
 	}
 
@@ -61,10 +61,8 @@ $(document).ready(function () {
             url:"editarRol.php",
             data:{nombre_usuario:rol}
             }).done(function(dato){
-                console.log(dato);
                 $('#nombre-rol-recuperado').text(dato['nombre_rol']);
                 $('#tiene-materias-recuperado').text("No");
-                //bloquear el boton
                 document.getElementById("btn-editar-rol").disabled = true;
             }).fail(function(error){
                 console.log("falla");
@@ -77,11 +75,9 @@ $(document).ready(function () {
 			url:"editarRol.php",
 			data:{nombre_usuario:rol}
 			}).done(function(dato){
-                console.log(dato);
 				var data = dato[0];
 				$('#nombre-rol-recuperado').text(data['nombre_rol']);
 				$('#modal-nombre-rol').val(data['nombre_rol']);
-				console.log(data['puede_tener_materias']);
 				if(data['puede_tener_materias'] == 1){
 					$('#tiene-materias-recuperado').text("si");
 					$('#modal-tiene-materias-rol').val(1);
