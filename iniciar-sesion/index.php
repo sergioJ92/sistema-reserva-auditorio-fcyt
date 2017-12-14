@@ -2,6 +2,7 @@
 const RAIZ = '..'; 
 include_once RAIZ .'/lib/sesion_store.php';
 include_once RAIZ .'/lib/funciones_privilegios.php';
+include_once 'captcha.php';
 
 bloquearIniciarSesion();
 ?>
@@ -29,6 +30,15 @@ bloquearIniciarSesion();
                                 <div class="form-group">
                                     <label for="id-contrasenia">Contraseña: </label>
                                     <input class="form-control" name="password" id="id-contrasenia" type="password" placeholder="Contraseña">
+                                </div>
+                                <div class="form-group">
+                                    <label>Codigo de Verificacion</label>
+                                    <!-- <div class="form-group"> -->
+                                    <input type="captcha" name="captcha" id="id-captcha" value=<?php echo generar_caracteres();?> class="captcha" size="6" readonly>
+                                    <p>Introdusca el codigo de aqui ariba</p>
+                                    <input id="id-captcha-2" type="text" name="id-captcha" class="form-control" /><br>
+                                    <p>No se puede ver la Imagen? click <a id="recargar">Aqui</a></p>
+                                    <!-- </div> -->
                                 </div>
                                 <button id="boton-login" type="button" class="btn btn-primary form-control espacio-superior">Iniciar Sesion</button>
                             </div>

@@ -27,26 +27,26 @@ body {
 }
 
 .navbar-default {
-    background-color: #024959;/*#293952*/
-    border-color: #024959;
+    background-color: #336699;/*#293952*/
+    border-color: #336699;
     border-radius: 0;
 }
 
 .dropdown-toggle{
-    background-color: #024959;/*#293952*/
-    border-color: #024959;
+    background-color: #336699;/*#293952*/
+    border-color: #336699;
     border-radius: 0;
 }
 
 .dropdown-menu>li>a {
-    border-color: #024959;
+    border-color: #336699;
     border-radius: 0;
-    background-color: #024959;
+    background-color: #336699;
     color: white;
 }
 .dropdown-control {
-    background-color: #024959;/*#293952*/
-    border-color: #024959;
+    background-color: #336699;/*#293952*/
+    border-color: #336699;
     border-radius: 0;
 }
 .navbar-default .navbar-nav > li > a, .navbar-default .navbar-header a {
@@ -55,7 +55,7 @@ body {
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > ul > li > a:hover, .navbar-default .navbar-header a:hover {
     color: #e3cc41;
-    background-color: #024959;
+    background-color: #336699;
 }
 
 .navbar-default .navbar-nav > li > a:active, .navbar-default .navbar-header a:active {
@@ -233,7 +233,7 @@ legend {
 
 .filaTitulo{
     color: #fff;
-    background-color: #337ab7;/*#024959;*/
+    background-color: #337ab7;/*#336699;*/
 }
 
 .no-select{
@@ -267,7 +267,7 @@ legend {
 
 .lista-foco:hover{
     color: #fff;
-    /*background-color: #024959;*/
+    /*background-color: #336699;*/
     background-color: #73a4d1;
     border-color: #539adb;
 }

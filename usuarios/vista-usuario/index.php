@@ -29,24 +29,25 @@ bloquearCrearUsuarios();
             <div class="padding-pequeno sin-padding-bottom">
                 <button class="btn btn-primary" id="btn-crear-nuevo-usuario">Crear Usuario</button>
             </div>
-            <fieldset>
-                <legend>Lista Usuarios</legend>
-                <table id="tabla-usuarios" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col-sm-2">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Rol</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-tabla">
-                            
-                    </tbody>
-                </table>
-                      
-            </fieldset>
+            <div class="table-responsive">
+              <!-- <fieldset> -->
+                  <legend>Lista Usuarios</legend>
+                  <table id="tabla-usuarios" class="table table-striped">
+                      <thead>
+                          <tr>
+                              <th scope="col-sm-2">Nombre</th>
+                              <th scope="col">Apellido</th>
+                              <th scope="col">Rol</th>
+                              <th scope="col">Estado</th>
+                              <th scope="col">Opciones</th>
+                          </tr>
+                      </thead>
+                      <tbody id="cuerpo-tabla">
+                              
+                      </tbody>
+                  </table>     
+              <!-- </fieldset> -->
+            </div>
             <!-- Edit Item Modal -->
             <div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
               <div class="modal-dialog" role="document">
