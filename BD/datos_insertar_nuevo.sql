@@ -177,7 +177,7 @@ INSERT INTO telefono_usuario (nombre_usuario, telefono) VALUES
 ('root', 70700865);
 
 
-INSERT INTO tiene_materia (nombre_usuario, codigo_materia, estado_privilegio) VALUES
+INSERT INTO tiene_materia (nombre_usuario, codigo_materia) VALUES
 ('root', 2010010),
 ('root', 2010022),
 ('root', 2010024);

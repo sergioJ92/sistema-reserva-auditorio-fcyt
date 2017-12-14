@@ -220,6 +220,7 @@ $(document).ready(function () {
     	if($('#select-estado').val()==1){
 			estado = true;
     	}
+    	//cambiar rol es 
     	guardarDatosNuevos(nombre, apellido, telefonos, correos, nombre_usuario, estado);
     }
 
@@ -301,9 +302,7 @@ $(document).ready(function () {
 	*/
 	$('#anadir-materia-modal').click(function(e){
 		e.preventDefault();
-		console.log("entre")
 		insertarMateria();
-		console.log("termina");
 		//e.stopPropagation();
 	});
 

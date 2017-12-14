@@ -779,6 +779,7 @@ create table TIENE_ROL (
    NOMBRE_ROL           TEXT                 not null,
    FECHA_INICIO         DATE                 null,
    FECHA_FIN            DATE                 null,
+   ESTADO               BOOLEAN              not null,
    constraint PK_TIENE_ROL primary key (NOMBRE_USUARIO, NOMBRE_ROL)
 );
 
@@ -812,7 +813,6 @@ NOMBRE_ROL
 create table TIENE_PRIVILEGIO (
    NOMBRE_PRIVILEGIO    TEXT                 not null,
    NOMBRE_ROL           TEXT                 not null,
-   /*ESTADO_PRIVILEGIO    BOOLEAN              not null,------------------------------------------------*/
    constraint PK_TIENE_PRIVILEGIO primary key (NOMBRE_PRIVILEGIO, NOMBRE_ROL)
 );
 
