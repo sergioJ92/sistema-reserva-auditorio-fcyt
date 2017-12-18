@@ -9,8 +9,6 @@
 			$('#cuerpo-tabla').append(filas);
 			$('#primaryllave-'+i).hide();
 		}
-		
-		
 	}
 
 	function anadirNuevaFila(data,id){							///////
@@ -42,121 +40,7 @@
 		window.location.href = dominio + dato;
 	}
 
-	function mostrarDatosUsuario(lista){
-		$('#nombres').val(lista['nombres']);
-		$('#apellidos').val(lista['apellidos']);
-		$('#telefonos').val(lista['telefono']);
-		$('#correo').val(lista['correo']);
-		$('#nombreDeUsuario').val(lista['nombre_usuario']);	
-	}
-
-	function cargarVentana(){
-		crearOpcionesRoles();
-		crearAgregarMateria();
-	}
-
-	function crearOpcionesRoles(){
-		$.ajax({
-			type: 'GET',
-			url:'../recurso_rol.php',
-			data:{},
-		}).done(function(entrada){
-			var roles = {};
-	        entrada.forEach(function (rol) {
-	            if (!roles[rol['nombre_rol']]) {
-	                roles[rol['nombre_rol']] = {
-	                    puede_tener_materias: parseInt(rol['puede_tener_materias']),
-	                    privilegios: []
-	                };
-	            }
-	            roles[rol['nombre_rol']].privilegios.push(rol['nombre_privilegio']);
-	        });
-	        
-	        rellenarRoles(roles);
-		});
-	}
-
-	function rellenarRoles(roles) {
-        
-        var selectRol = $('#nombre-rol').empty();
-        var optionDefecto = crear('OPTION', 'Seleccionar Rol');
-        optionDefecto.setAttribute('value', '');
-        optionDefecto.setAttribute('selected', 'selected');
-        optionDefecto.setAttribute('hidden', 'hidden');
-        selectRol.append(optionDefecto);
-        
-        for (var nombreRol in roles) {
-            var option = crear('OPTION', nombreRol);
-            option.setAttribute('value', nombreRol);
-            selectRol.append(option);
-        }
-        selectRol.off('change').change(function() {
-            var rol = roles[selectRol.val()];
-            actualizarPrivilegios('', rol.privilegios);
-            materias = [];
-            $('#lista-materias').empty();
-            if (rol['puede_tener_materias']) {
-                $('#seccion-materias').show('slow');
-            } else {
-                $('#seccion-materias').hide('slow');
-            }
-        });
-    }
-
-    function actualizarPrivilegios(seccion, privilegios) {
-        
-        seccion = seccion.length === 0 ? seccion: seccion + '-';
-        $('#' + seccion + 'privilegio-cronograma').prop('checked', false);
-        $('#' + seccion + 'privilegio-solicitudes').prop('checked', false);
-        $('#' + seccion + 'privilegio-reservas').prop('checked', false);
-        $('#' + seccion + 'privilegio-usuarios').prop('checked', false);
-        privilegios.forEach(function (privilegio) {
-            $('#' + seccion + 'privilegio-' + privilegio.toLowerCase()).prop('checked', true);
-        });
-    }
-
-	function crearAgregarMateria(){
-		$.ajax({
-			type: 'GET',
-			url:'../recurso_materia.php',
-			data:{}
-		}).done(function(materias){
-			var selectMaterias = $('#select-materias');
-        	materias.forEach(function (materia) {
-	            var option = crear('OPTION', materia['nombre_materia']);
-	            option.setAttribute('value', materia['codigo_materia']);
-	            selectMaterias.append(option);
-        	});
-		});
-	}
-
-	
-
-	function cargarRoles(lista){
-		alert(lista['nombre_rol']);
-		document.getElementById("nombre-rol").value = lista['nombre_rol'];
-	}
-
-	function recuperarDatos(llave){
-		var res = null;
-		$.ajax({
-			type: 'POST',
-			url:'recuperarDatos.php',
-			data:{id:llave},
-		}).done(function(res){
-			var fila = JSON.parse(res);
-			mostrarDatosUsuario(fila[0]);
-			cargarRoles(fila[0]);
-			cargarMaterias(fila[0]);
-			//////
-			console.log(fila);
-			console.log("recupere datos");
-			//////
-		});
-		return res;
-	}
-
-	function cambiarEstadoUsuario(dato, id, estado){
+	function cambiarEstadoUsuario(dato, id, estado){			///////
     	$.ajax({
 		    type:'POST',
 		    url:'eliminar_usuario.php',
@@ -175,11 +59,6 @@
 		    }).fail(function(error){
 
 		    });	
-	}
-
-	function parcearIdTag(id){
-	var cadena = id.split('-');
-	return cadena[1];
 	}
 
 	ajaxGet('vista-usuario.php',{},mostrarUsuarios);
