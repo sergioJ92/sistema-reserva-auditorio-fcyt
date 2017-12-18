@@ -111,22 +111,23 @@ function crearOptionConIndices($elemento) {
             if($val == 'auditorio')
             {
                 //include  "reservas-auditorio/calendario_auditorio.php";
-                echo '<script src="reservas-auditorio/reservas.js"></script>';
+                echo '<script src="reservas-auditorio/auditorio.js"></script>';
             }
             elseif($val == 'laboratorio')
             {
                 //include  "reservas-laboratorio/calendario_laboratorio.php";
-                echo '<script src="reservas-laboratorio/reservas.js"></script>';
+                echo '<script src="reservas-laboratorio/laboratorio.js"></script>';
             }
             elseif($val == 'aula')
             {
                 //include  "reservas-aula/calendario_aula.php";
-                echo '<script src="reservas-aula/reservas.js"></script>';
+                echo '<script src="reservas-aula/aula.js"></script>';
             }
             else
             {
                 header('Location: ./index.php');
             }
+            echo '<script src="reservas.js"></script>';
         ?>
         <?php include RAIZ . '/pie.inc'; ?>
     </body>

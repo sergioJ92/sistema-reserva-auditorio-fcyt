@@ -1,14 +1,4 @@
 
-$(document).ready(function() {
-    
-    var valor = $('#selAnioGestion').val();
-    if (valor !== 'null') {
-        var anio = parseInt(valor.split('-')[0]);
-        var gestion = parseInt(valor.split('-')[1]);
-        cargarCalendario(anio, gestion);
-    }
-});
-
 function crearCalendario(
         anio, gestion, fechaHoraInicio, fechaHoraFin, 
         horaInicioJornada, horaFinJornada, duracionPeriodo, 
@@ -29,7 +19,7 @@ function crearCalendario(
     return new Calendario(cronograma, utiles);
 }
 
-function cargarCalendario(anio, gestion) {
+function cargarCalendario(anio, gestion, id_ambiente) {
     
     cargarDatosCronograma(anio, gestion, function(cronograma) {
         
@@ -42,7 +32,7 @@ function cargarCalendario(anio, gestion) {
                                             utiles);
 
                                         $('#calendario').empty().append(calendario.getDOM());
-                                        cargarContenidoEnCalendario(anio, gestion, calendario);
+                                        cargarContenidoEnCalendario(anio, gestion, id_ambiente, calendario);
                                         }
             );
         } else {
@@ -51,9 +41,9 @@ function cargarCalendario(anio, gestion) {
     });
 }
 
-function cargarContenidoEnCalendario(anio, gestion, calendario) {
+function cargarContenidoEnCalendario(anio, gestion, id_ambiente, calendario) {
     
-    var argumentos = {anio: anio, gestion: gestion, calendario: calendario};
+    var argumentos = {anio: anio, gestion: gestion, ambiente: id_ambiente, calendario: calendario};
     var funciones = [
         anadirActividades,
         anadirTolerancias,
@@ -140,9 +130,10 @@ function anadirReservas(argumentos, siguiente) {
             
     var anio = argumentos.anio;
     var gestion = argumentos.gestion;
+    var ambiente = argumentos.ambiente;
     var calendario = argumentos.calendario;
 
-    cargarReservas(anio, gestion, function(respuesta) {
+    cargarReservas(anio, gestion, ambiente, function(respuesta) {
 
         respuesta.academicas.forEach((reserva) => {
             calendario.anadirEvento(crearEventoReservaAcademica(reserva));
@@ -291,8 +282,8 @@ function cuandoCambiaAnioGestion(evento) {
     var valor = $('#selAnioGestion').val();
     var anio = parseInt(valor.split('-')[0]);
     var gestion = parseInt(valor.split('-')[1]);
-    if (anio !== '' && gestion !== '') {
-        cargarCalendario(anio, gestion);
+    if (anio !== '' && gestion !== '' && ambiente !== '') {
+        cargarCalendario(anio, gestion, ambiente);
     }
 }
 
@@ -310,9 +301,9 @@ function cargarContenidoCronograma(anio, gestion, peticion, callback) {
     }, callback);
 }
 
-function cargarReservas(anio, gestion, callback) {
+function cargarReservas(anio, gestion, id_ambiente, callback) {
     
-    ajaxPost('obtener_reservas.php', {anio: anio, gestion: gestion}, callback);
+    ajaxPost('obtener_reservas.php', {anio: anio, gestion: gestion, ambiente:id_ambiente}, callback);
 }
 
 function cargarFechasNacionales(callback) {
@@ -330,6 +321,7 @@ function reservar(fecha, horaInicio, horaFin,
         nombreUsuario, calendario) {
     
     var reserva = {
+        ambiente: ambiente,
         fecha: formatearSoloFecha(fecha),
         hora_inicio: horaInicio,
         hora_fin: horaFin,

@@ -59,8 +59,12 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     pg_query($conn, "BEGIN;");
     $insertarReserva = 'INSERT INTO reserva (id_ambiente, fecha, hora_inicio, hora_fin, evento)';
     $insertarReserva .= " VALUES ('$ambiente', '$fecha', '$horaInicio', '$horaFin', '$evento')";
+
     if (pg_query($conn, $insertarReserva)) {
-        return guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha);
+        $consulta = "SELECT id_reserva FROM reserva WHERE id_ambiente='$ambiente' AND fecha='$fecha' AND hora_inicio='$horaInicio' AND hora_fin='$horaFin'";
+            $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+            $idReserva = pg_fetch_row($resultadoConsulta)[0];
+        return guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha, $idReserva);
     }
     else {
         pg_query($conn, "ROLLBACK");
@@ -68,10 +72,8 @@ function guardarReserva($fecha, $horaInicio, $horaFin,
     }
 }
 
-function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha) {
+function guardarReservarAcademica($conn, $codigoMateria, $idContenido, $idAsunto, $nombreUsuario, $fecha, $idReserva) {
     
-    $consulta_insercion = pg_query($conn, "SELECT lastval();");
-    $idReserva = pg_fetch_row($consulta_insercion)[0];
     $insertarAcademica = 'INSERT INTO reserva_academica (id_reserva, codigo_materia, id_contenido, id_asunto)';
     $insertarAcademica .= " VALUES ('$idReserva', '$codigoMateria', '$idContenido', '$idAsunto')";
 
