@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var url = location.href;
 	var dato = url.split('?next=')[1];
-	var dominio = 'http://localhost/sistema-reserva-auditorio-fcyt/usuarios/';
+	var dominio = 'http://chr2.hosting.cs.umss.edu.bo/usuarios/';
 	var datojson = '';
 	var materias = [];
 

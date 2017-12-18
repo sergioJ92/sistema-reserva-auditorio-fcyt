@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/roles/"
+	var dominio = "http://chr2.hosting.cs.umss.edu.bo/roles/"
 
 	function crearNuevoRol() {
 

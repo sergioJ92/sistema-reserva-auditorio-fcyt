@@ -1,6 +1,6 @@
  $(document).ready(function () {
 	
-	var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/usuarios/";
+	var dominio = "http://chr2.hosting.cs.umss.edu.bo/usuarios/";
     
     function mostrarUsuarios(usuarios){							///////
     	var filas = "";

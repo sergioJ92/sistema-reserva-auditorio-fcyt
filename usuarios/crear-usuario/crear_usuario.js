@@ -1,7 +1,7 @@
 $(document).ready(function () {
     
     var materias = [];
-    var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/usuarios/"
+    var dominio = "http://chr2.hosting.cs.umss.edu.bo/usuarios/"
     
     function cargarRoles(entrada) {
         var roles = {};
