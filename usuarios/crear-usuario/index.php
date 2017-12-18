@@ -76,9 +76,6 @@ bloquearCrearUsuarios();
                             <label for="nombre-rol" class="padding-derecha-roles">Rol <span class="rojo"> * </span></label>
                             <select id="nombre-rol" class="form-control agrandar-combo-box"></select>
                         </div>
-                        <div class="form-inline col-xs-6 text-right form-group">
-                            <button class="btn btn-default" id="btn-abrir-crear-rol">Crear nuevo Rol</button>
-                        </div>
                         <div class="col-xs-12"><b>Privilegios asociados al rol</b></div>
                         <div class="col-xs-12">
                             <div class="list-group padding-lista-privilegios lista-privilegios-desabilitado">
@@ -122,53 +119,7 @@ bloquearCrearUsuarios();
                 </div>
             </div>
         </div>
-        <div id="modalCrearRol" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header estilo-modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Crear nuevo Rol</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div id="contenedor-msg-rol"></div>
-                            <div class="col-md-12 form-group">
-                                <label for="nuevo-nombre-rol">Nombre de Rol <span class="rojo">*</span></label>
-                                <input id="nuevo-nombre-rol" type="text" class="form-control">
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="checkbox">
-                                    <label><input id="puede-tener-materias" type="checkbox">Puede tener materias</label>
-                                </div>
-                            </div>
-                            <div class="col-md-12"><b>Privilegios asociados al rol</b></div>
-                            <div class="col-md-12">
-                                <div class="list-goup padding-lista-privilegios">
-                                    <div class="checkbox list-group-iem col-xs-6 margen-privilegios">
-                                        <label><input id="nuevo-privilegio-cronograma" type="checkbox">Administrar cronograma académico</label>
-                                    </div>
-                                    <div class="checkbox list-group-tem col-xs-6 margen-privilegios">
-                                        <label><input id="nuevo-privilegio-solicitudes" type="checkbox">Administrar solicitudes de reserva</label>
-                                    </div>
-                                    <div class="checkbox list-group-tem col-xs-6 margen-privilegios">
-                                        <label><input id="nuevo-privilegio-reservas" type="checkbox">Reservar el auditorio</label>
-                                    </div>
-                                    <div class="checkbox list-group-iem col-xs-6 margen-privilegios">
-                                        <label><input id="nuevo-privilegio-usuarios" type="checkbox">Administrar usuarios</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer estilo-modal-footer">
-                        <div class=" text-center">
-                            <button type="button" class="btn btn-primary" id="btn-crear-nuevo-rol">Guardar</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <?php include RAIZ . '/pie.inc' ?>
     </body>
 </html>

@@ -6,7 +6,20 @@ $(document).ready(function () {
 	function obtenerNombreUsuarioUrl(){
 		var url = location.href;
 		rol = url.split('?next=')[1];
+        rol = habilitarEspacios(rol);
 	}
+
+    function habilitarEspacios(cad){
+        var cadenaRes = '';
+        var cadenas = cad.split("%20");
+        if(cadenas.length > 0){
+            cadenaRes = cadenaRes + cadenas[0];
+            for (var i=1 ;i < cadenas.length; ++i) {
+                cadenaRes = cadenaRes+" "+cadenas[i];
+            }
+        }    
+        return cadenaRes;
+    }
 
 	function cargarVentana(){
 		var cadenaRes = "";
@@ -24,7 +37,7 @@ $(document).ready(function () {
 			$('#campo-privilegios').append(cadenaRes);
 			$('#modal-campo-privilegios').append(cadenaModalRes);
 		}).fail(function(error){
-			console.log("errororororor");
+			console.log("error");
 		});
 	}
 
@@ -42,9 +55,21 @@ $(document).ready(function () {
 		
 	    return res;
 	}
-
+    function cargarDatosRolNinguno(){
+        $.ajax({
+            type:"GET",
+            url:"editarRol.php",
+            data:{nombre_usuario:rol}
+            }).done(function(dato){
+                $('#nombre-rol-recuperado').text(dato['nombre_rol']);
+                $('#tiene-materias-recuperado').text("No");
+                document.getElementById("btn-editar-rol").disabled = true;
+            }).fail(function(error){
+                console.log("falla");
+                console.log(error);
+            });
+    }
 	function cargarDatosRol(){
-
 		$.ajax({
 			type:"GET",
 			url:"editarRol.php",
@@ -53,7 +78,6 @@ $(document).ready(function () {
 				var data = dato[0];
 				$('#nombre-rol-recuperado').text(data['nombre_rol']);
 				$('#modal-nombre-rol').val(data['nombre_rol']);
-				console.log(data['puede_tener_materias']);
 				if(data['puede_tener_materias'] == 1){
 					$('#tiene-materias-recuperado').text("si");
 					$('#modal-tiene-materias-rol').val(1);
@@ -77,6 +101,7 @@ $(document).ready(function () {
 
 
     function cancelarCrearRol(){
+        document.getElementById("btn-editar-rol").disabled = false;
     	window.location.href = dominio;
     }
 
@@ -187,7 +212,11 @@ $(document).ready(function () {
     obtenerNombreUsuarioUrl();
 
 	setTimeout(function(){
-		cargarDatosRol();
+        if(rol == 'Ninguno'){
+            cargarDatosRolNinguno();   
+        }else{
+            cargarDatosRol();
+        }
 		$('#btn-editar-rol').click(cargarDatosModal);
 		$('#actualizar-datos-rol').click(modalEditarRol);
 		$('#btn-cancelar').click(cancelarCrearRol);

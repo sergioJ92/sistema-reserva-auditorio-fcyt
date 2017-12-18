@@ -7,8 +7,7 @@ require_once RAIZ . '/interfazbd/Validador.php';
 require_once RAIZ . '/interfazbd/ValidacionExcepcion.php';
 
 function obtenerDatosRoles($dato){
-
-	$consulta = "SELECT r.nombre_rol, r.puede_tener_materias, tp.nombre_privilegio FROM rol as r, tiene_privilegio tp WHERE  r.nombre_rol='".$dato."' AnD r.nombre_rol=tp.nombre_rol ";
+	$consulta = "SELECT r.nombre_rol, r.puede_tener_materias, tp.nombre_privilegio FROM rol as r, tiene_privilegio tp WHERE  r.nombre_rol='".$dato."' AnD r.nombre_rol=tp.nombre_rol";
 	$resultado = ConexionBD::getConexion();
     $resultado = pg_query($consulta);
     $resultadoLista = [];
@@ -16,6 +15,14 @@ function obtenerDatosRoles($dato){
         array_push($resultadoLista, $fila);
     }
     return $resultadoLista;
+}
+
+function datosNinguno($dato){
+    $consulta = "SELECT * FROM rol as r WHERE  r.nombre_rol='".$dato."'";
+    $resultado = ConexionBD::getConexion();
+    $resultado = pg_query($consulta);
+    $resultadoF = pg_fetch_assoc($resultado);
+    return $resultadoF;
 }
 
 function validarDatosUsuario($nombre_rol, $tiene_materias) {
@@ -55,10 +62,22 @@ function eliminarPrivilegios($lista_eliminar, $nombre_rol){
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $dato = $_GET["nombre_usuario"];
+    //$cadCorregida = habilitarEspacios($dato);
+    //$dato = 'Super usuario';
     header('Content-Type: application/json');
-	$resConsulta = obtenerDatosRoles($dato);
+    try{
+        if($dato == 'Ninguno'){
+            $arreglo = datosNinguno($dato);
+            echo json_encode($arreglo);
+        }else{
+            $resConsulta = obtenerDatosRoles($dato);
+            echo json_encode($resConsulta);        
+        }
+    }catch (ValidacionExcepcion $ex){
+        $res = array('exito' => false, 'mensaje' => $ex->getMessage());
+        echo json_encode($res);
+    }
 
-    echo json_encode($resConsulta);
 }else{
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $datos = $_POST;
