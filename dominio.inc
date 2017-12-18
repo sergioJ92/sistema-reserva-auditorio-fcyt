@@ -1,5 +1,5 @@
 <?php
 
-const DOMINIO = 'http://localhost/sistema-reserva-auditorio-fcyt';
+const DOMINIO = 'http://localhost/sistema-reserva-auditorio-fcyt/';
 
 ?>

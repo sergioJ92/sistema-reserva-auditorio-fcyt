@@ -1,9 +1,8 @@
  $(document).ready(function () {
 	
 	var dominio = "http://localhost/sistema-reserva-auditorio-fcyt/usuarios/";
-	var materias = [];
     
-    function mostrarUsuarios(usuarios){
+    function mostrarUsuarios(usuarios){							///////
     	var filas = "";
 		for (var i = 0; i < usuarios.length; ++i) {
 			filas = anadirNuevaFila(usuarios[i],i);
@@ -14,7 +13,7 @@
 		
 	}
 
-	function anadirNuevaFila(data,id){
+	function anadirNuevaFila(data,id){							///////
 		var estado = 'Inactivo';
 		if(data['activo'] == 't'){
 			estado = "Activo";
@@ -34,11 +33,11 @@
 	  	return fila;
 	}
 
-	function redireccionarCrearUsuario(){
+	function redireccionarCrearUsuario(){							//////
 		window.location.href = dominio + "crear-usuario";	 	
 	}
 
-	function redireccionarEditar(llave){
+	function redireccionarEditar(llave){							/////
 		var dato = 'vista-editar/?next='+llave;
 		window.location.href = dominio + dato;
 	}
@@ -131,54 +130,12 @@
 		});
 	}
 
-	function crearVisualizadorMateria(nombreMateria, funcionEliminar, id) {
-		debugger;
-		var cadena = '<div class="list-group-item col-xs-6" id="'+id+'"></div>';
-		cadena = cadena + '<div class="col-md-8 padding-boton">'+nombreMateria+'</div>';
-		cadena = cadena + '<div class="col-md-4 text-right">';
-		cadena = cadena + '<button type="button" class="btn btn-default">Eliminar</button>';
-		cadena = cadena + '</div>';
-        //var contenedor = crear('DIV', null, 'list-group-item col-xs-6', id);
-        //contenedor.appendChild(crear('DIV', nombreMateria, 'col-md-8 padding-boton'));
-        //var botonEliminar = crear('BUTTON', 'Eliminar', 'btn btn-default');
-        //botonEliminar.onclick = funcionEliminar;
-        //var divBoton = crear('DIV', null, 'col-md-4 text-right');
-        //divBoton.appendChild(botonEliminar);
-        //contenedor.appendChild(divBoton);
-        return cadena;
-    }
-
-	function anadirMateria() {
-        debugger;
-        var selectMaterias = $('#select-materias');
-        var codigoMateria = selectMaterias.val();
-        var nombreMateria = $('#select-materias option[value="'+codigoMateria+'"]').text();
-        if (materias.includes(codigoMateria)) {
-            return;
-        }
-        var posicion = materias.length;
-        var id = 'm' + posicion;
-        materias.push(codigoMateria);
-        var a =crearVisualizadorMateria(nombreMateria, function() {
-            $('#' + id).remove();
-            delete materias[posicion];
-            
-        }, id);
-        console.log(a);
-        console.log('cccccc');
-        $('#lista-materias-modal').append(a);
-		console.log($('#lista-materias-modal').html());
-    }
+	
 
 	function cargarRoles(lista){
 		alert(lista['nombre_rol']);
 		document.getElementById("nombre-rol").value = lista['nombre_rol'];
-		//$('#nombre-rol').val(lista['nombre_rol']);
 	}
-
-	function cargarMaterias(lista){
-
-	}	
 
 	function recuperarDatos(llave){
 		var res = null;
@@ -215,7 +172,6 @@
 				cadena = 'Inactivo';
 			}
 		    console.log("Se a cambiado el estado del usuario: " + dat['nombre_usuario']+ " a "+cadena);
-		    //Falta mostrar el mensaje de la actualizacion en la pantalla
 		    }).fail(function(error){
 
 		    });	
@@ -240,16 +196,12 @@
     		}else{
     			cambiarEstadoUsuario(dato,id,false);	
     		}	
-    		//mostrarAlerta('alert-success',"Se elimino el usuariocorrectamente")
     	});
     	//editar usuario
         $("body").on("click",".edit-item",function(){
     		var id = $(this).parent("td").data("id");
     		var llave = document.getElementById("primary"+id).innerHTML;
     		redireccionarEditar(llave);
-    		//cargarVentana();
-    		//var tablaDatos = recuperarDatos(llave);
 		});
-		$('#btn-anadir-materia-modal').click(anadirMateria);
 	},1000)
 });
