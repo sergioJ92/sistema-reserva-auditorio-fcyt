@@ -55,8 +55,11 @@ function crearReserva($fecha,$horaInicio,$horaFin,$evento, $idAmbiente){
     return $resultadoConsulta;
 }
 
-function crearReservaSolicitada($responsable,$descripcion,$institucion){
+function crearReservaSolicitada($responsable,$descripcion,$institucion, $fecha, $horaInicio, $horaFin, $idAmbiente){
     global $idReserva,$idRespuesta;
+    $consulta = "SELECT id_reserva FROM reserva WHERE id_ambiente='$idAmbiente' AND fecha='$fecha' AND hora_inicio='$horaInicio' AND hora_fin='$horaFin'";
+    $resultadoConsulta = pg_query(ConexionBD::getConexion(), $consulta);
+    $idReserva = pg_fetch_row($resultadoConsulta)[0];
     $consulta = 'INSERT INTO reserva_solicitada';
     $consulta .= ' (id_reserva,responsable, descripcion, institucion, id_respuesta) VALUES';
     $consulta .= " ( '$idReserva','$responsable', '$descripcion', '$institucion', '$idRespuesta')";
@@ -72,7 +75,7 @@ function realizarReservaCompleta($mensaje,$idSolicitudReserva,$aceptadoRechazado
             if ($aceptadoRechazado == 1) {
                 if (eliminarReservas($listaConflictos)){
                     if (crearReserva($fecha,$horaInicio,$horaFin,$evento, $idAmbiente)) {
-                        if (crearReservaSolicitada($responsable, $descripcion, $institucion)) {
+                        if (crearReservaSolicitada($responsable, $descripcion, $institucion, $fecha, $horaInicio, $horaFin, $idAmbiente)) {
                             pg_query(ConexionBD::getConexion(), "select * from desbloquear('".$fecha."')");
                             pg_query(ConexionBD::getConexion(), "COMMIT");
                             return true;
