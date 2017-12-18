@@ -112,21 +112,21 @@ bloquearBandejaSolicitudes();
 
             if($val == 'auditorio')
             {
-                echo  '<script src="bandeja-auditorios/script_bandeja_solicitudes_auditorio.js"></script>';
-
+                echo '<script src="bandeja-auditorios/auditorio.js"></script>';
             }
             elseif($val == 'laboratorio')
             {
-                echo  '<script src="bandeja-laboratorios/script_bandeja_solicitudes_laboratorio.js"></script>';
+                echo '<script src="bandeja-laboratorios/laboratorio.js"></script>';
             }
             elseif($val == 'aula')
             {
-                echo  '<script src="bandeja-aulas/script_bandeja_solicitudes_aula.js"></script>';
+                echo '<script src="bandeja-aulas/aula.js"></script>';
             }
             else
             {
                 header('Location: ./index.php');
             }
+            echo  '<script src="script_bandeja_solicitudes.js"></script>';
         ?>
         
         <?php include ('../pie.inc'); ?>

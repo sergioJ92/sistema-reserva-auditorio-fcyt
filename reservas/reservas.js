@@ -1,36 +1,4 @@
 
-$(document).ready(function() {
-    $('#laboratorio-oculto').css("display", "block");
-    
-    var valor = $('#selAnioGestion').val();
-    if (valor !== 'null') {
-        var anio = parseInt(valor.split('-')[0]);
-        var gestion = parseInt(valor.split('-')[1]);
-        cargarCalendario(anio, gestion);
-    }
-});
-
-var departamento = '';
-var laboratorio = '';
-
-$('#selAnioGestion').attr('disabled', 'disabled');
-$( "#selLaboratorio" ).attr('disabled', 'disabled');
-
-$('#selDepartamento').change(function () {
-    laboratorio = '';
-    departamento = $(this).val();
-    console.log(departamento);
-    var _departamento = departamento.replace(/\s/g,"_");
-    $("#selLaboratorio").load("obtener_datos.php?tipo="+"3"+"&nombre="+_departamento);
-    $("#selLaboratorio").removeAttr("disabled");
-});
-
-$("#selLaboratorio").change(function(){
-    laboratorio = $(this).val();
-    console.log(laboratorio);
-    $("#selAnioGestion").removeAttr("disabled");
-});
-
 function crearCalendario(
         anio, gestion, fechaHoraInicio, fechaHoraFin, 
         horaInicioJornada, horaFinJornada, duracionPeriodo, 
@@ -314,8 +282,8 @@ function cuandoCambiaAnioGestion(evento) {
     var valor = $('#selAnioGestion').val();
     var anio = parseInt(valor.split('-')[0]);
     var gestion = parseInt(valor.split('-')[1]);
-    if (anio !== '' && gestion !== '' && laboratorio !== '') {
-        cargarCalendario(anio, gestion, laboratorio);
+    if (anio !== '' && gestion !== '' && ambiente !== '') {
+        cargarCalendario(anio, gestion, ambiente);
     }
 }
 
@@ -353,7 +321,7 @@ function reservar(fecha, horaInicio, horaFin,
         nombreUsuario, calendario) {
     
     var reserva = {
-        ambiente: laboratorio,
+        ambiente: ambiente,
         fecha: formatearSoloFecha(fecha),
         hora_inicio: horaInicio,
         hora_fin: horaFin,

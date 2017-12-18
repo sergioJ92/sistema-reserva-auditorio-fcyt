@@ -4,7 +4,7 @@ $(document).ready(function () {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        data: {tipo: 'laboratorio'},
+        data: {tipo: ambiente},
         url: "./obtener_solicitud_reserva.php",
         success: function (data) {
             datos = data;
@@ -17,8 +17,8 @@ $(document).ready(function () {
                 llenarModal(this.id);
                 setCookie('id_solicitud_reserva', datos[this.id]['id_solicitud_reserva']);
                 setCookie('id_ambiente', datos[this.id]['id_ambiente']);
-                setCookie('tipo', 'laboratorio');
-                setCookie('nombre_ambiente', $('#modalAmbiente').text()); 
+                setCookie('tipo', ambiente);
+                setCookie('nombre_ambiente', $('#modalAmbiente').text());
                 setCookie('institucion', $('#modalInstitucion').text());
                 setCookie('responsable', $('#modalResponsable').text());
                 setCookie('correo', $('#modalCorreo').text());
@@ -50,9 +50,8 @@ function llenarModal(idLista) {
     $('#modalEvento').text("");
     $('#modalDescripccion').text("");
 
-
+    $('#modalAmbiente').text(datos[idLista][nombre_ambiente]);
     $('#modalInstitucion').text(datos[idLista]['institucion']);
-    $('#modalAmbiente').text(datos[idLista]['nombre_laboratorio']);
     $('#modalResponsable').text(datos[idLista]['responsable']);
     $('#modalCorreo').text(datos[idLista]['correo1']);
     $('#modalTelefono').text(datos[idLista]['telefono1']);
@@ -86,10 +85,10 @@ function llenarDatos(valores) {
             filaContenido += '<div ><span>Solicitud de Reserva</span></div>';
 
             filaContenido += '<div ><span>Del: </span>';
-            filaContenido += valores[fila]['nombre_laboratorio'];
+            filaContenido += valores[fila][nombre_ambiente];
             filaContenido += '</div>';
 
-            filaContenido += '<div ><span>De: </span>';
+            filaContenido += '<div ><span>Por: </span>';
             filaContenido += valores[fila]['responsable'];
             filaContenido += '</div>';
 
