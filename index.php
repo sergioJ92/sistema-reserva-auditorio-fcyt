@@ -47,7 +47,6 @@
                 </div>
                 
             </div>
-
             <div class="col-sm-4">
                 <div class="row text-center">
                     <div class="col-sm-3">

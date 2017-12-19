@@ -1201,11 +1201,11 @@ class Calendario extends Observador {
     }
 
     getDOM() {
-        let tabla = crear('TABLE', null, 'table table-bordered');
+        let tabla = crear('TABLE', null, 'table table-bordered ');
         
         let cabecera = crear('THEAD');
         let fila = crear('TR');
-        let thPeriodo = crear('TH', 'Periodo');
+        let thPeriodo = crear('TH', 'Periodo', 'id-td');
         thPeriodo.style.verticalAlign = 'middle';
         thPeriodo.setAttribute('rowspan', '2');
         fila.appendChild(thPeriodo);
@@ -1225,7 +1225,7 @@ class Calendario extends Observador {
             fila = crear('TR');
             fila.appendChild(crear('TD', 
                     invMinutos(periodo.horaInicio) + ' - ' + 
-                    invMinutos(periodo.horaFin), 'periodo'));
+                    invMinutos(periodo.horaFin), 'periodo', 'id-td'));
             for (let col = 0; col< NUMERO_DIAS_SEMANA; col++) {
                 let celda = crear('TD', null, 'celda');
                 let boton = crear('BUTTON', null, 'cuadrado');
@@ -1240,7 +1240,7 @@ class Calendario extends Observador {
         tabla.appendChild(cabecera);
         tabla.appendChild(cuerpo);
         
-        let contenedor = crear('DIV', null, 'contenedor-calendario');
+        let contenedor = crear('DIV', null, 'contenedor-calendario ');
         contenedor.appendChild(this.barraNavegacion.getDOM(this.cronograma.inicio, this.cronograma.fin));///////asdasdsad//////
         let contenedorTabla = crear('DIV', null, 'table-responsive');
         contenedorTabla.appendChild(tabla);

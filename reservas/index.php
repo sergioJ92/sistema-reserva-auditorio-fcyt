@@ -34,9 +34,9 @@ function crearOptionConIndices($elemento) {
                 <div class="col-md-12">
                     <h3 class="inline">Reservas</h3>
                 </div>
-                <div class="row">
+                <div class="row-center  " >
                     <div id='auditorio-oculto' style="display: none;">
-                        <div  class="col-md-6 form-group" id="auditorio">
+                        <div  class="col-md-4 form-group" id="auditorio">
                             <label>Seleccionar Auditorio <span class="rojo">*</span></label>
                             <select class="form-control" id="selAuditorio">
                                 <option selected="" value="null" hidden="">Nombre Auditorio</option>
@@ -69,7 +69,7 @@ function crearOptionConIndices($elemento) {
                     </div>
                     
                      <div id='laboratorio-oculto' style="display: none;">  
-                        <div  class="col-md-6 form-group" id="departamento">
+                        <div  class="col-md-4 form-group" id="departamento">
                             <label>Seleccionar Departamento <span class="rojo">*</span></label>
                             <select name="selDepartamento" class="form-control" id="selDepartamento">
                                 <option selected="" value="null" hidden="">Nombre Departamento</option>
@@ -77,14 +77,14 @@ function crearOptionConIndices($elemento) {
 
                             </select>
                         </div>
-                        <div  class="col-md-6 form-group" id="laboratorio">
+                        <div  class="col-md-4 form-group" id="laboratorio">
                             <label>Seleccionar Laboratorio <span class="rojo">*</span></label>
                             <select name="selLaboratorio" class="form-control" id="selLaboratorio">
                             </select>
                         </div>    
                     </div>
 
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label for="selAnioGestion">
                             <span>Seleccione el Cronograma Académico</span>
                         </label>
